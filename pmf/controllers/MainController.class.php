@@ -1,6 +1,10 @@
 <?php
 namespace controllers;
 
+
+use helpers\Exception;
+use helpers\Debug;
+
 use dto\Config;
 use dto\DBAccessor;
 
@@ -42,22 +46,39 @@ class MainController {
     protected $controller;
     /**
      * the main view, i.e. the presentation object for a basic webpage
-     * @var views\MainView
+     * @var MainView
      */
     protected $mainView;
+    /**
+     * the debug object
+     * @var Debug
+     */
+    protected $debug;
+    /**
+     * the config object
+     * @var Config
+     */
+    protected $config;
 
 
     /**
      * set the object regarding the requested uri
      */
     public function __construct(){
-        $config = Config::getInstance();
-        $this->basePath = $config->getApplicationRelativePath();
+        $this->debug = Debug::getInstance('mainController');
+        $this->debug->startProfiling('Page generation start');
 
-        $this->controllerClass = $config->getControllerClass();
+        Exception::convertErrorToException();
+
+        $this->config = Config::getInstance();
+        $this->basePath = $this->config->getApplicationRelativePath();
+
+        $this->controllerClass = $this->config->getControllerClass();
 
         $matches = array();
-        if(preg_match("#$this->basePath(\w+.php/)?((/?\w+)+)#", $_SERVER["REQUEST_URI"], $matches)){
+        if(preg_match("#$this->basePath(\w+.php/)?((/?\w+)+)/?$#", $_SERVER["REQUEST_URI"], $matches)){
+            $this->debug->dump($matches);
+
             $this->args = explode('/', $matches[2]);
 
             $dba = new DBAccessor("menu");
@@ -69,21 +90,13 @@ class MainController {
                 $this->controllerClass = $menu->getController();
             }else{
                 $this->controllerClass = $firstArg;
-                //TODO we have to test if this controller file exists. If not, we should return a 404 HTTP code
+
                 $method = array_shift($this->args);
                 if(isset($method)){
                     $this->method = $method;
                 }
             }
         }
-
-        $mainViewClass = '\\views\\'.$config->getMainViewName();
-        $this->mainView = new $mainViewClass();
-
-
-        //FIXME \\controllers path should also be in the config
-        $controller = '\\controllers\\'.$this->controllerClass;
-        $this->controller = new $controller();
     }
 
 
@@ -91,16 +104,36 @@ class MainController {
      * execution of the controller
      */
     public function execute(){
-        //TODO si le controlleur ou la méthode n'existent pas, il faut renvoyer une 404 à la place
-        call_user_func_array(array($this->controller, $this->method), $this->args);
+        $this->debug->profilingCP('Sub controller call');
 
-        //we have to call the main set the subView in the mainView and then display the content
-        $this->mainView->setSubView($this->controller->getView());
-
-        //it's the RestResponse object which handle the return
         $response = HttpResponse::getInstance();
-        $response->setBody($this->mainView);
+
+        if(file_exists("pmf/controllers/$this->controllerClass.class.php")){
+            $controller = '\\controllers\\'.$this->controllerClass;
+            $this->controller = new $controller();
+
+            $mainViewClass = '\\views\\'.$this->config->getMainViewName();
+            $this->mainView = new $mainViewClass();
+
+            if(method_exists($this->controller, $this->method)){
+                call_user_func_array(array($this->controller, $this->method), $this->args);
+
+                //we have to call the main set the subView in the mainView and then display the content
+                $this->mainView->setSubView($this->controller->getView());
+                //it's the RestResponse object which handle the return
+                $response->setBody($this->mainView);
+            }else{
+                $response->setCode(404);
+            }
+        }else{
+            $response->setCode(404);
+        }
+
+        $this->debug->profilingCP('Start of page rendering');
+
         $response->send();
+
+        $this->debug->endProfiling('Page generation end');
     }
 
 }

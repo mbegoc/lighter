@@ -1,6 +1,8 @@
 <?php
 namespace views;
 
+use helpers\HttpResponse;
+
 use handlers\TemplateEngine;
 
 

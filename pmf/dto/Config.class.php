@@ -58,6 +58,12 @@ class Config extends DataObject {
     }
 
 
+    public function setDebugData($configPath, $active){
+        $this->doc['debug']['configPath'] = $configPath;
+        $this->doc['debug']['active'] = (boolean)$active;
+    }
+
+
     public function addLanguage($code, $name){
         if(strlen($code) != 2){
             throw new ConfigException("The language code shouldn't be longer than 2 characters.");
@@ -112,6 +118,14 @@ class Config extends DataObject {
 
     public function getMainViewName(){
         return $this->doc['view']['class'];
+    }
+
+    public function getDebugConfigPath(){
+        return $this->doc['debug']['configPath'];
+    }
+
+    public function isDebugActive(){
+        return $this->doc['debug']['active'];
     }
 }
 

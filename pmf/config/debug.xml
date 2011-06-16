@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Debug>
-<options redirect='0' debug='1' report='0' frameReport='1' reportPath='/LIB/framework/debug.html' scriptPath='/home/michel/Developpement/'>
-<exceptions autoDisplay='1' autoConvert='1' stoped='0' defaultSection='Exceptions "catchées" automatiquement' errorLevel='30711' />
-<sections></sections>
-</options>
-<html>
-<header><![CDATA[
+    <options redirect='0' report='0' frameReport='1' reportPath='debug.html' scriptPath='/tmp/'>
+        <sections></sections>
+    </options>
+    <html>
+        <header><![CDATA[
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
 <html xmlns='http://www.w3.org/1999/xhtml' lang='fr'>
 <head>
@@ -32,10 +31,10 @@
 </head>
 <body>
 <h1>Debuggage</h1>]]></header>
-<footer><![CDATA[
+        <footer><![CDATA[
 </body>
 </html>]]></footer>
-<frame><![CDATA[
+        <frame><![CDATA[
 <script type='text/javascript'>
     var divDebug = document.createElement('div');
     divDebug.setAttribute('class', 'debug');
@@ -55,5 +54,5 @@
     divDebug.onmouseout = function(){divDebug.style.width = '10px';divDebug.style.height = '10px';divDebug.style.padding = '0';divDebug.style.overflow = 'hidden';};
     document.body.appendChild(divDebug);
 </script>]]></frame>
-</html>
+    </html>
 </Debug>

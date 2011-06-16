@@ -2,6 +2,11 @@
 namespace views;
 
 
+use helpers\HttpRequest;
+
+use handlers\HtmlHeader;
+
+
 /**
  * The MainView aims to display the whole content to respond to the request.
  * It may be HTML or other.
@@ -12,11 +17,6 @@ namespace views;
  * @author michel
  *
  */
-use helpers\HttpRequest;
-
-use handlers\HtmlHeader;
-
-
 class MainView extends View {
     /**
      * the sub view, i.e. the view object which will generated the actual content.

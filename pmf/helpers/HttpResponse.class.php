@@ -2,7 +2,10 @@
 namespace helpers;
 
 
+use helpers\HttpResponse;
+
 use views\View;
+
 
 class HttpResponse {
     private static $instance = NULL;
@@ -70,6 +73,11 @@ class HttpResponse {
 
     }
 
+
+    /**
+     * manage the singleton
+     * @return HttpResponse
+     */
     public function getInstance(){
         if(!isset(self::$instance)){
             self::$instance = new self();
@@ -79,12 +87,12 @@ class HttpResponse {
     }
 
 
-    public function setHttpResponseCode($code){
+    public function setCode($code){
         $this->code = (int)$code;
     }
 
 
-    public function getHttpResponseCode(){
+    public function getCode(){
         return $this->code;
     }
 
@@ -96,26 +104,29 @@ class HttpResponse {
     public function send(){
         $this->prepareHeader();
 
-        //FIXME here if the code is an error, we should return a body containing the http error code and message
-        switch(HttpRequest::getInstance()->getAccept()){
-            case 'text/html':
-            case 'application/xhtml':
-                $this->body->display();
-                break;
-            case 'text/xml':
-                //FIXME these try / catch are... dirty ?
-                try{
-                    $this->body->displayXml();
-                }catch(Exception $e){}
+        if(in_array($this->code, $this->httpBodyCodes)){
+            switch(HttpRequest::getInstance()->getAccept()){
+                case 'text/html':
+                case 'application/xhtml':
+                    $this->body->display();
                     break;
-            case 'application/json':
-                try{
-                    $this->body->displayJson();
-                }catch(Exception $e){}
-                break;
-            default:
-                $this->code = 406;//pour l'exemple
-                $this->prepareHeader();
+                case 'text/xml':
+                    //FIXME these try / catch are... dirty ?
+                    try{
+                        $this->body->displayXml();
+                    }catch(Exception $e){}
+                        break;
+                case 'application/json':
+                    try{
+                        $this->body->displayJson();
+                    }catch(Exception $e){}
+                    break;
+                default:
+                    $this->code = 406;
+                    $this->prepareHeader();
+            }
+        }else{
+            echo json_encode(array($this->code, $this->httpMessages[$this->code]));
         }
     }
 
