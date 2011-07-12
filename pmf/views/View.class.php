@@ -1,9 +1,11 @@
 <?php
 namespace views;
 
-use helpers\HttpResponse;
 
+use handlers\HttpResponse;
 use handlers\TemplateEngine;
+
+use \Exception;
 
 
 /**
@@ -45,10 +47,12 @@ abstract class View {
 
 
 	/**
-	 * display the template content
+	 * display the template content and return a boolean saying if the method is supported
+	 * @return boolean
 	 */
 	public function display(){
 	    self::$tplEngine->display($this->template);
+	    return true;
 	}
 
 
@@ -75,22 +79,24 @@ abstract class View {
 
 
     /**
-     * return the content in XML format
+     * display the content in XML format and return a boolean saying if the method is supported
+     * @return boolean
      */
     public function displayXml(){
-        //TODO have to return the right http code
-        throw new Exception("No XML content.");
+        return false;
     }
 
 
     /**
-     * return the content in JSON format
-     * @throws Exception
+     * display the content in JSON format and return a boolean saying if the method is supported
+     * @return boolean
      */
     public function displayJson(){
-        //TODO have to return the right http code
-        throw new Exception("No JSON content.");
+        return false;
     }
 
 }
+
+
+class ViewException extends Exception {}
 

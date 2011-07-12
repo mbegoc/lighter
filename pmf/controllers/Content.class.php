@@ -1,17 +1,15 @@
 <?php
 namespace controllers;
 
+use handlers\HttpRequest;
+
 use dto\Content as Data;
 use dto\DBAccessor;
-
-use handlers\HtmlHeader;
 
 use views\Content as View;
 
 
 class Content extends Controller {
-
-    protected $view;
 
 
     public function __construct(){
@@ -19,26 +17,30 @@ class Content extends Controller {
 
 
     public function handleRequest(){
+        //FIXME we should take the default document from the config
+        $this->show('4de1b9443a0759c046000000');
+    }
+
+
+    public function show($id){
         $dba = new DBAccessor('content');
-        $content = $dba->get('4de1b9443a0759c046000000');
+        $content = $dba->get($id);
 
         $this->view = new View();
+
+        switch(HttpRequest::getInstance()->getMethod()){
+            case 'POST':
+                $this->view->addMessage(View::SAVED);
+                break;
+            case 'DELETE':
+            case 'PUT':
+            case 'GET':
+            default:
+                break;
+        }
+
         $this->view->setData($content);
-        $this->view->addMessage(View::MESSAGE);
     }
 
 
-    public function test($title = 'Test', $text = 'Test'){
-        $content = new Data();
-        $content->setTitle($title);
-        $content->setContent($text);
-        $this->view = new View();
-        $this->view->setData($content);
-        $this->view->addMessage(View::MESSAGE);
-    }
-
-
-    public function getView(){
-        return $this->view;
-    }
 }

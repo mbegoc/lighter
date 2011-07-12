@@ -1,14 +1,10 @@
 <?php
-/*****************************************************************************
- * Copyright (c) 2010 Michel Begoc
- * Author: Michel Begoc
- * Date: 2010-06-16
- *
- *****************************************************************************/
-require_once("forms/InputText.class.php");
-require_once("forms/Hidden.class.php");
-require_once("forms/Password.class.php");
-require_once("forms/TextArea.class.php");
+namespace html\forms;
+
+
+use handlers\HttpRequest;
+
+use \Exception;
 
 
 /**
@@ -25,16 +21,35 @@ require_once("forms/TextArea.class.php");
  *
  */
 class Form {
-	private $name;
-	private $target;
-	private $method;
-	private $elements;
-
-	private $fieldset = NULL;
+    /**
+     * the name of the form
+     * @var string
+     */
+	protected $name;
+	/**
+	 * the target of the form
+	 * @var string
+	 */
+	protected $target;
+	/**
+	 * the method to send the form through
+	 * @var string
+	 */
+	protected $method;
+	/**
+	 * the list of fields of the form
+	 * @var array
+	 */
+	protected $elements;
+	/**
+	 * fieldset title
+	 * @var string
+	 */
+	protected $fieldset = NULL;
 
 
 	/**
-	 * crée un nouveau formulaire dont la cible est $target
+	 * create a new form
 	 * @param $target
 	 */
 	public function __construct($name, $target = "", $method = "post"){
@@ -47,7 +62,7 @@ class Form {
 
 
 	/**
-	 * ajoute un nouvel élément à ce formulaire
+	 * add an element to the form
 	 * @param FormElement $element
 	 */
 	public function addElement(FormElement $element){
@@ -65,10 +80,10 @@ class Form {
 
 
 	/**
-	 * retourne le formulaire au format html
+	 * return this form in html format
 	 */
-	public function toHTML(){
-		$html = "<div id='{$this->name}Box'>";
+	public function __toString(){
+		$html = "<div id='{$this->name}Box' class='formBox'>";
 
 		if(isset($this->fieldset)){
 			$html.= "<fieldset><legend>$this->fieldset</legend>";
@@ -76,10 +91,10 @@ class Form {
 
 		$html.= "<form name='$this->name' id='$this->name' method='$this->method' action='$this->target'>";
 		foreach($this->elements as $element){
-			$html.= $element->toHTML();
+			$html.= $element;
 		}
 		$html.= "<div id='{$this->name}ButtonBox'>";
-		$html.= "<input type='submit' name='$this->name[submit]' value='Envoyer'/>";
+		$html.= "<input type='submit' name='{$this->name}Submit' value='Envoyer'/>";
 		$html.= "</div>";
 
 		$html.= "</form>";
@@ -108,24 +123,15 @@ class Form {
 
 
 	/**
-	 * complète un vo avec les valeurs du formulaire
-	 * @param VoBase $vo
-	 */
-	public function fillVo(&$vo){
-		foreach($this->elements as $element){
-			$vo->{$element->getName()} = $element->getValue();
-		}
-	}
-
-
-	/**
-	 * détermine si ce formulaire a été complété ou non
+	 * say if this form have been posted or not
 	 * @return boolean
 	 */
 	public function isPosted(){
-		return isset($_POST[$this->name]["submit"]);
+	    $submit = HttpRequest::getInstance()->getString($this->name.'Submit');
+		return isset($submit);
 	}
 }
-/*****************************************************************************
- * End of file FormHelper.class.php
- */
+
+
+class FormException extends Exception {}
+

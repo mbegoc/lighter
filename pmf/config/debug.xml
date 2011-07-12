@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Debug>
-    <options redirect='0' report='0' frameReport='1' reportPath='debug.html' scriptPath='/tmp/'>
-        <sections></sections>
+    <options redirect='0' report='1' frameReport='1' reportPath='debug.html' scriptPath='/tmp/'>
+        <sections><!-- <section>default</section> --></sections>
     </options>
     <html>
-        <header><![CDATA[
-<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+        <header><![CDATA[<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
 <html xmlns='http://www.w3.org/1999/xhtml' lang='fr'>
 <head>
 <title>Debuggage</title>
@@ -31,11 +30,9 @@
 </head>
 <body>
 <h1>Debuggage</h1>]]></header>
-        <footer><![CDATA[
-</body>
+        <footer><![CDATA[</body>
 </html>]]></footer>
-        <frame><![CDATA[
-<script type='text/javascript'>
+        <frame><![CDATA[<script type='text/javascript'>
     var divDebug = document.createElement('div');
     divDebug.setAttribute('class', 'debug');
     divDebug.style.position = 'fixed';

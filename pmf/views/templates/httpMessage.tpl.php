@@ -1,0 +1,1 @@
+<h1><?php echo $this->body->getCode(); ?></h1><p><?php echo $this->body->getMessage(); ?></p>

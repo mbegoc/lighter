@@ -1,9 +1,8 @@
 <?php
-namespace helpers;
+namespace handlers;
 
 
 use dto\DBAccessor;
-
 use dto\Config;
 
 use \SimpleXMLElement;
@@ -24,7 +23,7 @@ class Debug {
      * the name of the debug class to use
      * @var string
      */
-    private static $debugClass = 'helpers\Debug';
+    private static $debugClass = 'handlers\Debug';
     /**
      * the messages list
      * @var array
@@ -123,7 +122,7 @@ class Debug {
                 if(count(self::$instances) == 0){
                     $config = Config::getInstance();
                     if(!$config->isDebugActive()){
-                        self::$debugClass = 'helpers\FakeDebug';
+                        self::$debugClass = 'handlers\FakeDebug';
                     }else{
                         $configFile = $config->getDebugConfigPath();
                         if(file_exists($configFile)){
@@ -181,12 +180,10 @@ class Debug {
          * @param string $title
          */
         public function log($message, $title = NULL){
-            if(self::$debug){
-                if(is_null($title)){
-                    $title = "Message ".$this->i["message"]++;
-                }
-                $this->addMessage("Message", $title, $message);
+            if(is_null($title)){
+                $title = "Message ".$this->i["message"]++;
             }
+            $this->addMessage("Message", $title, $message);
         }
 
 
@@ -229,7 +226,7 @@ class Debug {
          * @param string $title
          */
         public function startProfiling($title = NULL){
-            if(is_null($title)){
+            if($title == NULL){
                 $title = $title = "Start profiling";
             }
             $this->i["profiling"] = 1;
@@ -244,7 +241,7 @@ class Debug {
          */
         public function profilingCP($title = NULL){
             $endTime = microtime(true);
-            if(is_null($title)){
+            if($title == NULL){
                 $title = $title = "Profiling CheckPoint".$this->i["profiling"]++;
             }
 
@@ -259,7 +256,7 @@ class Debug {
          */
         public function endProfiling($title = NULL){
             $endTime = microtime(true);
-            if(is_null($title)){
+            if($title == NULL){
                 $title = $title = "End profiling";
             }
 
@@ -398,5 +395,5 @@ class FakeDebug extends Debug {
 }
 
 
-class DebugException extends Exception {}
+class DebugException extends \Exception {}
 

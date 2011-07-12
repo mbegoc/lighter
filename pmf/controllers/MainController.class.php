@@ -2,13 +2,15 @@
 namespace controllers;
 
 
+use dto\ConfigException;
+
 use helpers\Exception;
-use helpers\Debug;
 
 use dto\Config;
 use dto\DBAccessor;
 
-use helpers\HttpResponse;
+use handlers\Debug;
+use handlers\HttpResponse;
 
 
 /**
@@ -33,7 +35,7 @@ class MainController {
      * the method to call from the controller
      * @var string
      */
-    protected $method = "handleRequest";
+    protected $method;
     /**
      * the arguments
      * @var array
@@ -50,10 +52,10 @@ class MainController {
      */
     protected $mainView;
     /**
-     * the debug object
-     * @var Debug
+     * the profile object
+     * @var profile
      */
-    protected $debug;
+    protected $profile;
     /**
      * the config object
      * @var Config
@@ -65,8 +67,8 @@ class MainController {
      * set the object regarding the requested uri
      */
     public function __construct(){
-        $this->debug = Debug::getInstance('mainController');
-        $this->debug->startProfiling('Page generation start');
+        $this->profile = Debug::getInstance('Page profiling');
+        $this->profile->startProfiling('Page generation start');
 
         Exception::convertErrorToException();
 
@@ -74,11 +76,10 @@ class MainController {
         $this->basePath = $this->config->getApplicationRelativePath();
 
         $this->controllerClass = $this->config->getControllerClass();
+        $this->method = $this->config->getControllerMethod();
 
         $matches = array();
         if(preg_match("#$this->basePath(\w+.php/)?((/?\w+)+)/?$#", $_SERVER["REQUEST_URI"], $matches)){
-            $this->debug->dump($matches);
-
             $this->args = explode('/', $matches[2]);
 
             $dba = new DBAccessor("menu");
@@ -97,6 +98,11 @@ class MainController {
                 }
             }
         }
+
+        $urlReport = Debug::getInstance('Url Data');
+        $urlReport->log($this->controllerClass, 'controller');
+        $urlReport->log($this->method, 'method');
+        $urlReport->dump($this->args, 'arguments');
     }
 
 
@@ -104,24 +110,29 @@ class MainController {
      * execution of the controller
      */
     public function execute(){
-        $this->debug->profilingCP('Sub controller call');
+        $this->profile->profilingCP('Sub controller call');
 
         $response = HttpResponse::getInstance();
 
+        if(file_exists('pmf/views/'.$this->config->getMainViewName().'.class.php')){
+            $mainViewClass = '\\views\\'.$this->config->getMainViewName();
+            $this->mainView = new $mainViewClass();
+            //it's the RestResponse object which handle the return
+            $response->setBody($this->mainView);
+        }else{
+            throw new ConfigException("Main view class name misconfiguration. The class file can't be found.");
+        }
+
+        //FIXME should take the controllers and MainView path from config
         if(file_exists("pmf/controllers/$this->controllerClass.class.php")){
             $controller = '\\controllers\\'.$this->controllerClass;
             $this->controller = new $controller();
-
-            $mainViewClass = '\\views\\'.$this->config->getMainViewName();
-            $this->mainView = new $mainViewClass();
 
             if(method_exists($this->controller, $this->method)){
                 call_user_func_array(array($this->controller, $this->method), $this->args);
 
                 //we have to call the main set the subView in the mainView and then display the content
                 $this->mainView->setSubView($this->controller->getView());
-                //it's the RestResponse object which handle the return
-                $response->setBody($this->mainView);
             }else{
                 $response->setCode(404);
             }
@@ -129,11 +140,11 @@ class MainController {
             $response->setCode(404);
         }
 
-        $this->debug->profilingCP('Start of page rendering');
+        $this->profile->profilingCP('Start of page rendering');
 
         $response->send();
 
-        $this->debug->endProfiling('Page generation end');
+        $this->profile->endProfiling('Page generation end');
     }
 
 }

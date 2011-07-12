@@ -2,11 +2,15 @@
 namespace dto;
 
 
+use handlers\Debug;
+
 class Config extends DataObject {
     private static $instance = NULL;
 
-    public function __construct(array $doc = array('class' => __CLASS__)){
-        parent::__construct($doc);
+    public function __construct(array $doc = NULL){
+        if($doc != NULL){
+            parent::__construct($doc);
+        }
     }
 
 
@@ -17,7 +21,7 @@ class Config extends DataObject {
     public static function getInstance(){
         if(!isset(self::$instance)){
             $dba = new DBAccessor("config");
-            $dba->search();
+            $dba->search(array(), 1, 0, array('date' => -1));
             self::$instance = $dba->next();
             if(!isset(self::$instance)){
                 self::$instance = new self();
@@ -29,6 +33,13 @@ class Config extends DataObject {
 
 
     public function setTemplateData($path, $extension){
+        if($path == ''){
+            $path = '/';
+        }
+        if($extension == ''){
+            //FIXME ensure this default extension is correct
+            $extension = '.php';
+        }
         $this->doc['template']['path'] = $path;
         $this->doc['template']['extension'] = $extension;
     }
@@ -41,26 +52,37 @@ class Config extends DataObject {
 
 
     public function setApplicationPath($root, $relative){
-        $this->doc['path']['full'] = $root.$relative;
+        if($root == ''){
+            throw new ConfigException('Absolute path of the application can\'t be empty', 1);
+        }
+        $this->doc['path']['root'] = $root;
         $this->doc['path']['relative'] = $relative;
+        $this->doc['path']['full'] = $root.$relative;
     }
 
 
     public function setDefaultController($class, $method){
+        if($class == '' || $method == ''){
+            throw new ConfigException('Default controller class and method can\'t be empty', 2);
+        }
         $this->doc['controller']['class'] = $class;
         $this->doc['controller']['method'] = $method;
     }
 
 
-    public function setDefaultView($class, $method){
+    public function setDefaultView($class){
         $this->doc['view']['class'] = $class;
-        $this->doc['view']['method'] = $method;
     }
 
 
     public function setDebugData($configPath, $active){
         $this->doc['debug']['configPath'] = $configPath;
         $this->doc['debug']['active'] = (boolean)$active;
+    }
+
+
+    public function setIndexFile($isIndexFileNeeded){
+        $this->doc['path']['needIndexFile'] = (boolean)$isIndexFileNeeded;
     }
 
 
@@ -80,9 +102,11 @@ class Config extends DataObject {
     }
 
 
-    public function validate(){
+    public function prepareToDb(){
+        parent::prepareToDb(__CLASS__);
         unset($this->doc['_id']);
         $this->doc['date'] = time();
+        \handlers\Debug::getInstance()->dump($this->doc);
     }
 
 
@@ -98,6 +122,11 @@ class Config extends DataObject {
 
     public function getApplicationFullPath(){
         return $this->doc['path']['full'];
+    }
+
+
+    public function getApplicationRootPath(){
+        return $this->doc['path']['root'];
     }
 
 
@@ -126,6 +155,10 @@ class Config extends DataObject {
 
     public function isDebugActive(){
         return $this->doc['debug']['active'];
+    }
+
+    public function needIndexFile(){
+        return $this->doc['path']['needIndexFile'];
     }
 }
 

@@ -2,9 +2,9 @@
 namespace views;
 
 
-use helpers\HttpRequest;
+use handlers\HttpRequest;
 
-use handlers\HtmlHeader;
+use html\HtmlHeader;
 
 
 /**
@@ -51,6 +51,27 @@ class MainView extends View {
         self::$tplEngine->addObject("body", $this->subView);
         self::$tplEngine->addObject("htmlHeader", HtmlHeader::getInstance());
         parent::display();
+        return true;
+    }
+
+
+    /**
+     * this class doesn't need to handle xml content: the subView does
+     * (non-PHPdoc)
+     * @see views.View::displayXml()
+     */
+    public function displayXml(){
+        return $this->subView->displayXml();
+    }
+
+
+    /**
+     * this class doesn't need to handle json content: the subView does
+     * (non-PHPdoc)
+     * @see views.View::displayJson()
+     */
+    public function displayJson(){
+        return $this->subView->displayJson();
     }
 
 }

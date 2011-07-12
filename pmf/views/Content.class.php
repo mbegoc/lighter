@@ -2,7 +2,8 @@
 namespace views;
 
 use dto\Content as Data;
-use handlers\HtmlHeader;
+
+use html\HtmlHeader;
 
 
 /**
@@ -11,6 +12,7 @@ use handlers\HtmlHeader;
  *
  */
 class Content extends SubView {
+    const SAVED = 'Modifications sauvegardée.';
     const MESSAGE = "Ceci est un message type, une erreur par exemple.";
 
 

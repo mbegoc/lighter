@@ -1,5 +1,8 @@
 <?php
-namespace helpers;
+namespace handlers;
+
+
+use \Exception;
 
 
 class HttpRequest {
@@ -9,6 +12,7 @@ class HttpRequest {
     private $accept;
     private $charset;
     private $language;
+
 
     private function __construct(){
         $this->method = strtoupper($_SERVER['REQUEST_METHOD']);
@@ -28,7 +32,7 @@ class HttpRequest {
 
     /**
      *
-     * @return helpers\HttpRequest
+     * @return handlers\HttpRequest
      */
     public function getInstance(){
         if(!isset(self::$instance)){
@@ -92,4 +96,7 @@ class HttpRequest {
 	}
 
 }
+
+
+class HttpException extends Exception {}
 

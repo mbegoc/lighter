@@ -5,7 +5,11 @@ use views\MainView;
 
 
 abstract class Controller {
+    protected $view;
+
     public abstract function handleRequest();
 
-    public abstract function getView();
+    public function getView(){
+        return $this->view;
+    }
 }

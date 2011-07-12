@@ -4,8 +4,10 @@ namespace dto;
 
 class Menu extends DataObject {
 
-    public function __construct(array $doc = array('class' => __CLASS__)){
-        parent::__construct($doc);
+    public function __construct(array $doc = NULL){
+        if($doc != NULL){
+            parent::__construct($doc);
+        }
 
         //FIXME this should be got from config
         $this->doc['controller'] = 'Content';
@@ -69,7 +71,7 @@ class Menu extends DataObject {
         }
     }
 
-    public function validate(){
-
+    public function prepareToDB(){
+        parent::prepareToDB(__CLASS__);
     }
 }

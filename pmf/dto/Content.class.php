@@ -5,8 +5,10 @@ namespace dto;
 class Content extends DataObject {
 
 
-    public function __construct(array $doc = array('class' => __CLASS__)){
-        parent::__construct($doc);
+    public function __construct(array $doc = NULL){
+        if($doc != NULL){
+            parent::__construct($doc);
+        }
     }
 
     public function setTitle($title){
@@ -25,8 +27,8 @@ class Content extends DataObject {
         return $this->doc['Content'];
     }
 
-    public function validate(){
-
+    public function prepareToDB(){
+        parent::prepareToDB(__CLASS__);
     }
 
 }

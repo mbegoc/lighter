@@ -1,4 +1,7 @@
 <?php
+use handlers\Debug;
+
+
 error_reporting(E_ALL);
 require "pmf/config/include.php";
 

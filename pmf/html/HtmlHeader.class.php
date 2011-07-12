@@ -1,5 +1,5 @@
 <?php
-namespace handlers;
+namespace html;
 
 
 class HtmlHeader {
@@ -47,12 +47,23 @@ class HtmlHeader {
     }
 
     public function addCssFile($file, $media = 'all'){
-        $this->cssFiles.= "<link type='text/css' rel='stylesheet' src='$file' media='$media'/>";
+        $this->cssFiles.= "<link type='text/css' rel='stylesheet' href='$file' media='$media'/>";
     }
 
     public function addJsFile($file, $type = 'text/javascript'){
         $this->jsFiles.= "<script type='$type' src='$file'></script>";
     }
+
+
+    public function resetCssFiles(){
+        $this->cssFiles = '';
+    }
+
+
+    public function resetJsFiles(){
+        $this->jsFiles = '';
+    }
+
 
     public function display(){
         echo '<head>';
