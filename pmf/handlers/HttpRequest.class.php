@@ -16,6 +16,10 @@ class HttpRequest {
 
     private function __construct(){
         $this->method = strtoupper($_SERVER['REQUEST_METHOD']);
+        //some browser can't send other method but GET and POST: we accept a method parameter to be able to handle this
+        if(isset($_REQUEST['method']) && ($_REQUEST['method'] == 'PUT' || $_REQUEST['method'] == 'DELETE')){
+            $this->method = $_REQUEST['method'];
+        }
         $this->accept = explode(',', $_SERVER['HTTP_ACCEPT']);
         $this->charset = $_SERVER['HTTP_ACCEPT_CHARSET'];
         $this->language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
