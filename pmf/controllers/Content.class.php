@@ -13,6 +13,7 @@ class Content extends Controller {
 
 
     public function __construct(){
+        $this->view = new View();
     }
 
 
@@ -25,8 +26,6 @@ class Content extends Controller {
     public function show($id){
         $dba = new DBAccessor('content');
         $content = $dba->get($id);
-
-        $this->view = new View();
 
         switch(HttpRequest::getInstance()->getMethod()){
             case 'POST':

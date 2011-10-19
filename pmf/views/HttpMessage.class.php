@@ -32,7 +32,7 @@ class HttpMessage extends View {
      * @param string $message
      */
     public function __construct($code, $message){
-        parent::__construct('httpMessage');
+        parent::__construct('main', 'httpMessage');
 
         $this->code = $code;
         $this->message = $message;

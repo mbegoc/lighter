@@ -6,6 +6,6 @@ error_reporting(E_ALL);
 require "pmf/config/include.php";
 
 
-$router = new controllers\MainController();
+$router = new handlers\Router();
 $router->execute();
 

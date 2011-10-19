@@ -5,6 +5,8 @@ namespace views;
 use handlers\HttpResponse;
 use handlers\TemplateEngine;
 
+use html\HtmlHeader;
+
 use \Exception;
 
 
@@ -25,8 +27,13 @@ abstract class View {
 	 * the template to display
 	 * @var string
 	 */
-	protected $template;
-    /**
+	protected $mainTemplate;
+	/**
+	 * the content template
+	 * @var string
+	 */
+	protected $contentTemplate;
+	/**
      * a messages list to display
      * @var string
      */
@@ -37,22 +44,34 @@ abstract class View {
 	 * constructor
 	 * @param string $template
 	 */
-	public function __construct($template){
-	    $this->template = $template;
+	public function __construct($mainTemplate, $contentTemplate){
+	    $this->mainTemplate = $mainTemplate;
+	    $this->contentTemplate = $contentTemplate;
 
 	    if(!isset(self::$tplEngine)){
-	        self::$tplEngine = new TemplateEngine($template);
+	        self::$tplEngine = new TemplateEngine();
 	    }
 	}
 
 
 	/**
-	 * display the template content and return a boolean saying if the method is supported
+	 * display the main template of the page and return a boolean saying if the method is supported
 	 * @return boolean
 	 */
-	public function display(){
-	    self::$tplEngine->display($this->template);
+	public final function display(){
+        self::$tplEngine->addObject("view", $this);
+        self::$tplEngine->addObject("htmlHeader", HtmlHeader::getInstance());
+        self::$tplEngine->display($this->mainTemplate);
 	    return true;
+	}
+
+
+	/**
+	 * return the HTML actual content of the page
+	 * @return string
+	 */
+	public function getContent(){
+	    return self::$tplEngine->get($this->contentTemplate);
 	}
 
 

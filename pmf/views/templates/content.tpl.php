@@ -1,6 +1,6 @@
 <!-- the content template -->
-<?php echo $this->body->getMessages(); ?>
+<?=$this->view->getMessages();?>
 <div style='background-color:#ccc;border:1px solid black;'>
-<h1><?php echo $this->data->getTitle(); ?></h1>
-<p><?php echo $this->data->getContent(); ?></p>
+<h1><?=$this->data->getTitle();?></h1>
+<p><?=$this->data->getContent();?></p>
 </div>

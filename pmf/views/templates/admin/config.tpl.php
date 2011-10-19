@@ -1,3 +1,3 @@
 <h1>Configuration</h1>
-<?php echo $this->body->getMessages(); echo $this->body->getForm(); ?>
+<?php echo $this->view->getMessages(); echo $this->view->getForm(); ?>
 <a href='./'>Retour</a>

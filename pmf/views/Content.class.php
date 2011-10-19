@@ -11,7 +11,7 @@ use html\HtmlHeader;
  * @author michel
  *
  */
-class Content extends SubView {
+class Content extends View {
     const SAVED = 'Modifications sauvegardée.';
     const MESSAGE = "Ceci est un message type, une erreur par exemple.";
 
@@ -20,7 +20,7 @@ class Content extends SubView {
      *
      */
     public function __construct(){
-        parent::__construct('content');
+        parent::__construct('main', 'content');
     }
 
 
@@ -28,7 +28,7 @@ class Content extends SubView {
      * set the Data to display, i.e. a Content dto object
      * @param Data $data
      */
-    public function setData(Data $data){
+    public function setData(DataObject $data){
         self::$tplEngine->addObject("data", $data);
 
         HtmlHeader::getInstance()->setTitle($data->getTitle());

@@ -1,1 +1,1 @@
-<h1><?php echo $this->body->getCode(); ?></h1><p><?php echo $this->body->getMessage(); ?></p>
+<h1><?=$this->view->getCode();?></h1><p><?=$this->view->getMessage();?></p>
