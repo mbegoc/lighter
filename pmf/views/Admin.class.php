@@ -2,6 +2,12 @@
 namespace views;
 
 
+use dto\Menu;
+
+use html\tables\EditTable;
+
+use dto\DBAccessor;
+
 use html\forms\InputCheckBox;
 
 use handlers\Debug;
@@ -20,7 +26,7 @@ use dto\DataObject;
 use helpers\Path;
 
 
-class Admin extends View {
+class Admin extends PageBody {
     const SAVE_OK = 'Your modification has been saved.';
     /**
      *
@@ -34,19 +40,59 @@ class Admin extends View {
     protected $form = NULL;
     /**
      *
+     * @var html\tables\EditTable
+     */
+    protected $table = NULL;
+    /**
+     *
      * @param string $template
      */
     protected $title = 'Administration';
 
 
     public function __construct($template){
-        parent::__construct('admin/'.$template);
+        parent::__construct('main', 'admin/'.$template);
         self::$tplEngine->addObject("pathHelper", Path::getInstance());
         HtmlHeader::getInstance()->addCssFile(Config::getInstance()->getApplicationRelativePath().'include/css/admin.css');
     }
 
 
+    public function getForm(){
+        return $this->form;
+    }
+
+
+    public function getList(){
+        return $this->table;
+    }
+
+
+    public function isUpdated(){
+        if($this->form->isPosted()){
+            $values = $this->form->getValues();
+
+            switch($this->form->getName()){
+                case 'config':
+                    $this->fillConfigData($values);
+                    break;
+                case 'menu':
+                    $this->fillMenuData($values);
+                    break;
+                default:
+
+            }
+
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+
     public function setConfig(Config $data){
+        $this->setTitle('Configuration');
+
         $this->data = $data;
 
         $this->form = new Form("config");
@@ -64,27 +110,56 @@ class Admin extends View {
     }
 
 
-    public function isUpdated(){
-        if($this->form->isPosted()){
-            $values = $this->form->getValues();
-
-            $this->data->setApplicationPath($values['rootPath'], $values['path']);
-            $this->data->setDefaultController($values['controllerClass'], $values['controllerMethod']);
-            $this->data->setDebugData($values['debugConfPath'], $values['debugActive']);
-            $this->data->setDefaultView($values['mainViewClass']);
-            $this->data->setTemplateData($values['tplPath'], $values['tplExtension']);
-            $this->data->setIndexFile($values['indexFile']);
-
-            return true;
-        }else{
-            return false;
-        }
-
+    private function fillConfigData(array $values){
+        $this->data->setApplicationPath($values['rootPath'], $values['path']);
+        $this->data->setDefaultController($values['controllerClass'], $values['controllerMethod']);
+        $this->data->setDebugData($values['debugConfPath'], $values['debugActive']);
+        $this->data->setDefaultView($values['mainViewClass']);
+        $this->data->setTemplateData($values['tplPath'], $values['tplExtension']);
+        $this->data->setIndexFile($values['indexFile']);
     }
 
 
-    public function getForm(){
-        return $this->form;
+    public function initMenuList(DBAccessor $dba){
+        $this->setTitle('Menu List');
+        $this->table = new EditTable("menuList");
+        $this->table->addHeaderCell('Title');
+        $this->table->addCol('Title');
+        $this->table->addHeaderCell('URL name');
+        $this->table->addCol('Short');
+        $this->table->addHeaderCell('Controller');
+        $this->table->addCol('Controller');
+        $this->table->addHeaderCell('Method');
+        $this->table->addCol('ControllerMethod');
+        $this->table->setTool('Detail', Path::getInstance()->prefixURI('Admin/menu/'));
+
+        while(($dto = $dba->next()) != NULL){
+            $this->table->addRow($dto);
+        }
+    }
+
+
+    public function setMenu(Menu $data){
+        $this->setTitle('Menu element');
+
+        $this->data = $data;
+
+        $this->form = new Form("menu");
+
+        $this->form->addElement(new InputText('title', _('Title'), 200, $this->data->getTitle()));
+        $this->form->addElement(new InputText('short', _('URL name'), 200, $this->data->getShort()));
+        $this->form->addElement(new InputText('controllerClass', _('Controller class'), 200, $this->data->getController()));
+        $this->form->addElement(new InputText('controllerMethod', _('Controller method'), 200, $this->data->getControllerMethod()));
+        $this->form->addElement(new InputCheckBox('published', _('Published'), $this->data->isPublished()));
+    }
+
+
+    private function fillMenuData(array $values){
+        $this->data->setTitle($values['title']);
+        $this->data->setShort($values['short']);
+        $this->data->setController($values['controllerClass']);
+        $this->data->setControllerMethod($values['controllerMethod']);
+        $this->data->setPublished($values['published']);
     }
 
 }

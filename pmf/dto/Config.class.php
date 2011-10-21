@@ -103,10 +103,19 @@ class Config extends DataObject {
 
 
     public function prepareToDb(){
-        parent::prepareToDb(__CLASS__);
+        parent::prepareToDb();
         unset($this->doc['_id']);
         $this->doc['date'] = time();
         \handlers\Debug::getInstance()->dump($this->doc);
+    }
+
+
+    /**
+     * (non-PHPdoc)
+     * @see dto.DataObject::getClassName()
+     */
+    protected function getClassName(){
+        return __CLASS__;
     }
 
 

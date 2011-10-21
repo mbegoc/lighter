@@ -28,7 +28,16 @@ class Content extends DataObject {
     }
 
     public function prepareToDB(){
-        parent::prepareToDB(__CLASS__);
+        parent::prepareToDB();
+    }
+
+
+    /**
+     * (non-PHPdoc)
+     * @see dto.DataObject::getClassName()
+     */
+    protected function getClassName(){
+        return __CLASS__;
     }
 
 }

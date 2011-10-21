@@ -130,6 +130,15 @@ class Form {
 	    $submit = HttpRequest::getInstance()->getString($this->name.'Submit');
 		return isset($submit);
 	}
+
+
+	/**
+	 * name getter
+	 * @return string
+	 */
+	public function getName(){
+	    return $this->name;
+	}
 }
 
 

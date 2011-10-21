@@ -2,6 +2,8 @@
 namespace controllers;
 
 
+use dto\Menu;
+
 use handlers\Debug;
 
 use dto\DBAccessor;
@@ -14,17 +16,35 @@ class Admin extends Controller {
 
 
     public function handleRequest(){
-        $this->view = new View('pannel');
+        $this->pannel();
     }
 
 
     public function pannel(){
-        $this->handleRequest();
+        $this->view = new View('pannel');
     }
 
 
-    public function menu(){
-        $this->view = new View('menu');
+    public function menu($id = NULL){
+        $dba = new DBAccessor('menu');
+        if(isset($id)){
+            if($id == 'emptyForm'){
+                $menu = new Menu();
+            }else{
+                $menu = $dba->get($id);
+            }
+            $this->view = new View('detail');
+            $this->view->setMenu($menu);
+
+            if($this->view->isUpdated()){
+                $dba->save($menu);
+                $this->view->addMessage(View::SAVE_OK);
+            }
+        }else{
+            $dba->search();
+            $this->view = new View('list');
+            $this->view->initMenuList($dba);
+        }
     }
 
 
@@ -32,7 +52,7 @@ class Admin extends Controller {
     public function config(){
         $config = Config::getInstance();
 
-        $this->view = new View('config');
+        $this->view = new View('detail');
         $this->view->setConfig($config);
 
         if($this->view->isUpdated()){

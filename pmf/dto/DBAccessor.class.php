@@ -51,7 +51,7 @@ class DBAccessor {
      */
     public function get($id){
         $doc = $this->collection->findOne(array('_id' => new MongoId($id)));
-        $class = $doc["class"];
+        $class = $doc["_class_"];
         return new $class($doc);
     }
 
@@ -91,7 +91,7 @@ class DBAccessor {
         if($this->cursor !== NULL){
             if($this->cursor->hasNext()){
                 $doc = $this->cursor->getNext();
-                $class = $doc["class"];
+                $class = $doc["_class_"];
                 return new $class($doc);
             }else{
                 $this->cursor->reset();

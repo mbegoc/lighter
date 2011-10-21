@@ -6,6 +6,8 @@ namespace dto;
  * The mother class for the MongoDB Documents
  *
  */
+use handlers\Debug;
+
 abstract class DataObject {
     /**
      * the document itself
@@ -19,7 +21,7 @@ abstract class DataObject {
      * @param $doc
      */
     public function __construct(array $doc){
-        if(isset($doc["class"])){
+        if(isset($doc["_class_"])){
             $this->doc = $doc;
         }else{
             throw new DataObjectException("The class element must be present.", 1);
@@ -48,8 +50,8 @@ abstract class DataObject {
      * Here you can check data validity, remove, add or change information
      * $param string $class
      */
-    public function prepareToDB($class){
-        $this->doc['class'] = $class;
+    public function prepareToDB(){
+        $this->doc['_class_'] = $this->getClassName();
     }
 
 
@@ -60,6 +62,8 @@ abstract class DataObject {
         return json_encode($this->doc);
     }
 
+
+    protected abstract function getClassName();
 }
 
 

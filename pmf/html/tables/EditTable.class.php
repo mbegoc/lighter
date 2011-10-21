@@ -8,7 +8,7 @@
  * 				contenant des outils pour chaque ligne.
  *
  *****************************************************************************/
-namespace helpers;
+namespace html\tables;
 
 
 class EditTable extends Table {
@@ -42,9 +42,9 @@ class EditTable extends Table {
 
 	/**
 	 * réécriture de la fonction de Table, adaptée aux besoins de la nouvelle classe
-	 * @param VoObject $vo
+	 * @param DataObject $dto
 	 */
-	public function addRow(&$vo){
+	public function addRow(DataObject $dto){
 		if($this->highlight){
 			$class = " class='highlighted'";
 		}else{
@@ -54,14 +54,15 @@ class EditTable extends Table {
 
 		$this->tbody.= "<tr$class>";
 		foreach($this->cols as $col){
-			if(isset($vo->{$col})){
-				$this->tbody.= "<td$colspan>".$vo->{$col}."</td>";
+		    $value = $dto->{'get'.$col}();
+			if(isset($value)){
+				$this->tbody.= "<td$colspan>$value</td>";
 			}else{
 				$this->tbody.= "<td></td>";
 			}
 		}
 		foreach($this->tools as $tool){
-			$this->tbody.= "<td><a href='".$tool["url"].$vo->id."'>".$tool["label"]."</a></td>";
+			$this->tbody.= "<td><a href='".$tool["url"].$dto->getId()."'>".$tool["label"]."</a></td>";
 		}
 		$this->tbody.= "</tr>";
 	}
@@ -76,6 +77,4 @@ class EditTable extends Table {
 		return parent::toHTML();
 	}
 }
-/*****************************************************************************
- * End of file EditTable.php
- */
+

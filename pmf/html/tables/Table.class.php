@@ -6,7 +6,7 @@
  * Description: class d'abstraction php pour les tables HTML
  *
  *****************************************************************************/
-namespace helpers;
+namespace html\tables;
 
 
 class Table {
@@ -34,9 +34,9 @@ class Table {
 	/**
 	 * Ajoute une ligne à la table
 	 * Les données sont passées par un VoObject
-	 * @param VoObject $vo
+	 * @param DataObject $dto
 	 */
-	public function addRow(&$vo){
+	public function addRow(DataObject $dto){
 		if($this->highlight){
 			$class = " class='highlighted'";
 		}else{
@@ -46,8 +46,9 @@ class Table {
 
 		$this->tbody.= "<tr$class>";
 		foreach($this->cols as $col){
-			if(isset($vo->{$col})){
-				$this->tbody.= "<td$colspan>$col".$vo->{$col}."</td>";
+		    $value = $dto->{'get'.$col}();
+			if($value){
+				$this->tbody.= "<td$colspan>$value</td>";
 			}else{
 				$this->tbody.= "<td></td>";
 			}
@@ -107,6 +108,4 @@ class Table {
 				"</table>";
 	}
 }
-/*****************************************************************************
- * End of file Table.class.php
- */
+

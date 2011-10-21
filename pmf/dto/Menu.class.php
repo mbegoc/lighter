@@ -11,6 +11,7 @@ class Menu extends DataObject {
 
         //FIXME this should be got from config
         $this->doc['controller'] = 'Content';
+        $this->doc['method'] = 'handleRequest';
     }
 
     public function setTitle($title){
@@ -45,12 +46,8 @@ class Menu extends DataObject {
         return $this->doc['method'];
     }
 
-    public function publish(){
-        $this->doc['published'] = true;
-    }
-
-    public function unpublish(){
-        $this->doc['published'] = true;
+    public function setPublished($published){
+        $this->doc['published'] = $published;
     }
 
     public function isPublished(){
@@ -73,5 +70,9 @@ class Menu extends DataObject {
 
     public function prepareToDB(){
         parent::prepareToDB(__CLASS__);
+    }
+
+    protected function getClassName(){
+        return __CLASS__;
     }
 }
