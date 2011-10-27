@@ -3,25 +3,16 @@ namespace views;
 
 
 use dto\Menu;
-
-use html\tables\EditTable;
-
-use dto\DBAccessor;
-
-use html\forms\InputCheckBox;
+use dto\Config;
 
 use handlers\Debug;
 
-use html\forms\FormElement;
-
 use html\HtmlHeader;
-
-use dto\Config;
-
+use html\tables\EditTable;
+use html\forms\FormElement;
+use html\forms\InputCheckBox;
 use html\forms\InputText;
 use html\forms\Form;
-
-use dto\DataObject;
 
 use helpers\Path;
 
@@ -120,7 +111,7 @@ class Admin extends PageBody {
     }
 
 
-    public function initMenuList(DBAccessor $dba){
+    public function initMenuList(Menu $menu){
         $this->setTitle('Menu List');
         $this->table = new EditTable("menuList");
         $this->table->addHeaderCell('Title');
@@ -133,8 +124,8 @@ class Admin extends PageBody {
         $this->table->addCol('ControllerMethod');
         $this->table->setTool('Detail', Path::getInstance()->prefixURI('Admin/menu/'));
 
-        while(($dto = $dba->next()) != NULL){
-            $this->table->addRow($dto);
+        while($menu->next()){
+            $this->table->addRow($menu);
         }
     }
 
@@ -150,6 +141,7 @@ class Admin extends PageBody {
         $this->form->addElement(new InputText('short', _('URL name'), 200, $this->data->getShort()));
         $this->form->addElement(new InputText('controllerClass', _('Controller class'), 200, $this->data->getController()));
         $this->form->addElement(new InputText('controllerMethod', _('Controller method'), 200, $this->data->getControllerMethod()));
+        $this->form->addElement(new InputText('itemId', _('Item id'), 200, $this->data->getItemId()));
         $this->form->addElement(new InputCheckBox('published', _('Published'), $this->data->isPublished()));
     }
 
@@ -159,6 +151,7 @@ class Admin extends PageBody {
         $this->data->setShort($values['short']);
         $this->data->setController($values['controllerClass']);
         $this->data->setControllerMethod($values['controllerMethod']);
+        $this->data->setItemId($values['itemId']);
         $this->data->setPublished($values['published']);
     }
 

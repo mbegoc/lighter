@@ -4,13 +4,13 @@ namespace dto;
 
 use handlers\Debug;
 
-class Config extends DataObject {
+class Config extends DataAccessor {
     private static $instance = NULL;
 
-    public function __construct(array $doc = NULL){
-        if($doc != NULL){
-            parent::__construct($doc);
-        }
+    protected function __construct(){
+        parent::__construct('config');
+        $this->loadAll()->sort(array('date' => -1))->slice(1);
+        $this->next();
     }
 
 
@@ -20,12 +20,7 @@ class Config extends DataObject {
      */
     public static function getInstance(){
         if(!isset(self::$instance)){
-            $dba = new DBAccessor("config");
-            $dba->search(array(), 1, 0, array('date' => -1));
-            self::$instance = $dba->next();
-            if(!isset(self::$instance)){
-                self::$instance = new self();
-            }
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -102,20 +97,9 @@ class Config extends DataObject {
     }
 
 
-    public function prepareToDb(){
-        parent::prepareToDb();
+    protected function prepareToDb(){
         unset($this->doc['_id']);
         $this->doc['date'] = time();
-        \handlers\Debug::getInstance()->dump($this->doc);
-    }
-
-
-    /**
-     * (non-PHPdoc)
-     * @see dto.DataObject::getClassName()
-     */
-    protected function getClassName(){
-        return __CLASS__;
     }
 
 

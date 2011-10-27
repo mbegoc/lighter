@@ -2,13 +2,11 @@
 namespace dto;
 
 
-class Content extends DataObject {
+class Content extends DataAccessor {
 
 
-    public function __construct(array $doc = NULL){
-        if($doc != NULL){
-            parent::__construct($doc);
-        }
+    public function __construct(){
+        parent::__construct('content');
     }
 
     public function setTitle($title){
@@ -28,16 +26,7 @@ class Content extends DataObject {
     }
 
     public function prepareToDB(){
-        parent::prepareToDB();
-    }
 
-
-    /**
-     * (non-PHPdoc)
-     * @see dto.DataObject::getClassName()
-     */
-    protected function getClassName(){
-        return __CLASS__;
     }
 
 }

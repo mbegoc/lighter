@@ -4,7 +4,6 @@ namespace controllers;
 use handlers\HttpRequest;
 
 use dto\Content as Data;
-use dto\DBAccessor;
 
 use views\Content as View;
 
@@ -24,8 +23,8 @@ class Content extends Controller {
 
 
     public function show($id){
-        $dba = new DBAccessor('content');
-        $content = $dba->get($id);
+        $content = new Data();
+        $content->load($id);
 
         switch(HttpRequest::getInstance()->getMethod()){
             case 'POST':

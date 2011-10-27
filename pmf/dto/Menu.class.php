@@ -2,16 +2,17 @@
 namespace dto;
 
 
-class Menu extends DataObject {
+class Menu extends DataAccessor {
 
-    public function __construct(array $doc = NULL){
-        if($doc != NULL){
-            parent::__construct($doc);
-        }
-
-        //FIXME this should be got from config
+    public function __construct(){
+        parent::__construct('menu');
         $this->doc['controller'] = 'Content';
         $this->doc['method'] = 'handleRequest';
+    }
+
+    public function loadFromSlug($slug){
+        $this->search(array("short" => $slug));
+        return $this;
     }
 
     public function setTitle($title){
@@ -38,12 +39,22 @@ class Menu extends DataObject {
         return $this->doc['controller'];
     }
 
-    public function setControllerMethod($controller){
-        $this->doc['method'] = $controller;
+    public function setControllerMethod($method){
+        $this->doc['method'] = $method;
     }
 
     public function getControllerMethod(){
         return $this->doc['method'];
+    }
+
+    /**
+     * id of the item to pass to the controller
+     */
+    public function setItemId($itemId){
+        $this->doc['itemId'] = (string)$itemId;
+    }
+    public function getItemId(){
+        return $this->doc['itemId'];
     }
 
     public function setPublished($published){
@@ -68,11 +79,9 @@ class Menu extends DataObject {
         }
     }
 
-    public function prepareToDB(){
-        parent::prepareToDB(__CLASS__);
+    protected function prepareToDB(){
+
     }
 
-    protected function getClassName(){
-        return __CLASS__;
-    }
 }
+
