@@ -1,19 +1,30 @@
 <?php
-namespace html\forms;
+namespace pmf\html\forms;
+
+
+use pmf\handlers\Debug;
 
 
 /**
  * an html input checkbox
- * @author michel
+ *
+ * @name InputCheckBox
+ * @package pmf
+ * @subpackage helpers\html\forms
+ * @see pmf\helpers\html\forms\Input
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
-use handlers\Debug;
-
 class InputCheckBox extends Input {
 
 
     /**
      * construct a html checkbox
+     *
      * @param string $name
      * @param string $label
      * @param string $value
@@ -25,6 +36,7 @@ class InputCheckBox extends Input {
 
 	/**
 	 * produce a html string
+     *
 	 * @return string html
 	 */
 	public function __toString(){
@@ -40,4 +52,5 @@ class InputCheckBox extends Input {
 	}
 
 }
+
 

@@ -6,6 +6,6 @@
  * @param string $class
  */
 function __autoload($class){
-    $path = 'pmf/'.str_replace('\\', '/', $class).'.class.php';
+    $path = str_replace('\\', '/', $class).'.class.php';
     require $path;
 }

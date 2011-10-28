@@ -1,8 +1,8 @@
 <?php
-namespace views;
+namespace pmf\views;
 
 
-use html\HtmlHeader;
+use pmf\html\HtmlHeader;
 
 use \SimpleXMLElement;
 

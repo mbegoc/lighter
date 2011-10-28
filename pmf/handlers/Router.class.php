@@ -1,23 +1,31 @@
 <?php
-namespace handlers;
+namespace pmf\handlers;
 
 
-use dto\ConfigException;
+use pmf\dto\ConfigException;
 
-use helpers\Exception;
+use pmf\helpers\Exception;
 
-use dto\Config;
-use dto\Menu;
+use pmf\dto\Config;
+use pmf\dto\Menu;
 
-use handlers\Debug;
-use handlers\HttpResponse;
+use pmf\handlers\Debug;
+use pmf\handlers\HttpResponse;
 
 
 /**
  *
  * this class permit to route the request on the good (Sub)Controller, regarding the asked uri
  * it can be extended to alter the way the url is treated. If you do, the index.php will have to be updated too.
- * @author michel
+ *
+ * @name Router
+ * @package pmf
+ * @subpackage handlers
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
 class Router {
@@ -28,36 +36,43 @@ class Router {
     protected $basePath;
     /**
      * the controller class corresponding to the asked uri
+     *
      * @var string
      */
     protected $controllerClass;
     /**
      * the method to call from the controller
+     *
      * @var string
      */
     protected $method;
     /**
      * the arguments
+     *
      * @var array
      */
     protected $args = array();
     /**
      * the controller itself, i.e. its instance
+     *
      * @var Controller
      */
     protected $controller;
     /**
      * the main view, i.e. the presentation object for a basic webpage
+     *
      * @var MainView
      */
     protected $view;
     /**
      * the profile object
+     *
      * @var profile
      */
     protected $profile;
     /**
      * the config object
+     *
      * @var Config
      */
     protected $config;
@@ -116,7 +131,7 @@ class Router {
 
         //FIXME should take the controllers and MainView path from config
         if(file_exists("pmf/controllers/$this->controllerClass.class.php")){
-            $controller = '\\controllers\\'.$this->controllerClass;
+            $controller = '\\pmf\\controllers\\'.$this->controllerClass;
             $this->controller = new $controller();
 
             if(method_exists($this->controller, $this->method)){

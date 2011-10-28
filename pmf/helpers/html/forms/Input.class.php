@@ -1,41 +1,57 @@
 <?php
-namespace html\forms;
+namespace pmf\html\forms;
 
 
 /**
- * an input text
- * @author michel
+ * a generic input text. Subclasses will implement particular HTML inputs
+ *
+ * @name Input
+ * @abstract
+ * @package pmf
+ * @subpackage helpers\html\forms
+ * @see pmf\helpers\html\forms\FormElement
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
 abstract class Input extends FormElement {
     /**
      * the field type
+     *
      * @var string
      */
     protected $inputType;
     /**
      * the size of the field
+     *
      * @var int
      */
 	protected $size;
 	/**
 	 * the label (title) of the field
+     *
 	 * @var string
 	 */
 	protected $label;
 	/**
 	 * the field name
+     *
 	 * @var string
 	 */
 	protected $name;
 	/**
 	 * the field value
+     *
 	 * @var string
 	 */
 	protected $value;
 
 
 	/**
+     * default constructor
 	 *
 	 * @param string $name
 	 * @param string $label
@@ -54,6 +70,7 @@ abstract class Input extends FormElement {
 
 	/**
 	 * produce a html string
+     *
 	 * @return string html
 	 */
 	public function __toString(){
@@ -66,4 +83,5 @@ abstract class Input extends FormElement {
 	}
 
 }
+
 

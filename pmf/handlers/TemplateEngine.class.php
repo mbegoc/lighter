@@ -1,24 +1,35 @@
 <?php
-namespace handlers;
+namespace pmf\handlers;
 
-use dto\Config;
+
+use pmf\dto\Config;
 
 
 /**
  * This class can handle php templates. This is inspired by Smarty.
  * You can register objects in it, and then access these objects in the template.
  * Finally, this class can process the template and display it.
- * @author michel
+ *
+ * @name TemplateEngine
+ * @package pmf
+ * @subpackage handlers
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
 class TemplateEngine {
 	/**
 	 * the registered objects list
+	 *
 	 * @var array
 	 */
 	private $objects = array();
 	/**
 	 * the config object
+	 *
 	 * @var dto\Config
 	 */
 	private $config;
@@ -36,10 +47,11 @@ class TemplateEngine {
 	 * ajouts d'objets aux moteur de template. Lors de l'affichage du site,
 	 * il sera possible d'accéder à ces objets dans les templates par
 	 * $this->name ou $tplEng->name
+	 *
 	 * @param string $name
 	 * @param VueBase $object un objet de type vue
 	 */
-	public function addObject($name, &$object){
+	public function addObject($name, $object){
 		$this->objects[$name] = $object;
 	}
 
@@ -56,6 +68,7 @@ class TemplateEngine {
 
 	/**
 	 * retourne le template fournit en paramètre processé
+	 *
 	 * @param string $template
 	 */
 	public function get($template){
@@ -73,6 +86,10 @@ class TemplateEngine {
 	}
 
 
+	/**
+	 *
+	 * @param string $template
+	 */
 	protected function getTemplate($template){
 	    return $this->config->getTemplatePath().$template.$this->config->getTemplateExt();
 	}
@@ -81,6 +98,7 @@ class TemplateEngine {
 	/**
 	 * magic functions
 	 * permettent l'accès aux objets référencés
+	 *
 	 * @param $name
 	 */
 	public function __isset($name){

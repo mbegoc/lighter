@@ -1,28 +1,47 @@
 <?php
-namespace helpers;
+namespace pmf\helpers;
 
 
-use dto\Config;
+use pmf\dto\Config;
 
-
+/**
+ * Class Path: provide helper method for handling paths to resources
+ *
+ * @name Config
+ * @package pmf
+ * @subpackage dto
+ * @see pmf\dto\DataAccessor
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
+ *
+ */
 class Path {
     /**
      * instance
+     *
      * @var Path
      */
     private static $instance = NULL;
     /**
      * Config object
+     *
      * @var dto\Config
      */
     protected $config;
     /**
      * the index file if needed
+     *
      * @var string
      */
     protected $indexFile = '';
 
 
+    /**
+     * private singleton constructor
+     */
     private function __construct(){
         $this->config = Config::getInstance();
         if($this->config->needIndexFile()){
@@ -31,6 +50,11 @@ class Path {
     }
 
 
+    /**
+     * singleton getInstance method
+     *
+     * @static
+     */
     public function getInstance(){
         if(!isset(self::$instance)){
             self::$instance = new self();
@@ -39,11 +63,9 @@ class Path {
     }
 
 
-
-
     /**
-     *
-     * Enter description here ...
+     * provide the path for a static image
+     * 
      * @param string $name
      */
     public function getImgPath($name){
@@ -51,7 +73,15 @@ class Path {
     }
 
 
+    /**
+     * correctly prefix a relative uri
+     *
+     * @param string uri
+     */
     public function prefixURI($uri){
         return $this->config->getApplicationRelativePath().$this->indexFile.$uri;
     }
+
 }
+
+

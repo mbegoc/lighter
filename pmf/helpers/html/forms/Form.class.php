@@ -1,48 +1,54 @@
 <?php
-namespace html\forms;
+namespace pmf\html\forms;
 
 
-use handlers\HttpRequest;
+use pmf\handlers\HttpRequest;
 
 use \Exception;
 
 
 /**
- * Permet de gérer des formulaires HTML.
- * La classe représente un formulaire HTML. On va pouvoir ensuite
- * lui demander soit de fournir le formulaire HTML, soit d'analyser
- * le formulaire qui sera posté et de le transformer en VoObjet.
- * Edit: l'idée de VoObjet va probablement être compliqueé à mettre
- * en oeuvre (à moins peut-être de passer un objet vide en paramètre
- * à la fonction et de boucler dans la liste de champs)
+ * Handle HTML forms. The class represent a HTML form. We can ask it the
+ * HTML form or to handle the posted data.
  *
+ * @name Form
+ * @package pmf
+ * @subpackage helpers\html\forms
+ * @since 0.1
+ * @version 0.1
  * @author Michel Begoc
- * @copyright Michel Begoc (c) 2010
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
 class Form {
     /**
      * the name of the form
+     *
      * @var string
      */
 	protected $name;
 	/**
 	 * the target of the form
+     *
 	 * @var string
 	 */
 	protected $target;
 	/**
 	 * the method to send the form through
+     *
 	 * @var string
 	 */
 	protected $method;
 	/**
 	 * the list of fields of the form
+     *
 	 * @var array
 	 */
 	protected $elements;
 	/**
 	 * fieldset title
+     *
 	 * @var string
 	 */
 	protected $fieldset = NULL;
@@ -50,6 +56,7 @@ class Form {
 
 	/**
 	 * create a new form
+     *
 	 * @param $target
 	 */
 	public function __construct($name, $target = "", $method = "post"){
@@ -63,6 +70,7 @@ class Form {
 
 	/**
 	 * add an element to the form
+     *
 	 * @param FormElement $element
 	 */
 	public function addElement(FormElement $element){
@@ -71,7 +79,8 @@ class Form {
 
 
 	/**
-	 *
+	 * set fieldset name
+     *
 	 * @param string $label
 	 */
 	public function setFieldSet($label){
@@ -81,6 +90,7 @@ class Form {
 
 	/**
 	 * return this form in html format
+     * @return string
 	 */
 	public function __toString(){
 		$html = "<div id='{$this->name}Box' class='formBox'>";
@@ -110,7 +120,9 @@ class Form {
 
 
 	/**
-	 * retourne les valeurs saisies pour ce formulaire
+	 * return the input values
+     *
+     * @return array
 	 */
 	public function getValues(){
 		$return = array();
@@ -124,6 +136,7 @@ class Form {
 
 	/**
 	 * say if this form have been posted or not
+     *
 	 * @return boolean
 	 */
 	public function isPosted(){
@@ -134,13 +147,28 @@ class Form {
 
 	/**
 	 * name getter
+     *
 	 * @return string
 	 */
 	public function getName(){
 	    return $this->name;
 	}
+
 }
 
-
+/**
+ * the exception thrown by the Form class
+ *
+ * @name FormException
+ * @package pmf
+ * @subpackage helpers\html\forms
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
+ *
+ */
 class FormException extends Exception {}
+
 

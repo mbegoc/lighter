@@ -1,11 +1,11 @@
 <?php
-namespace views;
+namespace pmf\views;
 
 
-use handlers\HttpResponse;
-use handlers\TemplateEngine;
+use pmf\handlers\HttpResponse;
+use pmf\handlers\TemplateEngine;
 
-use html\HtmlHeader;
+use pmf\html\HtmlHeader;
 
 use \Exception;
 

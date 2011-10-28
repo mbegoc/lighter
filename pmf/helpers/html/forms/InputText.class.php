@@ -1,16 +1,26 @@
 <?php
-namespace html\forms;
+namespace pmf\html\forms;
 
 
 /**
  * an input text
- * @author michel
+ *
+ * @name InputText
+ * @package pmf
+ * @subpackage helpers\html\forms
+ * @see pmf\helpers\html\forms\Input
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
 class InputText extends Input {
 
 
 	/**
+     * default constructor
 	 *
 	 * @param string $name
 	 * @param string $label
@@ -22,4 +32,5 @@ class InputText extends Input {
 	}
 
 }
+
 

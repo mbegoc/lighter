@@ -1,34 +1,48 @@
 <?php
-namespace dto;
+namespace pmf\dto;
 
 
 use \MongoId;
 use \Mongo;
 use \Exception;
 
+
 /**
  * a class to access a mongo database
- * @author michel
+ *
+ * @name DataAccessor
+ * @abstract
+ * @package pmf
+ * @subpackage dto
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
 abstract class DataAccessor {
     /**
      * the collection name in which to search the documents
+     *
      * @var string
      */
     private $collection = NULL;
     /**
      * the cursor resulting of a search
+     *
      * @var MongoCursor
      */
     private $cursor = NULL;
     /**
      * the connection data
+     *
      * @var array
      */
     private static $connexionData = NULL;
     /**
      * the mongo document
+     *
      * @var array
      */
     protected $doc;
@@ -36,10 +50,11 @@ abstract class DataAccessor {
 
     /**
      * initialize the DB connection
-     * constructor is protected by default because of the potential singletons (such as Config)
-     * which could inheritate of this class. The singleton pattern need a restricted visibility
-     * for the constructor. Other subclasses can extend the default visibility of the constructor,
-     * while the opposite is impossible.
+     * constructor is protected by default because of the potential singletons (such
+     * as Config) which could inheritate of this class. The singleton pattern need a
+     * restricted visibility for the constructor. Other subclasses can extend the
+     * default visibility of the constructor, while the opposite is impossible.
+     *
      * @param string $collection
      */
     protected function __construct($collection){
@@ -56,6 +71,7 @@ abstract class DataAccessor {
 
     /**
      * load document from its id
+     *
      * @param string $id
      */
     public function load($id){
@@ -65,7 +81,9 @@ abstract class DataAccessor {
 
     /**
      * search in the db a set of documents regarding the provided criterias
-     * this method is protected and is a convenient method for specific search method which could be implemented in subsclasses
+     * this method is protected and is a convenient method for specific search method
+     *  which could be implemented in subsclasses
+     *
      * @param array $criterias
      * @throws DataAccessorException
      */
@@ -80,6 +98,7 @@ abstract class DataAccessor {
 
     /**
      * intialize this object to access the whole set of documents of the database
+     *
      * @return DBAccessor
      */
     public function loadAll(){
@@ -90,6 +109,7 @@ abstract class DataAccessor {
 
     /**
      * sort the data
+     *
      * @param array $sort - key = field to sort, value = order (1, -1)
      * @return DBAccessor
      */
@@ -101,6 +121,7 @@ abstract class DataAccessor {
 
     /**
      * slice the dataset
+     *
      * @param int $qty
      * @param int $from
      * @return DBAccessor
@@ -113,6 +134,7 @@ abstract class DataAccessor {
 
     /**
      * load the next document from a previous search
+     *
      * @throws DataAccessorException
      */
     public function next(){
@@ -133,6 +155,7 @@ abstract class DataAccessor {
 
     /**
      * count the number of entries in a collection, regarding the provided criterias
+     *
      * @param array $criterias
      */
     public function count(array $criterias = array()){
@@ -151,6 +174,7 @@ abstract class DataAccessor {
 
     /**
      * delete an object from the DB
+     *
      * @param string $id
      */
     public function delete(){
@@ -160,6 +184,7 @@ abstract class DataAccessor {
 
     /**
      * delete an object from its id
+     *
      * @param string $id
      */
     public function deleteFromId($id){
@@ -170,16 +195,28 @@ abstract class DataAccessor {
     /**
      * a method to be called just before inserting the data in the DB.
      * Here you can check data validity, remove, add or change information
-     * $param string $class
+     *
+     * @abstract
+     * @param string $class
      */
     protected abstract function prepareToDB();
 
 
     /**
+     * a method which permit to initialize an object in one call.
+     *
+     * @var array - keys = fields names / values = values
+     */
+    public abstract function setValues(array $values);
+
+
+    /**
      * return the document id
+     *
+     * @return string
      */
     public function getId(){
-        return $this->doc["_id"];
+        return (string)$this->doc["_id"];
     }
 
 
@@ -193,4 +230,10 @@ abstract class DataAccessor {
 }
 
 
+/**
+ * Exception thrown by the DataAccessor
+ *
+ * @author michel
+ *
+ */
 class DataAccessorException extends Exception {}

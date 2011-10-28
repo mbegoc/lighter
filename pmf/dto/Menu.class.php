@@ -1,5 +1,5 @@
 <?php
-namespace dto;
+namespace pmf\dto;
 
 
 class Menu extends DataAccessor {

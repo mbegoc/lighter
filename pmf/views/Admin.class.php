@@ -1,32 +1,32 @@
 <?php
-namespace views;
+namespace pmf\views;
 
 
-use dto\Menu;
-use dto\Config;
+use pmf\dto\Menu;
+use pmf\dto\Config;
 
-use handlers\Debug;
+use pmf\handlers\Debug;
 
-use html\HtmlHeader;
-use html\tables\EditTable;
-use html\forms\FormElement;
-use html\forms\InputCheckBox;
-use html\forms\InputText;
-use html\forms\Form;
+use pmf\html\HtmlHeader;
+use pmf\html\tables\EditTable;
+use pmf\html\forms\FormElement;
+use pmf\html\forms\InputCheckBox;
+use pmf\html\forms\InputText;
+use pmf\html\forms\Form;
 
-use helpers\Path;
+use pmf\helpers\Path;
 
 
 class Admin extends PageBody {
     const SAVE_OK = 'Your modification has been saved.';
     /**
      *
-     * @var dto\DataObject
+     * @var pmf\dto\DataAccessor
      */
     protected $data = NULL;
     /**
      *
-     * @var html\forms\Form
+     * @var pmf\helpers\html\forms\Form
      */
     protected $form = NULL;
     /**

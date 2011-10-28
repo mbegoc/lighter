@@ -1,0 +1,55 @@
+         Roadmap
+        --------------
+         Michel Begoc
+        -------------
+         2011-10-28
+        -------------
+
+* Framework
+
+    Here are the next steps to obtain a correct first version:
+
+        * improve the routing definition system - unlink it from menu - remove menu
+          from the basic framework
+        * permit the replacement of the default Routing class
+        * write a correct initial configuration script, which should ask the user
+          the basic configuration data. For instance, db host and port, application
+          path.
+        * DataAccessor objects should use both collections and database
+        * gettext should be correctly implemented
+        * SessionManager should be implemented (at this time, it's an old object
+          which hasn't been converted to this framework)
+        * the helpers collection should be bigger
+        * html package should be include in helpers package
+        * ALL the code must be correctly commented
+        * a PHPUnit test pack should be created
+
+* Modules
+
+    As a second step, the framework part will have a few basic module which will
+    offer basic common fonctionnality, such as users management, page content,
+    news plugin, etc.
+
+** user_mod
+
+    This will be the first module added to the framework. It should be capable of
+    manage users and groups, in a basic way. Not too much features: just the ability
+    to edit a group or member profile by an administrator. The module should also
+    provide a basic login form.
+    
+    The capability to permit to visitor to create an account will be managed in
+    another module.
+
+** content_mod
+    
+    This module will offer the ability to edit and display simple page in a website.
+    The user_mod module will be necessary to protect the administration page.
+
+** menu_mod
+
+    This module will implement a menu definition system and a plugin to display it in
+    a webpage. The menu should be an extension to the routing system.
+
+** more
+    
+    Many modules could be done this way. More to come...

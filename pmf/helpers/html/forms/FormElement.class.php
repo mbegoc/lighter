@@ -1,14 +1,23 @@
 <?php
-namespace html\forms;
+namespace pmf\html\forms;
 
 
-use handlers\Debug;
-use handlers\HttpRequest;
+use pmf\handlers\Debug;
+use pmf\handlers\HttpRequest;
 
 
 /**
  * a mother class for all of the form fields
- * @author michel
+ *
+ * @name FormElement
+ * @abstract
+ * @package pmf
+ * @subpackage helpers\html\forms
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
 abstract class FormElement {
@@ -18,22 +27,26 @@ abstract class FormElement {
 	const BOOL = 4;
 	/**
 	 * the type of the element
+     *
 	 * @var int
 	 */
 	protected $type;
 	/**
 	 * the element name
+     *
 	 * @var string
 	 */
 	protected $name;
 	/**
 	 * the value of the element
+     *
 	 * @var mixed
 	 */
 	protected $value;
 
 
 	/**
+     * default constructor
 	 *
 	 * @param int $type
 	 */
@@ -44,12 +57,14 @@ abstract class FormElement {
 
 	/**
 	 * this fonction have to return a string representing the element in html format
+     * @abstract
 	 */
 	public abstract function __toString();
 
 
 	/**
 	 * return the value of a field, regarding its type
+     *
 	 * @return mixed
 	 */
 	public function getValue(){
@@ -75,6 +90,7 @@ abstract class FormElement {
 
 	/**
 	 * name getter
+     *
 	 * @return string
 	 */
 	public function getName(){
@@ -82,4 +98,5 @@ abstract class FormElement {
 	}
 
 }
+
 

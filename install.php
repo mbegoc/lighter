@@ -3,8 +3,8 @@ error_reporting(E_ALL);
 require "pmf/config/include.php";
 
 
-use dto\Config;
-use dto\DBAccessor;
+use pmf\dto\Config;
+use pmf\dto\DBAccessor;
 
 
 $config = new Config();
