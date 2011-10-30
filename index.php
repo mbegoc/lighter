@@ -5,9 +5,9 @@
  * actually handle the requests.
  */
 error_reporting(E_ALL);
-require "pmf/config/include.php";
+require "lighter/config/include.php";
 
 
-$router = new pmf\handlers\Router();
+$router = new lighter\handlers\Router();
 $router->execute();
 

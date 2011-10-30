@@ -12,10 +12,12 @@
         * improve the routing definition system - unlink it from menu - remove menu
           from the basic framework
         * permit the replacement of the default Routing class
-        * permit to separate the framework from the app
+        * continue to separate the framework from the app (media files may be a part
+          of the app -  at this time, the include folder is neither a part of the 
+          framework nor the app)
         * write a correct initial configuration script, which should ask the user
           the basic configuration data. For instance, db host and port, application
-          path.
+          path, etc.
         * DataAccessor objects should use both collections and database
         * DataAccessor objects should implements basic validation methods (or a Helper
           should do so)
@@ -23,9 +25,10 @@
         * SessionManager should be implemented (at this time, it's an old object
           which hasn't been converted to this framework)
         * the helpers collection should be bigger
-        * html package should be include in helpers package
         * ALL the code must be correctly commented
         * a PHPUnit test pack should be created
+        * the path object need to be improved define URI more efficiently. At this
+          time, the basic module admin have navigation bugs because of the URI.
 
 * Modules
 
