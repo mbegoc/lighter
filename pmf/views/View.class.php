@@ -5,7 +5,7 @@ namespace pmf\views;
 use pmf\handlers\HttpResponse;
 use pmf\handlers\TemplateEngine;
 
-use pmf\html\HtmlHeader;
+use pmf\helpers\html\HtmlHeader;
 
 use \Exception;
 
@@ -14,27 +14,39 @@ use \Exception;
  * The very basic View class. Instantiate the TemplateEngine and display a content,
  * regarding the providing template.
  *
- * @author michel
+ * @name View
+ * @abstract
+ * @package pmf
+ * @subpackage views
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
 abstract class View {
     /**
      * the template engine
+     *
      * @var handlers\TemplateEngine
      */
 	protected static $tplEngine;
 	/**
 	 * the template to display
+     *
 	 * @var string
 	 */
 	protected $mainTemplate;
 	/**
 	 * the content template
+     *
 	 * @var string
 	 */
 	protected $contentTemplate;
 	/**
      * a messages list to display
+     *
      * @var string
      */
     private $messages = "";
@@ -42,6 +54,7 @@ abstract class View {
 
 	/**
 	 * constructor
+     *
 	 * @param string $template
 	 */
 	public function __construct($mainTemplate, $contentTemplate){
@@ -56,6 +69,7 @@ abstract class View {
 
 	/**
 	 * display the main template of the page and return a boolean saying if the method is supported
+     *
 	 * @return boolean
 	 */
 	public final function display(){
@@ -68,6 +82,7 @@ abstract class View {
 
 	/**
 	 * return the HTML actual content of the page
+     *
 	 * @return string
 	 */
 	public function getContent(){
@@ -77,6 +92,7 @@ abstract class View {
 
     /**
      * add a message to the page
+     *
      * @param string $message
      * @param string $class
      */
@@ -90,6 +106,7 @@ abstract class View {
 
     /**
      * return the messages
+     *
      * @return string
      */
     public function getMessages(){
@@ -99,6 +116,7 @@ abstract class View {
 
     /**
      * display the content in XML format and return a boolean saying if the method is supported
+     *
      * @return boolean
      */
     public function displayXml(){
@@ -108,6 +126,7 @@ abstract class View {
 
     /**
      * display the content in JSON format and return a boolean saying if the method is supported
+     *
      * @return boolean
      */
     public function displayJson(){
@@ -117,5 +136,19 @@ abstract class View {
 }
 
 
+/**
+ * The exception thrown by the Views classes
+ *
+ * @name ViewException
+ * @package pmf
+ * @subpackage views
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
+ *
+ */
 class ViewException extends Exception {}
+
 

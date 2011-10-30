@@ -5,7 +5,7 @@ namespace pmf\views;
 use pmf\handlers\HttpResponse;
 use pmf\handlers\TemplateEngine;
 
-use pmf\html\HtmlHeader;
+use pmf\helpers\html\HtmlHeader;
 
 use \Exception;
 

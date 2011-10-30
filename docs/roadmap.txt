@@ -16,6 +16,8 @@
           the basic configuration data. For instance, db host and port, application
           path.
         * DataAccessor objects should use both collections and database
+        * DataAccessor objects should implements basic validation methods (or a Helper
+          should do so)
         * gettext should be correctly implemented
         * SessionManager should be implemented (at this time, it's an old object
           which hasn't been converted to this framework)

@@ -70,6 +70,26 @@ abstract class DataAccessor {
 
 
     /**
+     * a method to be called just before inserting the data in the DB.
+     * Here you can check data validity, remove, add or change information
+     *
+     * @abstract
+     * @param string $class
+     */
+    protected abstract function prepareToDB();
+
+
+    /**
+     * a method which permit to initialize an object in one call.
+     *
+     * @param array - keys = fields names / values = values
+     * @param string - a prefix which could be used to prefix each field name in the
+     * 		html form
+     */
+    public abstract function setValues(array $values, $prefix = "");
+
+
+    /**
      * load document from its id
      *
      * @param string $id
@@ -190,24 +210,6 @@ abstract class DataAccessor {
     public function deleteFromId($id){
         $this->collection->remove(array("_id" => new MongoId($id)));
     }
-
-
-    /**
-     * a method to be called just before inserting the data in the DB.
-     * Here you can check data validity, remove, add or change information
-     *
-     * @abstract
-     * @param string $class
-     */
-    protected abstract function prepareToDB();
-
-
-    /**
-     * a method which permit to initialize an object in one call.
-     *
-     * @var array - keys = fields names / values = values
-     */
-    public abstract function setValues(array $values);
 
 
     /**

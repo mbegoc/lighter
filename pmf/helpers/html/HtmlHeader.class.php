@@ -2,6 +2,9 @@
 namespace pmf\helpers\html;
 
 
+use \Exception;
+
+
 /**
  * manage the HTTP Header. It's a singleton thus it can be accessed from anywhere in
  * the application, as much from the main controller than from a sub-view of a

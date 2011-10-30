@@ -2,24 +2,34 @@
 namespace pmf\views;
 
 
-use pmf\html\HtmlHeader;
+use pmf\helpers\html\HtmlHeader;
 
 use \SimpleXMLElement;
 
 
 /**
  * a specialized view to display http messages
- * @author michel
+ *
+ * @name HttpMessage
+ * @package pmf
+ * @subpackage views
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
 class HttpMessage extends View {
     /**
      * http response code
+     *
      * @var int
      */
     protected $code;
     /**
      * http response message
+     *
      * @var string
      */
     protected $message;
@@ -28,6 +38,7 @@ class HttpMessage extends View {
     /**
      * construct a view with the given code and message
      * this reset html header to be able to display a html format if necessary
+     *
      * @param int $code
      * @param string $message
      */
@@ -46,6 +57,7 @@ class HttpMessage extends View {
 
     /**
      * return the http code for template
+     *
      * @return int
      */
     public function getCode(){
@@ -55,6 +67,7 @@ class HttpMessage extends View {
 
     /**
      * return the message for template
+     *
      * @return string
      */
     public function getMessage(){
@@ -84,4 +97,5 @@ class HttpMessage extends View {
     }
 
 }
+
 

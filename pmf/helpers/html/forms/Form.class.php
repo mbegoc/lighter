@@ -1,5 +1,5 @@
 <?php
-namespace pmf\html\forms;
+namespace pmf\helpers\html\forms;
 
 
 use pmf\handlers\HttpRequest;

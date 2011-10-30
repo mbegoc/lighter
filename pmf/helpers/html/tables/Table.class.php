@@ -1,5 +1,5 @@
 <?php
-namespace pmf\html\tables;
+namespace pmf\helpers\html\tables;
 
 
 /**

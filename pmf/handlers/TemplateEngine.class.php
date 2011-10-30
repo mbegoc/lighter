@@ -62,7 +62,7 @@ class TemplateEngine {
 	public function display($template){
 		$tplEng = $this;
 
-		include('pmf/'.$this->getTemplate($template));
+		include($this->getTemplate($template));
 	}
 
 
@@ -76,7 +76,7 @@ class TemplateEngine {
 
 		ob_start();
 
-		include('pmf/'.$this->getTemplate($template));
+		include($this->getTemplate($template));
 
 		$html = ob_get_contents();
 

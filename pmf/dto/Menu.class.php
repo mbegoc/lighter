@@ -2,6 +2,8 @@
 namespace pmf\dto;
 
 
+use pmf\handlers\Debug;
+
 class Menu extends DataAccessor {
 
     public function __construct(){
@@ -81,6 +83,15 @@ class Menu extends DataAccessor {
 
     protected function prepareToDB(){
 
+    }
+
+    public function setValues(array $values, $prefix = ""){
+        $this->setTitle($values[$prefix.'title']);
+        $this->setShort($values[$prefix.'short']);
+        $this->setController($values[$prefix.'controllerClass']);
+        $this->setControllerMethod($values[$prefix.'controllerMethod']);
+        $this->setItemId($values[$prefix.'itemId']);
+        $this->setPublished($values[$prefix.'published']);
     }
 
 }

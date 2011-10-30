@@ -57,9 +57,10 @@ class Admin extends Controller {
                 $menu->load($id);
             }
             $this->view = new View('detail');
-            $this->view->setMenu($menu);
+            $this->view->initMenu($menu);
 
-            if($this->view->isUpdated()){
+            if($this->view->isDataUpdated()){
+                $menu->setValues($this->view->getData());
                 $menu->save();
                 $this->view->addMessage(View::SAVE_OK);
             }
@@ -78,9 +79,10 @@ class Admin extends Controller {
         $config = Config::getInstance();
 
         $this->view = new View('detail');
-        $this->view->setConfig($config);
+        $this->view->initConfig($config);
 
-        if($this->view->isUpdated()){
+        if($this->view->isDataUpdated()){
+            $config->setValues($this->view->getData());
             $config->save($config);
             $this->view->addMessage(View::SAVE_OK);
         }

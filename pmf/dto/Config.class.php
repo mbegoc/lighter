@@ -56,6 +56,20 @@ class Config extends DataAccessor {
 
 
     /**
+     * set all the values in one shot
+     *
+     * @see pmf\dto.DataAccessor::setValues()
+     */
+    public function setValues(array $values, $prefix = ""){
+        $this->setApplicationPath($values[$prefix.'rootPath'], $values[$prefix.'path']);
+        $this->setDefaultController($values[$prefix.'controllerClass'], $values[$prefix.'controllerMethod']);
+        $this->setDebugData($values[$prefix.'debugConfPath'], $values[$prefix.'debugActive']);
+        $this->setTemplateData($values[$prefix.'tplPath'], $values[$prefix.'tplExtension']);
+        $this->setIndexFile($values[$prefix.'indexFile']);
+    }
+
+
+    /**
      * template data setter
      *
      * @param string $path

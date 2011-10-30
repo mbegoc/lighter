@@ -1,5 +1,5 @@
 <?php
-namespace pmf\html\tables;
+namespace pmf\helpers\html\tables;
 
 
 /**
@@ -64,9 +64,9 @@ class EditTable extends Table {
 	/**
      * this method need to be redefined from the base class
 	 *
-	 * @param DataObject $dto
+	 * @param DataAccessor $da
 	 */
-	public function addRow(DataObject $dto){
+	public function addRow(DataAccessor $da){
 		if($this->highlight){
 			$class = " class='highlighted'";
 		}else{
@@ -76,7 +76,8 @@ class EditTable extends Table {
 
 		$this->tbody.= "<tr$class>";
 		foreach($this->cols as $col){
-		    $value = $dto->{'get'.$col}();
+		    //FIXME I don't like this way of doing this, see how it could be done
+		    $value = $da->{'get'.$col}();
 			if(isset($value)){
 				$this->tbody.= "<td$colspan>$value</td>";
 			}else{
@@ -84,7 +85,7 @@ class EditTable extends Table {
 			}
 		}
 		foreach($this->tools as $tool){
-			$this->tbody.= "<td><a href='".$tool["url"].$dto->getId()."'>".$tool["label"]."</a></td>";
+			$this->tbody.= "<td><a href='".$tool["url"].$da->getId()."'>".$tool["label"]."</a></td>";
 		}
 		$this->tbody.= "</tr>";
 	}
@@ -99,7 +100,7 @@ class EditTable extends Table {
 		$this->addHeaderCell($this->toolsLabel, count($this->tools));
 		return parent::toHTML();
 	}
-    
+
 
     /**
      * convert this object into string - HTML serialization
