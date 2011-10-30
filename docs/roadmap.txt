@@ -12,6 +12,7 @@
         * improve the routing definition system - unlink it from menu - remove menu
           from the basic framework
         * permit the replacement of the default Routing class
+        * permit to separate the framework from the app
         * write a correct initial configuration script, which should ask the user
           the basic configuration data. For instance, db host and port, application
           path.
