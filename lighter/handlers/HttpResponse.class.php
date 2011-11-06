@@ -188,7 +188,7 @@ class HttpResponse {
                  * doesn't display the xhtml page
                  */
 //                case 'application/xhtml':
-                    if($this->body->display()){
+                    if($this->body->displayHtml()){
                         return;
                     }
                     break;

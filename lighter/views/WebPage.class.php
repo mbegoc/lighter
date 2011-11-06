@@ -17,12 +17,31 @@ use \Exception;
  * @author michel
  *
  */
-abstract class PageBody extends View {
+abstract class WebPage extends View {
     protected $title = "";
+    protected $contentTemplate = NULL;
 
 
     public function __construct($mainTemplate, $contentTemplate){
-        parent::__construct($mainTemplate, $contentTemplate);
+        parent::__construct($mainTemplate);
+        $this->contentTemplate = $contentTemplate;
+    }
+
+
+    public function displayHtml(){
+        self::$tplEngine->addObject("htmlHeader", HtmlHeader::getInstance());
+        parent::displayHtml();
+        return true;
+    }
+
+
+    /**
+     * return the HTML actual content of the page
+     *
+     * @return string
+     */
+    public function getMainContent(){
+        return self::$tplEngine->get($this->contentTemplate);
     }
 
 

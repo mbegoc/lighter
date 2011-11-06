@@ -2,6 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
 <?=$this->htmlHeader->display();?>
 <body>
-	<div id="content"><?=$this->view->getContent();?></div>
+    <div id="content"><?=$this->view->getMainContent();?></div>
 </body>
 </html>
