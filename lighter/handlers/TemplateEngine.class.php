@@ -7,8 +7,10 @@ use lighter\models\Config;
 
 /**
  * This class can handle php templates. This is inspired by Smarty.
- * You can register objects in it, and then access these objects in the template.
+ * You can register vars in it, and then access these vars in the template.
  * Finally, this class can process the template and display it.
+ *
+ * This object is accessible in the templates as $this.
  *
  * @name TemplateEngine
  * @package lighter
@@ -22,11 +24,11 @@ use lighter\models\Config;
  */
 class TemplateEngine {
     /**
-     * the registered objects list
+     * the registered vars list
      *
      * @var array
      */
-    private $objects = array();
+    private $vars = array();
     /**
      * the config object
      *
@@ -49,10 +51,10 @@ class TemplateEngine {
      * $this->name ou $tplEng->name
      *
      * @param string $name
-     * @param VueBase $object un objet de type vue
+     * @param mixed $var
      */
-    public function addObject($name, $object){
-        $this->objects[$name] = $object;
+    public function addVar($name, $var){
+        $this->vars[$name] = $var;
     }
 
 
@@ -60,7 +62,7 @@ class TemplateEngine {
      * affichage du template principal
      */
     public function display($template){
-        $tplEng = $this;
+        extract($this->vars);
 
         include($this->getTemplate($template));
     }
@@ -72,14 +74,11 @@ class TemplateEngine {
      * @param string $template
      */
     public function get($template){
-        $tplEng = $this;
+        extract($this->vars);
 
         ob_start();
-
         include($this->getTemplate($template));
-
         $html = ob_get_contents();
-
         ob_end_clean();
 
         return $html;
@@ -99,27 +98,5 @@ class TemplateEngine {
         }
     }
 
-
-    /**
-     * magic functions
-     * permettent l'accès aux objets référencés
-     *
-     * @param $name
-     */
-    public function __isset($name){
-        return isset($this->objects[$name]);
-    }
-
-    public function __get($name){
-        return $this->objects[$name];
-    }
-
-    public function __set($name, $value){
-        $this->objects[$name] = $value;
-    }
-
-    public function __unset($name){
-        unset($this->objects[$name]);
-    }
 }
 

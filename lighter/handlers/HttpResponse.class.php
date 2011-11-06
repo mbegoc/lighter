@@ -226,7 +226,7 @@ class HttpResponse {
                 $this->prepareHeader();
             case 'text/html':
             case 'application/xhtml':
-                $httpMessage->display();
+                $httpMessage->displayHtml();
         }
     }
 

@@ -66,7 +66,7 @@ abstract class View {
      * @return boolean
      */
     public function displayHtml(){
-        self::$tplEngine->addObject("view", $this);
+        self::$tplEngine->addVar("view", $this);
         self::$tplEngine->display($this->mainTemplate);
         return true;
     }

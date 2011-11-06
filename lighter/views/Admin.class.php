@@ -23,7 +23,7 @@ use lighter\helpers\Path;
  * @name Admin
  * @package lighter
  * @subpackage views
- * @see lighter\views\PageBody
+ * @see lighter\views\WebPage
  * @since 0.1
  * @version 0.1
  * @author Michel Begoc
@@ -31,7 +31,7 @@ use lighter\helpers\Path;
  * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
-class Admin extends PageBody {
+class Admin extends WebPage {
     const SAVE_OK = 'Your modification has been saved.';
     /**
      * the data source to use
@@ -66,7 +66,7 @@ class Admin extends PageBody {
      */
     public function __construct($template){
         parent::__construct('main', 'admin/'.$template);
-        self::$tplEngine->addObject("pathHelper", Path::getInstance());
+        self::$tplEngine->addVar("pathHelper", Path::getInstance());
         HtmlHeader::getInstance()->addCssFile(
             Config::getInstance()->getApplicationRelativePath().'include/css/admin.css'
         );

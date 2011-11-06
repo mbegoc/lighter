@@ -20,7 +20,7 @@ use \SimpleXMLElement;
  * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
-class HttpMessage extends View {
+class HttpMessage extends WebPage {
     /**
      * http response code
      *
@@ -81,6 +81,7 @@ class HttpMessage extends View {
      */
     public function displayJson(){
         echo json_encode(array('code' => $this->code, 'message' => $this->message));
+        return true;
     }
 
 
@@ -94,6 +95,7 @@ class HttpMessage extends View {
         $xml->addChild('message', $this->message);
 
         echo $xml->asXml();
+        return true;
     }
 
 }

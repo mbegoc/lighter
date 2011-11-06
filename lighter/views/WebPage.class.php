@@ -29,7 +29,7 @@ abstract class WebPage extends View {
 
 
     public function displayHtml(){
-        self::$tplEngine->addObject("htmlHeader", HtmlHeader::getInstance());
+        self::$tplEngine->addVar("htmlHeader", HtmlHeader::getInstance());
         parent::displayHtml();
         return true;
     }

@@ -1,4 +1,4 @@
-<h1><?=$this->view->getTitle();?></h1>
-<?=$this->view->getMessages();?>
-<?=$this->view->getForm();?>
+<h1><?=$view->getTitle();?></h1>
+<?=$view->getMessages();?>
+<?=$view->getForm();?>
 <a href='./'>Retour</a>
