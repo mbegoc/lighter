@@ -121,25 +121,25 @@ class Admin extends PageBody {
         $this->data = $data;
         $this->form = new Form("config");
         $this->form->addElement(new InputText(
-        	'path', _('Relative path'), 200, $this->data->getApplicationRelativePath())
+            'path', _('Relative path'), 200, $this->data->getApplicationRelativePath())
         );
         $this->form->addElement(new InputText(
-        	'rootPath', _('Root path'), 200, $this->data->getApplicationRootPath())
+            'rootPath', _('Root path'), 200, $this->data->getApplicationRootPath())
         );
         $this->form->addElement(new InputText(
-        	'controllerClass', _('Default controller class'), 200, $this->data->getControllerClass())
+            'controllerClass', _('Default controller class'), 200, $this->data->getControllerClass())
         );
         $this->form->addElement(new InputText(
-        	'controllerMethod', _('Default controller method'), 200, $this->data->getControllerMethod())
+            'controllerMethod', _('Default controller method'), 200, $this->data->getControllerMethod())
         );
         $this->form->addElement(new InputText(
-        	'debugConfPath', _('Debug configuration path'), 200, $this->data->getDebugConfigPath())
+            'debugConfPath', _('Debug configuration path'), 200, $this->data->getDebugConfigPath())
         );
         $this->form->addElement(new InputCheckBox(
-        	'debugActive', _('Is debug active ?'), $this->data->isDebugActive())
+            'debugActive', _('Is debug active ?'), $this->data->isDebugActive())
         );
         $this->form->addElement(new InputCheckBox(
-        	'indexFile', _('Is index file needed in the url ?'), $this->data->needIndexFile())
+            'indexFile', _('Is index file needed in the url ?'), $this->data->needIndexFile())
         );
     }
 
@@ -168,22 +168,22 @@ class Admin extends PageBody {
         $this->data = $data;
         $this->form = new Form("menu");
         $this->form->addElement(new InputText(
-        	'title', _('Title'), 200, $this->data->getTitle())
+            'title', _('Title'), 200, $this->data->getTitle())
         );
         $this->form->addElement(new InputText(
-        	'short', _('URL name'), 200, $this->data->getShort())
+            'short', _('URL name'), 200, $this->data->getShort())
         );
         $this->form->addElement(new InputText(
-        	'controllerClass', _('Controller class'), 200, $this->data->getController())
+            'controllerClass', _('Controller class'), 200, $this->data->getController())
         );
         $this->form->addElement(new InputText(
-        	'controllerMethod', _('Controller method'), 200, $this->data->getControllerMethod())
+            'controllerMethod', _('Controller method'), 200, $this->data->getControllerMethod())
         );
         $this->form->addElement(new InputText(
-        	'itemId', _('Item id'), 200, $this->data->getItemId())
+            'itemId', _('Item id'), 200, $this->data->getItemId())
         );
         $this->form->addElement(new InputCheckBox(
-        	'published', _('Published'), $this->data->isPublished())
+            'published', _('Published'), $this->data->isPublished())
         );
     }
 

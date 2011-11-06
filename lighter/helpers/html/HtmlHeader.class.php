@@ -236,7 +236,7 @@ class HtmlHeader {
         $s.= $this->canonical;
         foreach($this->cssFiles as $cssFile){
             $s.= '<link type="text/css" rel="stylesheet" href="'.$cssFile[0]
-            	.' media="'.$cssFile[1].'"/>';
+                .' media="'.$cssFile[1].'"/>';
         }
         foreach($this->jsFiles as $jsFile){
             $s.= '<script type="'.$jsFile[0].'" src="'.$jsFile[1].'"></script>';

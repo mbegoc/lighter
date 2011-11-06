@@ -27,132 +27,132 @@ class Form {
      *
      * @var string
      */
-	protected $name;
-	/**
-	 * the target of the form
+    protected $name;
+    /**
+     * the target of the form
      *
-	 * @var string
-	 */
-	protected $target;
-	/**
-	 * the method to send the form through
+     * @var string
+     */
+    protected $target;
+    /**
+     * the method to send the form through
      *
-	 * @var string
-	 */
-	protected $method;
-	/**
-	 * the list of fields of the form
+     * @var string
+     */
+    protected $method;
+    /**
+     * the list of fields of the form
      *
-	 * @var array
-	 */
-	protected $elements;
-	/**
-	 * fieldset title
+     * @var array
+     */
+    protected $elements;
+    /**
+     * fieldset title
      *
-	 * @var string
-	 */
-	protected $fieldset = NULL;
+     * @var string
+     */
+    protected $fieldset = NULL;
 
 
-	/**
-	 * create a new form
+    /**
+     * create a new form
      *
-	 * @param $target
-	 */
-	public function __construct($name, $target = "", $method = "post"){
-		$this->name = $name;
-		$this->target = $target;
-		$this->method = $method;
+     * @param $target
+     */
+    public function __construct($name, $target = "", $method = "post"){
+        $this->name = $name;
+        $this->target = $target;
+        $this->method = $method;
 
-		$this->elements = array();
-	}
+        $this->elements = array();
+    }
 
 
-	/**
-	 * add an element to the form
+    /**
+     * add an element to the form
      *
-	 * @param FormElement $element
-	 */
-	public function addElement(FormElement $element){
-		$this->elements[] = $element;
-	}
+     * @param FormElement $element
+     */
+    public function addElement(FormElement $element){
+        $this->elements[] = $element;
+    }
 
 
-	/**
-	 * set fieldset name
+    /**
+     * set fieldset name
      *
-	 * @param string $label
-	 */
-	public function setFieldSet($label){
-		$this->fieldset = $label;
-	}
+     * @param string $label
+     */
+    public function setFieldSet($label){
+        $this->fieldset = $label;
+    }
 
 
-	/**
-	 * return this form in html format
+    /**
+     * return this form in html format
      * @return string
-	 */
-	public function __toString(){
-		$html = "<div id='{$this->name}Box' class='formBox'>";
+     */
+    public function __toString(){
+        $html = "<div id='{$this->name}Box' class='formBox'>";
 
-		if(isset($this->fieldset)){
-			$html.= "<fieldset><legend>$this->fieldset</legend>";
-		}
+        if(isset($this->fieldset)){
+            $html.= "<fieldset><legend>$this->fieldset</legend>";
+        }
 
-		$html.= "<form name='$this->name' id='$this->name' method='$this->method' action='$this->target'>";
-		foreach($this->elements as $element){
-			$html.= $element;
-		}
-		$html.= "<div id='{$this->name}ButtonBox'>";
-		$html.= "<input type='submit' name='{$this->name}Submit' value='Envoyer'/>";
-		$html.= "</div>";
+        $html.= "<form name='$this->name' id='$this->name' method='$this->method' action='$this->target'>";
+        foreach($this->elements as $element){
+            $html.= $element;
+        }
+        $html.= "<div id='{$this->name}ButtonBox'>";
+        $html.= "<input type='submit' name='{$this->name}Submit' value='Envoyer'/>";
+        $html.= "</div>";
 
-		$html.= "</form>";
+        $html.= "</form>";
 
-		if(isset($this->fieldset)){
-			$html.= "</fieldset>";
-		}
+        if(isset($this->fieldset)){
+            $html.= "</fieldset>";
+        }
 
-		$html.= "</div>";
+        $html.= "</div>";
 
-		return $html;
-	}
+        return $html;
+    }
 
 
-	/**
-	 * return the input values
+    /**
+     * return the input values
      *
      * @return array
-	 */
-	public function getValues(){
-		$return = array();
-		foreach($this->elements as $element){
-			$return[$element->getName()] = $element->getValue();
-		}
+     */
+    public function getValues(){
+        $return = array();
+        foreach($this->elements as $element){
+            $return[$element->getName()] = $element->getValue();
+        }
 
-		return $return;
-	}
+        return $return;
+    }
 
 
-	/**
-	 * say if this form have been posted or not
+    /**
+     * say if this form have been posted or not
      *
-	 * @return boolean
-	 */
-	public function isPosted(){
-	    $submit = HttpRequest::getInstance()->getString($this->name.'Submit');
-		return isset($submit);
-	}
+     * @return boolean
+     */
+    public function isPosted(){
+        $submit = HttpRequest::getInstance()->getString($this->name.'Submit');
+        return isset($submit);
+    }
 
 
-	/**
-	 * name getter
+    /**
+     * name getter
      *
-	 * @return string
-	 */
-	public function getName(){
-	    return $this->name;
-	}
+     * @return string
+     */
+    public function getName(){
+        return $this->name;
+    }
 
 }
 

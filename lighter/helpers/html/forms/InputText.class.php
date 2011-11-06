@@ -19,17 +19,17 @@ namespace lighter\helpers\html\forms;
 class InputText extends Input {
 
 
-	/**
+    /**
      * default constructor
-	 *
-	 * @param string $name
-	 * @param string $label
-	 * @param int $size
-	 * @param mixed $value
-	 */
-	public function __construct($name, $label, $size, $value = "", $type = FormElement::STRING){
-	    parent::__construct('text', $type, $name, $label, $size, $value);
-	}
+     *
+     * @param string $name
+     * @param string $label
+     * @param int $size
+     * @param mixed $value
+     */
+    public function __construct($name, $label, $size, $value = "", $type = FormElement::STRING){
+        parent::__construct('text', $type, $name, $label, $size, $value);
+    }
 
 }
 

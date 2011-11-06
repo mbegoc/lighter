@@ -115,15 +115,15 @@ class Debug {
         $this->curSection = $section;
         self::$messages[$section] = array();
         $this->i = array("message" => 1, "var" => 1, "exception" => 1, "trace" => 1, "profiling" => 1);
-	}
+    }
 
 
-	/**
-	 * the principle of the singleton, but not an actual singleton
-	 *
-	 * @static
-	 * @param string $section
-	 */
+    /**
+     * the principle of the singleton, but not an actual singleton
+     *
+     * @static
+     * @param string $section
+     */
     public static function getInstance($section = "default"){
         if(isset(self::$instances[$section])){
             return self::$instances[$section];
@@ -225,9 +225,9 @@ class Debug {
         foreach($backtrace as $trace){
             if($trace["class"] !== "Debug"){
                 $this->addMessage("Trace",
-			                      $title,
-			                      $trace["class"].$trace["type"].$trace["function"],
-			                      array("file" => $trace["file"], "line" => $trace["line"])
+                                  $title,
+                                  $trace["class"].$trace["type"].$trace["function"],
+                                  array("file" => $trace["file"], "line" => $trace["line"])
                 );
             }
         }

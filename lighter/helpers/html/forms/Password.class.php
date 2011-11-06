@@ -19,16 +19,16 @@ namespace lighter\helpers\html\forms;
 class Password extends Input {
 
 
-	/**
+    /**
      * default constructor
-	 *
-	 * @param string $name
-	 * @param string $label
-	 * @param int $size
-	 */
-	public function __construct($name, $label, $size){
-	    parent::__construct('password', FormElement::STRING, $name, $label, $size, 'xxxxxxxx');
-	}
+     *
+     * @param string $name
+     * @param string $label
+     * @param int $size
+     */
+    public function __construct($name, $label, $size){
+        parent::__construct('password', FormElement::STRING, $name, $label, $size, 'xxxxxxxx');
+    }
 
 }
 

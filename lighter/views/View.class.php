@@ -31,14 +31,14 @@ abstract class View {
      *
      * @var handlers\TemplateEngine
      */
-	protected static $tplEngine;
-	/**
-	 * the template to display
+    protected static $tplEngine;
+    /**
+     * the template to display
      *
-	 * @var string
-	 */
-	protected $mainTemplate;
-	/**
+     * @var string
+     */
+    protected $mainTemplate;
+    /**
      * a messages list to display
      *
      * @var string
@@ -46,30 +46,30 @@ abstract class View {
     protected $messages = "";
 
 
-	/**
-	 * constructor
+    /**
+     * constructor
      *
      * @param string $template
      */
     public function __construct($mainTemplate){
         $this->mainTemplate = $mainTemplate;
 
-	    if(!isset(self::$tplEngine)){
-	        self::$tplEngine = new TemplateEngine();
-	    }
-	}
+        if(!isset(self::$tplEngine)){
+            self::$tplEngine = new TemplateEngine();
+        }
+    }
 
 
-	/**
-	 * display the main template of the page and return a boolean saying if the method is supported
+    /**
+     * display the main template of the page and return a boolean saying if the method is supported
      *
      * @return boolean
      */
     public function displayHtml(){
         self::$tplEngine->addObject("view", $this);
         self::$tplEngine->display($this->mainTemplate);
-	    return true;
-	}
+        return true;
+    }
 
 
     /**

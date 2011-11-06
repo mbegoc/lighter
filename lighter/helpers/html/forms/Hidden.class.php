@@ -27,17 +27,17 @@ class Hidden extends Input {
      */
     public function __construct($name, $type, $value = ""){
         parent::__construct('hidden', $type, $name, NULL, $size, $value);
-	}
+    }
 
 
-	/**
-	 * return a html string
+    /**
+     * return a html string
      *
-	 * @return string
-	 */
-	public function __toString(){
-		return "<input type='$this->type' name='$this->name' id='$this->name' value='$this->value' size='$this->size'/>";
-	}
+     * @return string
+     */
+    public function __toString(){
+        return "<input type='$this->type' name='$this->name' id='$this->name' value='$this->value' size='$this->size'/>";
+    }
 
 }
 

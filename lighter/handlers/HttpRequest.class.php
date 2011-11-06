@@ -149,60 +149,60 @@ class HttpRequest {
      * @param string $name
      * @return string
      */
-	public function getString($name){
-		if(isset($this->parameters[$name])){
-			$string = trim($this->parameters[$name]);
-			if($string != ""){
-				return $string;
-			}
-		}
-		return NULL;
-	}
+    public function getString($name){
+        if(isset($this->parameters[$name])){
+            $string = trim($this->parameters[$name]);
+            if($string != ""){
+                return $string;
+            }
+        }
+        return NULL;
+    }
 
 
-	/**
-	 * return the value of the int parameter provided by $name
+    /**
+     * return the value of the int parameter provided by $name
      * return NULL if parameter doesn't exist
-	 *
-	 * @param int $name
-	 */
-	public function getInt($name){
-		if(isset($this->parameters[$name]) && trim($this->parameters[$name]) != ""){
-			return (int)$this->parameters[$name];
-		}else{
-			return NULL;
-		}
-	}
+     *
+     * @param int $name
+     */
+    public function getInt($name){
+        if(isset($this->parameters[$name]) && trim($this->parameters[$name]) != ""){
+            return (int)$this->parameters[$name];
+        }else{
+            return NULL;
+        }
+    }
 
 
-	/**
-	 * return the value of the float parameter provided by $name
+    /**
+     * return the value of the float parameter provided by $name
      * return NULL if parameter doesn't exist
-	 *
-	 * @param float $name
-	 */
-	public function getFloat($name){
-		if(isset($this->parameters[$name]) && trim($this->parameters[$name]) != ""){
-			return (float)$this->parameters[$name];
-		}else{
-			return NULL;
-		}
-	}
+     *
+     * @param float $name
+     */
+    public function getFloat($name){
+        if(isset($this->parameters[$name]) && trim($this->parameters[$name]) != ""){
+            return (float)$this->parameters[$name];
+        }else{
+            return NULL;
+        }
+    }
 
 
-	/**
-	 * return the value of the boolean parameter provided by $name
+    /**
+     * return the value of the boolean parameter provided by $name
      * return NULL if parameter doesn't exist
-	 *
-	 * @param boolean $name
-	 */
-	public function getBool($name){
-		if(isset($this->parameters[$name]) && trim($this->parameters[$name]) != ""){
-			return (bool)$this->parameters[$name];
-		}else{
-			return NULL;
-		}
-	}
+     *
+     * @param boolean $name
+     */
+    public function getBool($name){
+        if(isset($this->parameters[$name]) && trim($this->parameters[$name]) != ""){
+            return (bool)$this->parameters[$name];
+        }else{
+            return NULL;
+        }
+    }
 
 }
 

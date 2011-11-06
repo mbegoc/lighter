@@ -23,83 +23,83 @@ class EditTable extends Table {
      *
      * @var string
      */
-	public $toolsLabel = "Edit";
+    public $toolsLabel = "Edit";
     /**
      * the list of tools
      *
      * @var array
      */
-	public $tools = array();
+    public $tools = array();
 
 
     /**
      * default contructor
      */
-	public function __construct($id){
-		parent::__construct($id);
-	}
+    public function __construct($id){
+        parent::__construct($id);
+    }
 
 
-	/**
+    /**
      * set the label of the column which will contain the tools
-	 *
-	 * @param string $label
-	 */
-	public function setToolsLabel($label){
-		$this->toolsLabel = (string)$label;
-	}
+     *
+     * @param string $label
+     */
+    public function setToolsLabel($label){
+        $this->toolsLabel = (string)$label;
+    }
 
 
-	/**
+    /**
      * add a tool to the tool column
-	 *
-	 * @param string $label
-	 * @param string $url
-	 */
-	public function addTool($label, $url){
-		$this->tools[] = array("url" => $url, "label" => $label);
-	}
+     *
+     * @param string $label
+     * @param string $url
+     */
+    public function addTool($label, $url){
+        $this->tools[] = array("url" => $url, "label" => $label);
+    }
 
 
-	/**
+    /**
      * this method need to be redefined from the base class
-	 *
-	 * @param DataAccessor $da
-	 */
-	public function addRow(DataAccessor $da){
-		if($this->highlight){
-			$class = " class='highlighted'";
-		}else{
-			$class = "";
-		}
-		$this->highlight = !$this->highlight;
+     *
+     * @param DataAccessor $da
+     */
+    public function addRow(DataAccessor $da){
+        if($this->highlight){
+            $class = " class='highlighted'";
+        }else{
+            $class = "";
+        }
+        $this->highlight = !$this->highlight;
 
-		$this->tbody.= "<tr$class>";
-		foreach($this->cols as $col){
-		    //FIXME I don't like this way of doing this, see how it could be done
-		    $value = $da->{'get'.$col}();
-			if(isset($value)){
-				$this->tbody.= "<td$colspan>$value</td>";
-			}else{
-				$this->tbody.= "<td></td>";
-			}
-		}
-		foreach($this->tools as $tool){
-			$this->tbody.= "<td><a href='".$tool["url"].$da->getId()."'>".$tool["label"]."</a></td>";
-		}
-		$this->tbody.= "</tr>";
-	}
+        $this->tbody.= "<tr$class>";
+        foreach($this->cols as $col){
+            //FIXME I don't like this way of doing this, see how it could be done
+            $value = $da->{'get'.$col}();
+            if(isset($value)){
+                $this->tbody.= "<td$colspan>$value</td>";
+            }else{
+                $this->tbody.= "<td></td>";
+            }
+        }
+        foreach($this->tools as $tool){
+            $this->tbody.= "<td><a href='".$tool["url"].$da->getId()."'>".$tool["label"]."</a></td>";
+        }
+        $this->tbody.= "</tr>";
+    }
 
 
-	/**
+    /**
      * convert this object into HTML
-	 *
-	 * @return string HTML
-	 */
-	public function toHTML(){
-		$this->addHeaderCell($this->toolsLabel, count($this->tools));
-		return parent::toHTML();
-	}
+     *
+     * @return string HTML
+     */
+    public function toHTML(){
+        $this->addHeaderCell($this->toolsLabel, count($this->tools));
+        return parent::toHTML();
+    }
 
 
     /**

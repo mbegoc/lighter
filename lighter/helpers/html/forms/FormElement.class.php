@@ -21,81 +21,81 @@ use lighter\handlers\HttpRequest;
  *
  */
 abstract class FormElement {
-	const STRING = 1;
-	const INT = 2;
-	const FLOAT = 3;
-	const BOOL = 4;
-	/**
-	 * the type of the element
+    const STRING = 1;
+    const INT = 2;
+    const FLOAT = 3;
+    const BOOL = 4;
+    /**
+     * the type of the element
      *
-	 * @var int
-	 */
-	protected $type;
-	/**
-	 * the element name
+     * @var int
+     */
+    protected $type;
+    /**
+     * the element name
      *
-	 * @var string
-	 */
-	protected $name;
-	/**
-	 * the value of the element
+     * @var string
+     */
+    protected $name;
+    /**
+     * the value of the element
      *
-	 * @var mixed
-	 */
-	protected $value;
+     * @var mixed
+     */
+    protected $value;
 
 
-	/**
+    /**
      * default constructor
-	 *
-	 * @param int $type
-	 */
-	public function __construct($type){
-	    $this->type = $type;
-	}
+     *
+     * @param int $type
+     */
+    public function __construct($type){
+        $this->type = $type;
+    }
 
 
-	/**
-	 * this fonction have to return a string representing the element in html format
+    /**
+     * this fonction have to return a string representing the element in html format
      * @abstract
-	 */
-	public abstract function __toString();
+     */
+    public abstract function __toString();
 
 
-	/**
-	 * return the value of a field, regarding its type
+    /**
+     * return the value of a field, regarding its type
      *
-	 * @return mixed
-	 */
-	public function getValue(){
-		switch($this->type){
-			case self::STRING:
-			    $this->value = HttpRequest::getInstance()->getString($this->name);
-			    break;
-			case self::INT:
-			    $this->value = HttpRequest::getInstance()->getInt($this->name);
-			    break;
-			case self::FLOAT:
-			    $this->value = HttpRequest::getInstance()->getFloat($this->name);
-			    break;
-			case self::BOOL:
-			    $this->value = HttpRequest::getInstance()->getBool($this->name);
-			    break;
-			default:
-			    throw new FormException('Unhandled parameter type');
-		}
-		return $this->value;
-	}
+     * @return mixed
+     */
+    public function getValue(){
+        switch($this->type){
+            case self::STRING:
+                $this->value = HttpRequest::getInstance()->getString($this->name);
+                break;
+            case self::INT:
+                $this->value = HttpRequest::getInstance()->getInt($this->name);
+                break;
+            case self::FLOAT:
+                $this->value = HttpRequest::getInstance()->getFloat($this->name);
+                break;
+            case self::BOOL:
+                $this->value = HttpRequest::getInstance()->getBool($this->name);
+                break;
+            default:
+                throw new FormException('Unhandled parameter type');
+        }
+        return $this->value;
+    }
 
 
-	/**
-	 * name getter
+    /**
+     * name getter
      *
-	 * @return string
-	 */
-	public function getName(){
-		return $this->name;
-	}
+     * @return string
+     */
+    public function getName(){
+        return $this->name;
+    }
 
 }
 

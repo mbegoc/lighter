@@ -21,105 +21,105 @@ use lighter\models\Config;
  *
  */
 class TemplateEngine {
-	/**
-	 * the registered objects list
-	 *
-	 * @var array
-	 */
-	private $objects = array();
-	/**
-	 * the config object
-	 *
-	 * @var models\Config
-	 */
-	private $config;
+    /**
+     * the registered objects list
+     *
+     * @var array
+     */
+    private $objects = array();
+    /**
+     * the config object
+     *
+     * @var models\Config
+     */
+    private $config;
 
 
-	/**
-	 *
-	 */
-	public function __construct(){
-	    $this->config = Config::getInstance();
-	}
+    /**
+     *
+     */
+    public function __construct(){
+        $this->config = Config::getInstance();
+    }
 
 
-	/**
-	 * ajouts d'objets aux moteur de template. Lors de l'affichage du site,
-	 * il sera possible d'accéder à ces objets dans les templates par
-	 * $this->name ou $tplEng->name
-	 *
-	 * @param string $name
-	 * @param VueBase $object un objet de type vue
-	 */
-	public function addObject($name, $object){
-		$this->objects[$name] = $object;
-	}
+    /**
+     * ajouts d'objets aux moteur de template. Lors de l'affichage du site,
+     * il sera possible d'accéder à ces objets dans les templates par
+     * $this->name ou $tplEng->name
+     *
+     * @param string $name
+     * @param VueBase $object un objet de type vue
+     */
+    public function addObject($name, $object){
+        $this->objects[$name] = $object;
+    }
 
 
-	/**
-	 * affichage du template principal
-	 */
-	public function display($template){
-		$tplEng = $this;
+    /**
+     * affichage du template principal
+     */
+    public function display($template){
+        $tplEng = $this;
 
-		include($this->getTemplate($template));
-	}
-
-
-	/**
-	 * retourne le template fournit en paramètre processé
-	 *
-	 * @param string $template
-	 */
-	public function get($template){
-		$tplEng = $this;
-
-		ob_start();
-
-		include($this->getTemplate($template));
-
-		$html = ob_get_contents();
-
-		ob_end_clean();
-
-		return $html;
-	}
+        include($this->getTemplate($template));
+    }
 
 
-	/**
-	 *
-	 * @param string $template
-	 */
-	protected function getTemplate($template){
-	    $paths = $this->config->getTemplatesPaths();
-	    foreach($paths as $path => $ext){
-	        if(file_exists($path.$template.$ext)){
-	            return $path.$template.$ext;
-	        }
-	    }
-	}
+    /**
+     * retourne le template fournit en paramètre processé
+     *
+     * @param string $template
+     */
+    public function get($template){
+        $tplEng = $this;
+
+        ob_start();
+
+        include($this->getTemplate($template));
+
+        $html = ob_get_contents();
+
+        ob_end_clean();
+
+        return $html;
+    }
 
 
-	/**
-	 * magic functions
-	 * permettent l'accès aux objets référencés
-	 *
-	 * @param $name
-	 */
-	public function __isset($name){
-		return isset($this->objects[$name]);
-	}
+    /**
+     *
+     * @param string $template
+     */
+    protected function getTemplate($template){
+        $paths = $this->config->getTemplatesPaths();
+        foreach($paths as $path => $ext){
+            if(file_exists($path.$template.$ext)){
+                return $path.$template.$ext;
+            }
+        }
+    }
 
-	public function __get($name){
-		return $this->objects[$name];
-	}
 
-	public function __set($name, $value){
-		$this->objects[$name] = $value;
-	}
+    /**
+     * magic functions
+     * permettent l'accès aux objets référencés
+     *
+     * @param $name
+     */
+    public function __isset($name){
+        return isset($this->objects[$name]);
+    }
 
-	public function __unset($name){
-		unset($this->objects[$name]);
-	}
+    public function __get($name){
+        return $this->objects[$name];
+    }
+
+    public function __set($name, $value){
+        $this->objects[$name] = $value;
+    }
+
+    public function __unset($name){
+        unset($this->objects[$name]);
+    }
 }
 

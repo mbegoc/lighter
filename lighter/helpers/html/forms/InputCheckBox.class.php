@@ -34,22 +34,22 @@ class InputCheckBox extends Input {
     }
 
 
-	/**
-	 * produce a html string
+    /**
+     * produce a html string
      *
-	 * @return string html
-	 */
-	public function __toString(){
-	    if($this->value){
-	        $checked = " checked='checked'";
-	    }
-		$html = "<div id='{$this->name}Box'>";
-		$html.= "<input type='$this->inputType' name='$this->name' id='$this->name' value='1'$checked/>";
-		$html.= "&nbsp;<label for='$this->name'>$this->label</label>";
-		$html.= "</div>";
+     * @return string html
+     */
+    public function __toString(){
+        if($this->value){
+            $checked = " checked='checked'";
+        }
+        $html = "<div id='{$this->name}Box'>";
+        $html.= "<input type='$this->inputType' name='$this->name' id='$this->name' value='1'$checked/>";
+        $html.= "&nbsp;<label for='$this->name'>$this->label</label>";
+        $html.= "</div>";
 
-		return $html;
-	}
+        return $html;
+    }
 
 }
 
