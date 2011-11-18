@@ -69,6 +69,15 @@ class Config extends DataAccessor {
 
 
     /**
+     * prepare the object to be save.
+     */
+    protected function prepareToDb(){
+        unset($this->doc['_id']);
+        $this->doc['date'] = time();
+    }
+
+
+    /**
      * template data setter
      *
      * @param array $path - array of the form path/to/templates => .ext
@@ -79,14 +88,10 @@ class Config extends DataAccessor {
 
 
     /**
-     * session data setter
-     *
-     * @param int $timeout
-     * @param boolean $autoclean
+     * @return string
      */
-    public function setSessionData($timeout, $autoclean){
-        $this->doc['session']['timeout'] = (int)$timeout;
-        $this->doc['session']['autoclean'] = (boolean)$autoclean;
+    public function getTemplatesPaths(){
+        return $this->doc['templatesPaths'];
     }
 
 
@@ -108,6 +113,30 @@ class Config extends DataAccessor {
 
 
     /**
+     * @return string
+     */
+    public function getApplicationFullPath(){
+        return $this->doc['path']['full'];
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getApplicationRootPath(){
+        return $this->doc['path']['root'];
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getApplicationRelativePath(){
+        return $this->doc['path']['relative'];
+    }
+
+
+    /**
      * set the default root to use
      *
      * @param string $class
@@ -119,6 +148,22 @@ class Config extends DataAccessor {
         }
         $this->doc['controller']['class'] = $class;
         $this->doc['controller']['method'] = $method;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getControllerClass(){
+        return $this->doc['controller']['class'];
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getControllerMethod(){
+        return $this->doc['controller']['method'];
     }
 
 
@@ -156,12 +201,69 @@ class Config extends DataAccessor {
 
 
     /**
+     * @return string
+     */
+    public function getDebugConfigPath(){
+        return $this->doc['debug']['configPath'];
+    }
+
+
+    /**
+     * @return boolean
+     */
+    public function isDebugActive(){
+        return $this->doc['debug']['active'];
+    }
+
+
+    /**
      * say wether the index.php file is needed or not.
      *
      * @param boolean $isIndexFileNeeded
      */
     public function setIndexFile($isIndexFileNeeded){
         $this->doc['path']['needIndexFile'] = (boolean)$isIndexFileNeeded;
+    }
+
+
+    /**
+     * @return boolean
+     */
+    public function needIndexFile(){
+        return $this->doc['path']['needIndexFile'];
+    }
+
+
+    /**
+     * add a route
+     *
+     * @param string $regex
+     * @param array $route
+     */
+    public function addRoute($regex, array $route){
+        $this->doc['routes'][] = array($regex => $route);
+    }
+
+
+    /**
+     *
+     *
+     * @return array
+     */
+    public function getRoutes(){
+        return $this->doc['routes'];
+    }
+
+
+    /**
+     * session data setter
+     *
+     * @param int $timeout
+     * @param boolean $autoclean
+     */
+    public function setSessionData($timeout, $autoclean){
+        $this->doc['session']['timeout'] = (int)$timeout;
+        $this->doc['session']['autoclean'] = (boolean)$autoclean;
     }
 
 
@@ -184,87 +286,6 @@ class Config extends DataAccessor {
         $lang['name'] = $name;
 
         array_push($this->doc['language'], $lang);
-    }
-
-
-    /**
-     * prepare the object to be save.
-     */
-    protected function prepareToDb(){
-        unset($this->doc['_id']);
-        $this->doc['date'] = time();
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getTemplatesPaths(){
-        return $this->doc['templatesPaths'];
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getApplicationFullPath(){
-        return $this->doc['path']['full'];
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getApplicationRootPath(){
-        return $this->doc['path']['root'];
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getApplicationRelativePath(){
-        return $this->doc['path']['relative'];
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getControllerClass(){
-        return $this->doc['controller']['class'];
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getControllerMethod(){
-        return $this->doc['controller']['method'];
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getDebugConfigPath(){
-        return $this->doc['debug']['configPath'];
-    }
-
-
-    /**
-     * @return boolean
-     */
-    public function isDebugActive(){
-        return $this->doc['debug']['active'];
-    }
-
-
-    /**
-     * @return boolean
-     */
-    public function needIndexFile(){
-        return $this->doc['path']['needIndexFile'];
     }
 
 }
