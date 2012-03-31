@@ -31,5 +31,9 @@ $config->addLanguage('en', 'English');
 $config->addLanguage('fr', 'Français');
 $config->setIndexFile(true);
 
-$config->save();
+if ($config->save()) {
+    echo 'ok';
+} else {
+    echo 'not ok';
+}
 

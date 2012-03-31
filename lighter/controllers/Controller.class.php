@@ -30,7 +30,7 @@ abstract class Controller {
 
 
     /**
-     * the default action method which is offered by all the controllers
+     * the default action method which is offered by all controllers
      *
      * @abstract
      */

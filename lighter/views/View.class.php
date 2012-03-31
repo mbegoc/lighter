@@ -61,7 +61,8 @@ abstract class View {
 
 
     /**
-     * display the main template of the page and return a boolean saying if the method is supported
+     * display the main template of the page and return a boolean saying
+     * if the method is supported
      *
      * @return boolean
      */
@@ -73,7 +74,8 @@ abstract class View {
 
 
     /**
-     * display the content in XML format and return a boolean saying if the method is supported
+     * display the content in XML format and return a boolean saying if the
+     * method is supported
      *
      * @return boolean
      */
@@ -83,7 +85,8 @@ abstract class View {
 
 
     /**
-     * display the content in JSON format and return a boolean saying if the method is supported
+     * display the content in JSON format and return a boolean saying if
+     * the method is supported
      *
      * @return boolean
      */

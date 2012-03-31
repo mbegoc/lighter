@@ -11,6 +11,8 @@ use lighter\models\Menu;
 use lighter\handlers\Debug;
 use lighter\handlers\HttpResponse;
 
+use lighter\routing\parser\RouteManager;
+
 
 /**
  *
@@ -89,6 +91,12 @@ class Router {
 
         $this->config = Config::getInstance();
         $this->basePath = $this->config->getApplicationRelativePath();
+
+        $routeManager = new RouteManager();
+        $routeManager->handleNode($this->config->getRoutes(), explode('/', $_SERVER["REQUEST_URI"]));
+        Debug::getInstance()->log($routeManager->getController(), 'controller');
+        Debug::getInstance()->log($routeManager->getMethod(), 'method');
+        Debug::getInstance()->dump($routeManager->getParams(), 'params');
 
         $this->controllerClass = $this->config->getControllerClass();
         $this->method = $this->config->getControllerMethod();

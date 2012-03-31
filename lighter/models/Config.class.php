@@ -4,6 +4,13 @@ namespace lighter\models;
 
 use \Exception;
 
+use lighter\routing\routes\ControllerNode;
+use lighter\routing\routes\FixedNode;
+use lighter\routing\routes\MethodNode;
+use lighter\routing\routes\ParamNode;
+use lighter\routing\routes\ParamsNode;
+use lighter\routing\routes\RootNode;
+
 
 /**
  * the config class. This class permit to acess the config collection and is
@@ -250,9 +257,9 @@ class Config extends DataAccessor {
      *
      * @return array
      */
-    public function getRoutes(){
-        return $this->doc['routes'];
-    }
+    //public function getRoutes(){
+    //    return $this->doc['routes'];
+    //}
 
 
     /**
@@ -288,6 +295,23 @@ class Config extends DataAccessor {
         array_push($this->doc['language'], $lang);
     }
 
+
+    public function getRoutes(){
+        $map = new RootNode();
+
+        $map->addSubNode(new FixedNode('useless-subsection'))
+            ->addSubNode(new ParamNode())
+            ->addSubNode(new MethodNode())
+            ->addSubNode(new ParamsNode())
+            ->addSubNode(new ControllerNode('HardControl'));
+
+        $map->addSubNode(new ControllerNode('Admin'))
+            ->addSubNode(new MethodNode())
+            ->addSubNode(new ParamsNode());
+
+        return $map;
+    }
+
 }
 
 
@@ -298,3 +322,4 @@ class Config extends DataAccessor {
  *
  */
 class ConfigException extends Exception {}
+
