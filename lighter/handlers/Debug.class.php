@@ -25,7 +25,7 @@ use \Exception;
 class Debug {
     /*
      * STATIC ATTRIBUTES - GLOBAL DEBUG CONFIGURATION
-     */
+    */
     /**
      * the name of the debug class to use
      * @staticvar string
@@ -89,7 +89,7 @@ class Debug {
 
     /*
      * INSTANCE ATTRIBUTES
-     */
+    */
     /**
      * the name of the debug section
      * @var string
@@ -123,6 +123,7 @@ class Debug {
      *
      * @static
      * @param string $section
+     * @return Debug
      */
     public static function getInstance($section = "default"){
         if(isset(self::$instances[$section])){
@@ -224,10 +225,11 @@ class Debug {
         $backtrace = debug_backtrace();
         foreach($backtrace as $trace){
             if($trace["class"] !== "Debug"){
-                $this->addMessage("Trace",
-                                  $title,
-                                  $trace["class"].$trace["type"].$trace["function"],
-                                  array("file" => $trace["file"], "line" => $trace["line"])
+                $this->addMessage(
+                	"Trace",
+                $title,
+                $trace["class"].$trace["type"].$trace["function"],
+                array("file" => $trace["file"], "line" => $trace["line"])
                 );
             }
         }
@@ -241,7 +243,7 @@ class Debug {
      */
     public function startProfiling($title = NULL){
         if($title == NULL){
-            $title = $title = "Start profiling";
+            $title = "Start profiling";
         }
         $this->i["profiling"] = 1;
         $this->addMessage("Profiling", $title, "0 s");
@@ -281,7 +283,7 @@ class Debug {
 
     /*
      * DISPLAY METHOD
-     */
+    */
     /**
      * return messages well formatted
      *
@@ -325,8 +327,11 @@ class Debug {
      */
     public function displayFrameReport($sections = NULL){
         //les retours à la ligne et les " provoquent la coupure des chaines javascript et des plantages
-        $formattedMessages = preg_replace('/"/', '\"', $this->getFormattedMessages($sections));
-        $formattedMessages = preg_replace("/\n/", "\\n", $formattedMessages);
+        $formattedMessages = preg_replace(
+            array('/"/', "/\n/"),
+            array('\"', "\\n"),
+            $this->getFormattedMessages($sections)
+        );
         $frame = preg_replace("/{debugInfo}/", $formattedMessages, self::$frame);
         echo($frame);
     }
@@ -411,18 +416,30 @@ class Debug {
  *
  */
 class FakeDebug extends Debug {
-    public function __construct($section){}
-    public function __destruct(){}
-    public function log($message, $title = NULL){}
-    public function dump($variable, $title = NULL){}
-    public function trace($title = NULL){}
-    public function startProfiling($title = NULL){}
-    public function profilingCP($title = NULL){}
-    public function endProfiling($title = NULL){}
-    public function getFormattedMessages($sections = NULL){}
-    public function displayFrameReport($sections = NULL){}
-    public function getHtmlPage($sections = NULL){}
-    public function generateReport($sections = NULL){}
+    public function __construct($section){
+    }
+    public function __destruct(){
+    }
+    public function log($message, $title = NULL){
+    }
+    public function dump($variable, $title = NULL){
+    }
+    public function trace($title = NULL){
+    }
+    public function startProfiling($title = NULL){
+    }
+    public function profilingCP($title = NULL){
+    }
+    public function endProfiling($title = NULL){
+    }
+    public function getFormattedMessages($sections = NULL){
+    }
+    public function displayFrameReport($sections = NULL){
+    }
+    public function getHtmlPage($sections = NULL){
+    }
+    public function generateReport($sections = NULL){
+    }
 
 }
 

@@ -2,7 +2,10 @@
 namespace lighter\routing\routes;
 
 
-abstract class Node {
+use \Serializable;
+
+
+abstract class Node implements Serializable {
     private $type;
     private $value;
     private $subNodes = array();
@@ -55,6 +58,17 @@ abstract class Node {
             $subNode->reset();
         }
         reset($this->subNodes);
+    }
+
+
+    public function serialize(){
+        return json_encode(array($this->type, $this->value, serialize($this->subNodes)));
+    }
+
+
+    public function unserialize($s){
+        list($this->type, $this->value, $this->subNodes) = json_decode($s);
+        $this->subNodes = unserialize($this->subNodes);
     }
 
 }

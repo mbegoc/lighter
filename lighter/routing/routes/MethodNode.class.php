@@ -12,7 +12,7 @@ class MethodNode extends Node {
 
 
     public function getType(){
-        return 'MehtodNode';
+        return 'MethodNode';
     }
 
 }

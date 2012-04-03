@@ -13,6 +13,13 @@ require "lighter/config/include.php";
 
 use lighter\models\Config;
 
+use lighter\routing\routes\ControllerNode;
+use lighter\routing\routes\FixedNode;
+use lighter\routing\routes\MethodNode;
+use lighter\routing\routes\ParamNode;
+use lighter\routing\routes\ParamsNode;
+use lighter\routing\routes\RootNode;
+
 
 $config = Config::getInstance();
 $config->setTemplatesPaths(array(
@@ -30,6 +37,16 @@ $config->setSessionData(1200, true);
 $config->addLanguage('en', 'English');
 $config->addLanguage('fr', 'Français');
 $config->setIndexFile(true);
+
+
+
+
+$map = new RootNode('/');
+$map->addSubNode(new ControllerNode('Admin'))
+    ->addSubNode(new MethodNode('handleRequest'))
+    ->addSubNode(new ParamsNode());
+
+$config->setRoutes($map);
 
 if ($config->save()) {
     echo 'ok';

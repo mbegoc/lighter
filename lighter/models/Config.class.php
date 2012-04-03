@@ -4,12 +4,9 @@ namespace lighter\models;
 
 use \Exception;
 
-use lighter\routing\routes\ControllerNode;
-use lighter\routing\routes\FixedNode;
-use lighter\routing\routes\MethodNode;
-use lighter\routing\routes\ParamNode;
-use lighter\routing\routes\ParamsNode;
-use lighter\routing\routes\RootNode;
+use lighter\routing\routes\Node as RouteNode;
+
+use lighter\handlers\Debug;
 
 
 /**
@@ -247,8 +244,8 @@ class Config extends DataAccessor {
      * @param string $regex
      * @param array $route
      */
-    public function addRoute($regex, array $route){
-        $this->doc['routes'][] = array($regex => $route);
+    public function setRoutes(RouteNode $route){
+        $this->doc['routes'] = serialize($route);
     }
 
 
@@ -257,9 +254,9 @@ class Config extends DataAccessor {
      *
      * @return array
      */
-    //public function getRoutes(){
-    //    return $this->doc['routes'];
-    //}
+    public function getRoutes(){
+       return unserialize($this->doc['routes']);
+    }
 
 
     /**
@@ -293,23 +290,6 @@ class Config extends DataAccessor {
         $lang['name'] = $name;
 
         array_push($this->doc['language'], $lang);
-    }
-
-
-    public function getRoutes(){
-        $map = new RootNode();
-
-        $map->addSubNode(new FixedNode('useless-subsection'))
-            ->addSubNode(new ParamNode())
-            ->addSubNode(new MethodNode())
-            ->addSubNode(new ParamsNode())
-            ->addSubNode(new ControllerNode('HardControl'));
-
-        $map->addSubNode(new ControllerNode('Admin'))
-            ->addSubNode(new MethodNode())
-            ->addSubNode(new ParamsNode());
-
-        return $map;
     }
 
 }

@@ -6,7 +6,6 @@ use lighter\helpers\Exception;
 
 use lighter\models\Config;
 use lighter\models\ConfigException;
-use lighter\models\Menu;
 
 use lighter\handlers\Debug;
 use lighter\handlers\HttpResponse;
@@ -92,39 +91,21 @@ class Router {
         $this->config = Config::getInstance();
         $this->basePath = $this->config->getApplicationRelativePath();
 
-        $routeManager = new RouteManager();
-        $routeManager->handleNode($this->config->getRoutes(), explode('/', $_SERVER["REQUEST_URI"]));
-        Debug::getInstance()->log($routeManager->getController(), 'controller');
-        Debug::getInstance()->log($routeManager->getMethod(), 'method');
-        Debug::getInstance()->dump($routeManager->getParams(), 'params');
-
-        $this->controllerClass = $this->config->getControllerClass();
-        $this->method = $this->config->getControllerMethod();
-
+        $urlReport = Debug::getInstance('Url Data');
+        $urlReport->startProfiling('Route handling');
         $matches = array();
-        if(preg_match("#$this->basePath(\w+.php/)?((/?[\w-]+)+)/?$#",
+        if(preg_match("#$this->basePath(\w+\.php/)?(.*)/?$#",
             $_SERVER["REQUEST_URI"], $matches))
         {
-            $this->args = explode('/', $matches[2]);
+            $routeManager = new RouteManager();
+            $routeManager->handleNode($this->config->getRoutes(), explode('/', $matches[2]));
 
-            $menu = new Menu();
-
-            $firstArg = array_shift($this->args);
-            if($menu->loadFromSlug($firstArg)->next()){
-                $this->controllerClass = $menu->getController();
-                $this->method = $menu->getControllerMethod();
-                $this->args[] = $menu->getItemId();
-            }else{
-                $this->controllerClass = $firstArg;
-
-                $method = array_shift($this->args);
-                if(isset($method)){
-                    $this->method = $method;
-                }
-            }
+            $this->controllerClass = $routeManager->getController();
+            $this->method = $routeManager->getMethod();
+            $this->args = $routeManager->getParams();
         }
 
-        $urlReport = Debug::getInstance('Url Data');
+        $urlReport->endProfiling('Route handling');
         $urlReport->log($this->controllerClass, 'controller');
         $urlReport->log($this->method, 'method');
         $urlReport->dump($this->args, 'arguments');
