@@ -1,1 +1,0 @@
-<h1><?=$view->getCode();?></h1><p><?=$view->getMessage();?></p>
