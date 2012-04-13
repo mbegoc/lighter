@@ -5,7 +5,6 @@ class ControllerNodeParser extends RouteParser {
 
 
     public function handleNode(Node $node, array $uri){
-        echo "Controller:".$this->value;
         if($value = current($uri)){
             $this->routeManager->setController($value);
             next($uri);

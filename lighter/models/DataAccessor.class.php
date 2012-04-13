@@ -59,7 +59,7 @@ abstract class DataAccessor {
      */
     protected function __construct($collection){
         if(!isset($this->connexionData)){
-            $this->connexionData = parse_ini_file("lighter/config/db.ini", true);
+            $this->connexionData = parse_ini_file(DB_CONFIG_FILE, true);
             $this->connexionData = $this->connexionData['database'];
         }
 

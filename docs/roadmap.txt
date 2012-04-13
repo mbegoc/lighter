@@ -9,8 +9,7 @@
 
     Here are the next steps to obtain a correct first version:
 
-        * improve the routing definition system - unlink it from menu - remove menu
-          from the basic framework
+        * remove menu from the basic framework
         * permit the replacement of the default Routing class
         * continue to separate the framework from the app (media files may be a part
           of the app -  at this time, the include folder is neither a part of the 

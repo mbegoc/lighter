@@ -83,6 +83,8 @@ class Router {
      * set the object regarding the requested uri
      */
     public function __construct(){
+        error_reporting(E_ALL);
+
         $this->profile = Debug::getInstance('Page profiling');
         $this->profile->startProfiling('Page generation start');
 
