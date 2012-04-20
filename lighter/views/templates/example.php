@@ -1,0 +1,1 @@
+<p class="lighter">Page d'example de <em>lighter</em></p>
