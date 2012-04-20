@@ -5,12 +5,12 @@ namespace lighter\routing\routes;
 class ParamsNode extends Node {
 
 
-    public function __construct(){
+    public function __construct() {
         parent::__construct();
     }
 
 
-    public function getType(){
+    public function getType() {
         return 'ParamsNode';
     }
 

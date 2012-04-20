@@ -40,7 +40,7 @@ class TemplateEngine {
     /**
      *
      */
-    public function __construct(){
+    public function __construct() {
         $this->config = Config::getInstance();
     }
 
@@ -53,7 +53,7 @@ class TemplateEngine {
      * @param string $name
      * @param mixed $var
      */
-    public function addVar($name, $var){
+    public function addVar($name, $var) {
         $this->vars[$name] = $var;
     }
 
@@ -61,7 +61,7 @@ class TemplateEngine {
     /**
      * affichage du template principal
      */
-    public function display($template){
+    public function display($template) {
         extract($this->vars);
 
         include($this->getTemplate($template));
@@ -73,7 +73,7 @@ class TemplateEngine {
      *
      * @param string $template
      */
-    public function get($template){
+    public function get($template) {
         extract($this->vars);
 
         ob_start();
@@ -89,10 +89,10 @@ class TemplateEngine {
      *
      * @param string $template
      */
-    protected function getTemplate($template){
+    protected function getTemplate($template) {
         $paths = $this->config->getSection('tplPaths');
-        foreach($paths as $path){
-            if(file_exists($path.$template.'.php')){
+        foreach ($paths as $path) {
+            if (file_exists($path.$template.'.php')) {
                 return $path.$template.'.php';
             }
         }

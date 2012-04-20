@@ -58,7 +58,7 @@ abstract class Input extends FormElement {
      * @param int $size
      * @param mixed $value
      */
-    public function __construct($inputType, $type, $name, $label, $size, $value){
+    public function __construct($inputType, $type, $name, $label, $size, $value) {
         parent::__construct($type);
         $this->inputType = $inputType;
         $this->name = $name;
@@ -73,7 +73,7 @@ abstract class Input extends FormElement {
      *
      * @return string html
      */
-    public function __toString(){
+    public function __toString() {
         $html = "<div id='{$this->name}Box'>";
         $html.= "<label for='$this->name'>$this->label: </label>";
         $html.= "<input type='$this->inputType' name='$this->name' id='$this->name' value='$this->value'/>";

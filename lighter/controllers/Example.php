@@ -27,7 +27,7 @@ class Example extends Controller {
      *
      * @see lighter\controllers.Controller::handleRequest()
      */
-    public function handleRequest(){
+    public function handleRequest() {
         $this->view = new View();
     }
 

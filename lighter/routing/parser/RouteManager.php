@@ -12,7 +12,7 @@ class RouteManager extends RouteParser {
     private $params = array();
 
 
-    public function __construct(){
+    public function __construct() {
         $this->parsers['FixedNode'] = new FixedNodeParser($this);
         $this->parsers['ControllerNode'] = new ControllerNodeParser($this);
         $this->parsers['MethodNode'] = new MethodNodeParser($this);
@@ -21,49 +21,49 @@ class RouteManager extends RouteParser {
     }
 
 
-    public function setController($controller){
+    public function setController($controller) {
         $this->controller = $controller;
     }
 
 
-    public function getController(){
+    public function getController() {
         return $this->controller;
     }
 
 
-    public function setMethod($method){
+    public function setMethod($method) {
         $this->method = $method;
     }
 
 
-    public function getMethod(){
+    public function getMethod() {
         return $this->method;
     }
 
 
-    public function addParam($param){
+    public function addParam($param) {
         $this->params[] = $param;
     }
 
 
-    public function getParams(){
+    public function getParams() {
         return $this->params;
     }
 
 
-    public function handleNode(Node $node, array $uri){
+    public function handleNode(Node $node, array $uri) {
         Debug::getInstance('routing')->dump($node);
-        if($subNode = $node->nextNode()){
-            if(!$this->parsers[$subNode->getType()]->handleNode($subNode, $uri)){
+        if ($subNode = $node->nextNode()) {
+            if (!$this->parsers[$subNode->getType()]->handleNode($subNode, $uri)) {
                 $this->handleNode($node, $uri);
             }
         }
     }
 
 
-    public function __toString(){
+    public function __toString() {
         $s = $this->controller.':'.$this->method;
-        foreach($this->params as $param){
+        foreach ($this->params as $param) {
             $s.= ':'.$param;
         }
         return $s;

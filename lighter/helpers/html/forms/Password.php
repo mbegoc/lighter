@@ -26,7 +26,7 @@ class Password extends Input {
      * @param string $label
      * @param int $size
      */
-    public function __construct($name, $label, $size){
+    public function __construct($name, $label, $size) {
         parent::__construct('password', FormElement::STRING, $name, $label, $size, 'xxxxxxxx');
     }
 

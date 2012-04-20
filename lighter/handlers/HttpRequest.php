@@ -65,17 +65,17 @@ class HttpRequest {
     /**
      * private singleton constructor
      */
-    private function __construct(){
+    private function __construct() {
         $this->method = strtoupper($_SERVER['REQUEST_METHOD']);
         //some browser can't send other method but GET and POST: we accept a method parameter to be able to handle this
-        if(isset($_REQUEST['method']) && ($_REQUEST['method'] == 'PUT' || $_REQUEST['method'] == 'DELETE')){
+        if (isset($_REQUEST['method']) && ($_REQUEST['method'] == 'PUT' || $_REQUEST['method'] == 'DELETE')) {
             $this->method = $_REQUEST['method'];
         }
         $this->accept = explode(',', $_SERVER['HTTP_ACCEPT']);
         $this->charset = $_SERVER['HTTP_ACCEPT_CHARSET'];
         $this->language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 
-        if($this->method == 'PUT' || $this->method == 'DELETE'){
+        if ($this->method == 'PUT' || $this->method == 'DELETE') {
             $params = parse_str(file_get_contents('php://input'), $this->_put_args);
             $this->parameters = array_merge($_REQUEST, $params);
         }else{
@@ -91,8 +91,8 @@ class HttpRequest {
      * @static
      * @return lighter\handlers\HttpRequest
      */
-    public static function getInstance(){
-        if(!isset(self::$instance)){
+    public static function getInstance() {
+        if (!isset(self::$instance)) {
             self::$instance = new self();
         }
 
@@ -105,7 +105,7 @@ class HttpRequest {
      *
      * @return string
      */
-    public function getMethod(){
+    public function getMethod() {
         return $this->method;
     }
 
@@ -117,7 +117,7 @@ class HttpRequest {
      * returned
      * @return string
      */
-    public function getAccept(){
+    public function getAccept() {
         return $this->accept[0];
     }
 
@@ -127,7 +127,7 @@ class HttpRequest {
      *
      * @return string
      */
-    public function getCharset(){
+    public function getCharset() {
         return $this->charset;
     }
 
@@ -137,7 +137,7 @@ class HttpRequest {
      *
      * @return string
      */
-    public function getLanguage(){
+    public function getLanguage() {
         return $this->language;
     }
 
@@ -149,10 +149,10 @@ class HttpRequest {
      * @param string $name
      * @return string
      */
-    public function getString($name){
-        if(isset($this->parameters[$name])){
+    public function getString($name) {
+        if (isset($this->parameters[$name])) {
             $string = trim($this->parameters[$name]);
-            if($string != ""){
+            if ($string != "") {
                 return $string;
             }
         }
@@ -166,8 +166,8 @@ class HttpRequest {
      *
      * @param int $name
      */
-    public function getInt($name){
-        if(isset($this->parameters[$name]) && trim($this->parameters[$name]) != ""){
+    public function getInt($name) {
+        if (isset($this->parameters[$name]) && trim($this->parameters[$name]) != "") {
             return (int)$this->parameters[$name];
         }else{
             return NULL;
@@ -181,8 +181,8 @@ class HttpRequest {
      *
      * @param float $name
      */
-    public function getFloat($name){
-        if(isset($this->parameters[$name]) && trim($this->parameters[$name]) != ""){
+    public function getFloat($name) {
+        if (isset($this->parameters[$name]) && trim($this->parameters[$name]) != "") {
             return (float)$this->parameters[$name];
         }else{
             return NULL;
@@ -196,8 +196,8 @@ class HttpRequest {
      *
      * @param boolean $name
      */
-    public function getBool($name){
-        if(isset($this->parameters[$name]) && trim($this->parameters[$name]) != ""){
+    public function getBool($name) {
+        if (isset($this->parameters[$name]) && trim($this->parameters[$name]) != "") {
             return (bool)$this->parameters[$name];
         }else{
             return NULL;

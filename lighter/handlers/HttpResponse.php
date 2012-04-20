@@ -66,7 +66,7 @@ class HttpResponse {
     /**
      * construct a new HttpResponse
      */
-    private function __construct(){
+    private function __construct() {
         $this->httpMessages = array(
             100 => 'Continue',
             101 => 'Switching Protocols',
@@ -125,8 +125,8 @@ class HttpResponse {
      *
      * @return handlers\HttpResponse
      */
-    public function getInstance(){
-        if(!isset(self::$instance)){
+    public function getInstance() {
+        if (!isset(self::$instance)) {
             self::$instance = new self();
         }
 
@@ -140,8 +140,8 @@ class HttpResponse {
      * @param int $code
      * @throws HttpException
      */
-    public function setCode($code){
-        if(isset($this->httpMessages[$code])){
+    public function setCode($code) {
+        if (isset($this->httpMessages[$code])) {
             $this->code = (int)$code;
         }else{
             throw new HttpException(_('Invalid HTTP code'));
@@ -154,7 +154,7 @@ class HttpResponse {
      *
      * @return int
      */
-    public function getCode(){
+    public function getCode() {
         return $this->code;
     }
 
@@ -164,7 +164,7 @@ class HttpResponse {
      *
      * @param views\View $view
      */
-    public function setBody(View $view){
+    public function setBody(View $view) {
         $this->body = $view;
     }
 
@@ -172,11 +172,11 @@ class HttpResponse {
     /**
      * send this response, i.e. write it to the output stream
      */
-    public function send(){
+    public function send() {
         $this->contentType = HttpRequest::getInstance()->getAccept();
         $this->prepareHeader();
-        if(in_array($this->code, $this->httpBodyCodes)){
-            switch($this->contentType){
+        if (in_array($this->code, $this->httpBodyCodes)) {
+            switch ($this->contentType) {
                 /* FIXME I don't like so much the way it works to know if a format is
                  * supported: the display method return a boolean in addition of
                  * displaying the content. I don't know how do that in a better way,
@@ -188,17 +188,17 @@ class HttpResponse {
                  * doesn't display the xhtml page
                  */
 //                case 'application/xhtml':
-                    if($this->body->displayHtml()){
+                    if ($this->body->displayHtml()) {
                         return;
                     }
                     break;
                 case 'text/xml':
-                    if($this->body->displayXml()){
+                    if ($this->body->displayXml()) {
                         return;
                     }
                     break;
                 case 'application/json':
-                    if($this->body->displayJson()){
+                    if ($this->body->displayJson()) {
                         return;
                     }
                     break;
@@ -214,7 +214,7 @@ class HttpResponse {
          */
         $httpMessage = new HttpMessage($this->code, $this->httpMessages[$this->code]);
 
-        switch(HttpRequest::getInstance()->getAccept()){
+        switch (HttpRequest::getInstance()->getAccept()) {
             case 'application/json':
                 $httpMessage->displayJson();
                 break;
@@ -234,7 +234,7 @@ class HttpResponse {
     /**
      * prepare the http header
      */
-    private function prepareHeader(){
+    private function prepareHeader() {
         $string = 'HTTP/1.1 '.$this->code.' '.$this->httpMessages[$this->code];
         header($string);
         header('Content-Type: '.$this->contentType);

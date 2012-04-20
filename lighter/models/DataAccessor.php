@@ -57,13 +57,13 @@ abstract class DataAccessor {
      *
      * @param string $collection
      */
-    protected function __construct($collection){
+    protected function __construct($collection) {
         $this->initialize($collection);
     }
 
 
-    protected function initialize($collection){
-        if(!isset(self::$connexionData)){
+    protected function initialize($collection) {
+        if (!isset(self::$connexionData)) {
             self::$connexionData = Config::getInstance()->getSection('mongo');
         }
 
@@ -98,7 +98,7 @@ abstract class DataAccessor {
      *
      * @param string $id
      */
-    public function load($id){
+    public function load($id) {
         $this->doc = $this->collection->findOne(array('_id' => new MongoId($id)));
     }
 
@@ -111,8 +111,8 @@ abstract class DataAccessor {
      * @param array $criterias
      * @throws DataAccessorException
      */
-    protected function search(array $criterias = array()){
-        if($this->cursor === NULL){
+    protected function search(array $criterias = array()) {
+        if ($this->cursor === NULL) {
             $this->cursor = $this->collection->find($criterias);
         }else{
             throw new DataAccessorException("This DataAccessor object is already initialized. Reset it or fetch all the data before calling this function.", 1);
@@ -125,7 +125,7 @@ abstract class DataAccessor {
      *
      * @return DBAccessor
      */
-    public function loadAll(){
+    public function loadAll() {
         $this->search();
         return $this;
     }
@@ -137,7 +137,7 @@ abstract class DataAccessor {
      * @param array $sort - key = field to sort, value = order (1, -1)
      * @return DBAccessor
      */
-    public function sort(array $sort){
+    public function sort(array $sort) {
         $this->cursor->sort($sort);
         return $this;
     }
@@ -150,7 +150,7 @@ abstract class DataAccessor {
      * @param int $from
      * @return DBAccessor
      */
-    public function slice($qty, $from = 0){
+    public function slice($qty, $from = 0) {
         $this->cursor->skip($from)->limit($qty);
         return $this;
     }
@@ -161,9 +161,9 @@ abstract class DataAccessor {
      *
      * @throws DataAccessorException
      */
-    public function next(){
-        if($this->cursor !== NULL){
-            if($this->cursor->hasNext()){
+    public function next() {
+        if ($this->cursor !== NULL) {
+            if ($this->cursor->hasNext()) {
                 $this->doc = $this->cursor->getNext();
                 return true;
             }else{
@@ -182,7 +182,7 @@ abstract class DataAccessor {
      *
      * @param array $criterias
      */
-    public function count(array $criterias = array()){
+    public function count(array $criterias = array()) {
         return $this->collection->count($criterias);
     }
 
@@ -190,7 +190,7 @@ abstract class DataAccessor {
     /**
      * save the current document to the DB
      */
-    public function save(){
+    public function save() {
         $this->prepareToDB();
         $this->collection->save($this->doc);
     }
@@ -201,7 +201,7 @@ abstract class DataAccessor {
      *
      * @param string $id
      */
-    public function delete(){
+    public function delete() {
         $this->collection->remove(array("_id" => $this->doc['_id']));
     }
 
@@ -211,7 +211,7 @@ abstract class DataAccessor {
      *
      * @param string $id
      */
-    public function deleteFromId($id){
+    public function deleteFromId($id) {
         $this->collection->remove(array("_id" => new MongoId($id)));
     }
 
@@ -221,7 +221,7 @@ abstract class DataAccessor {
      *
      * @return string
      */
-    public function getId(){
+    public function getId() {
         return (string)$this->doc["_id"];
     }
 
@@ -229,7 +229,7 @@ abstract class DataAccessor {
     /**
      * @return string
      */
-    public function __toString(){
+    public function __toString() {
         return json_encode($this->doc);
     }
 

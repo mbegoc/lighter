@@ -77,7 +77,7 @@ class Router {
     /**
      * set the object regarding the requested uri
      */
-    public function __construct(){
+    public function __construct() {
         error_reporting(E_ALL);
 
         $this->profile = Debug::getInstance('Page profiling');
@@ -90,9 +90,7 @@ class Router {
         $urlReport = Debug::getInstance('Url Data');
         $urlReport->startProfiling('Route handling');
         $matches = array();
-        if(preg_match("#(\w+\.php/)?(.*)/?$#",
-            $_SERVER["REQUEST_URI"], $matches))
-        {
+        if (preg_match("#(\w+\.php/)?(.*)/?$#", $_SERVER["REQUEST_URI"], $matches)) {
             $routeManager = new RouteManager();
             $routeManager->handleNode($this->config->getRoutes(), explode('/', $matches[2]));
 
@@ -111,18 +109,18 @@ class Router {
     /**
      * execution of the controller
      */
-    public function execute(){
+    public function execute() {
         $this->profile->profilingCP('Initialization begining');
 
         $response = HttpResponse::getInstance();
 
         $paths = $this->config->getSection('controllersPaths');
-        foreach($paths as $path => $package){
-            if(file_exists($path.$this->controllerClass.'.php')){
+        foreach ($paths as $path => $package) {
+            if (file_exists($path.$this->controllerClass.'.php')) {
                 $controller = $package.$this->controllerClass;
                 $this->controller = new $controller();
 
-                if(method_exists($this->controller, $this->method)){
+                if (method_exists($this->controller, $this->method)) {
                     call_user_func_array(
                         array($this->controller, $this->method),
                         $this->args

@@ -51,10 +51,10 @@ abstract class View {
      *
      * @param string $template
      */
-    public function __construct($mainTemplate){
+    public function __construct($mainTemplate) {
         $this->mainTemplate = $mainTemplate;
 
-        if(!isset(self::$tplEngine)){
+        if (!isset(self::$tplEngine)) {
             self::$tplEngine = new TemplateEngine();
         }
     }
@@ -66,7 +66,7 @@ abstract class View {
      *
      * @return boolean
      */
-    public function displayHtml(){
+    public function displayHtml() {
         self::$tplEngine->addVar("view", $this);
         self::$tplEngine->display($this->mainTemplate);
         return true;
@@ -79,7 +79,7 @@ abstract class View {
      *
      * @return boolean
      */
-    public function displayXml(){
+    public function displayXml() {
         return false;
     }
 
@@ -90,7 +90,7 @@ abstract class View {
      *
      * @return boolean
      */
-    public function displayJson(){
+    public function displayJson() {
         return false;
     }
 
@@ -101,8 +101,8 @@ abstract class View {
      * @param string $message
      * @param string $class
      */
-    public function addMessage($message, $class = NULL){
-        if(isset($class)){
+    public function addMessage($message, $class = NULL) {
+        if (isset($class)) {
             $class = " class='$class'";
         }
         $this->messages.= "<p$class>$message</p>";
@@ -114,7 +114,7 @@ abstract class View {
      *
      * @return string
      */
-    public function getMessages(){
+    public function getMessages() {
         return $this->messages;
     }
 

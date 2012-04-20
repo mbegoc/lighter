@@ -42,7 +42,7 @@ class HttpMessage extends WebPage {
      * @param int $code
      * @param string $message
      */
-    public function __construct($code, $message){
+    public function __construct($code, $message) {
         parent::__construct('main', 'httpMessage');
 
         $this->code = $code;
@@ -60,7 +60,7 @@ class HttpMessage extends WebPage {
      *
      * @return int
      */
-    public function getCode(){
+    public function getCode() {
         return $this->code;
     }
 
@@ -70,7 +70,7 @@ class HttpMessage extends WebPage {
      *
      * @return string
      */
-    public function getMessage(){
+    public function getMessage() {
         return $this->message;
     }
 
@@ -79,7 +79,7 @@ class HttpMessage extends WebPage {
      * (non-PHPdoc)
      * @see views.View::displayJson()
      */
-    public function displayJson(){
+    public function displayJson() {
         echo json_encode(array('code' => $this->code, 'message' => $this->message));
         return true;
     }
@@ -89,7 +89,7 @@ class HttpMessage extends WebPage {
      * (non-PHPdoc)
      * @see views.View::displayXml()
      */
-    public function displayXml(){
+    public function displayXml() {
         $xml = new SimpleXMLElement("<?xml version='1.0' encoding='UTF-8'?><httpResponse></httpResponse>");
         $xml->addChild('code', $this->code);
         $xml->addChild('message', $this->message);

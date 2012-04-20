@@ -50,7 +50,7 @@ abstract class FormElement {
      *
      * @param int $type
      */
-    public function __construct($type){
+    public function __construct($type) {
         $this->type = $type;
     }
 
@@ -67,8 +67,8 @@ abstract class FormElement {
      *
      * @return mixed
      */
-    public function getValue(){
-        switch($this->type){
+    public function getValue() {
+        switch ($this->type) {
             case self::STRING:
                 $this->value = HttpRequest::getInstance()->getString($this->name);
                 break;
@@ -93,7 +93,7 @@ abstract class FormElement {
      *
      * @return string
      */
-    public function getName(){
+    public function getName() {
         return $this->name;
     }
 

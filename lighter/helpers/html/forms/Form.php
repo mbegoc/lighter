@@ -59,7 +59,7 @@ class Form {
      *
      * @param $target
      */
-    public function __construct($name, $target = "", $method = "post"){
+    public function __construct($name, $target = "", $method = "post") {
         $this->name = $name;
         $this->target = $target;
         $this->method = $method;
@@ -73,7 +73,7 @@ class Form {
      *
      * @param FormElement $element
      */
-    public function addElement(FormElement $element){
+    public function addElement(FormElement $element) {
         $this->elements[] = $element;
     }
 
@@ -83,7 +83,7 @@ class Form {
      *
      * @param string $label
      */
-    public function setFieldSet($label){
+    public function setFieldSet($label) {
         $this->fieldset = $label;
     }
 
@@ -92,15 +92,15 @@ class Form {
      * return this form in html format
      * @return string
      */
-    public function __toString(){
+    public function __toString() {
         $html = "<div id='{$this->name}Box' class='formBox'>";
 
-        if(isset($this->fieldset)){
+        if (isset($this->fieldset)) {
             $html.= "<fieldset><legend>$this->fieldset</legend>";
         }
 
         $html.= "<form name='$this->name' id='$this->name' method='$this->method' action='$this->target'>";
-        foreach($this->elements as $element){
+        foreach ($this->elements as $element) {
             $html.= $element;
         }
         $html.= "<div id='{$this->name}ButtonBox'>";
@@ -109,7 +109,7 @@ class Form {
 
         $html.= "</form>";
 
-        if(isset($this->fieldset)){
+        if (isset($this->fieldset)) {
             $html.= "</fieldset>";
         }
 
@@ -124,9 +124,9 @@ class Form {
      *
      * @return array
      */
-    public function getValues(){
+    public function getValues() {
         $return = array();
-        foreach($this->elements as $element){
+        foreach ($this->elements as $element) {
             $return[$element->getName()] = $element->getValue();
         }
 
@@ -139,7 +139,7 @@ class Form {
      *
      * @return boolean
      */
-    public function isPosted(){
+    public function isPosted() {
         $submit = HttpRequest::getInstance()->getString($this->name.'Submit');
         return isset($submit);
     }
@@ -150,7 +150,7 @@ class Form {
      *
      * @return string
      */
-    public function getName(){
+    public function getName() {
         return $this->name;
     }
 

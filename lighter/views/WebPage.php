@@ -22,13 +22,13 @@ abstract class WebPage extends View {
     protected $contentTemplate = NULL;
 
 
-    public function __construct($mainTemplate, $contentTemplate){
+    public function __construct($mainTemplate, $contentTemplate) {
         parent::__construct($mainTemplate);
         $this->contentTemplate = $contentTemplate;
     }
 
 
-    public function displayHtml(){
+    public function displayHtml() {
         self::$tplEngine->addVar("htmlHeader", HtmlHeader::getInstance());
         parent::displayHtml();
         return true;
@@ -40,17 +40,17 @@ abstract class WebPage extends View {
      *
      * @return string
      */
-    public function getMainContent(){
+    public function getMainContent() {
         return self::$tplEngine->get($this->contentTemplate);
     }
 
 
-    public function setTitle($title){
+    public function setTitle($title) {
         $this->title = $title;
     }
 
 
-    public function getTitle(){
+    public function getTitle() {
         return $this->title;
     }
 

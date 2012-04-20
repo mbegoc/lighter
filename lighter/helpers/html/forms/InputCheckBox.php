@@ -29,7 +29,7 @@ class InputCheckBox extends Input {
      * @param string $label
      * @param string $value
      */
-    public function __construct($name, $label, $value = false){
+    public function __construct($name, $label, $value = false) {
         parent::__construct('checkbox', FormElement::BOOL, $name, $label, 0, $value);
     }
 
@@ -39,8 +39,8 @@ class InputCheckBox extends Input {
      *
      * @return string html
      */
-    public function __toString(){
-        if($this->value){
+    public function __toString() {
+        if ($this->value) {
             $checked = " checked='checked'";
         }
         $html = "<div id='{$this->name}Box'>";

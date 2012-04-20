@@ -30,7 +30,7 @@ abstract class RouteParser {
      *
      * @param RouteManager $routeManager
      */
-    public function __construct(RouteManager $routeManager){
+    public function __construct(RouteManager $routeManager) {
         $this->routeManager = $routeManager;
     }
 

@@ -75,7 +75,7 @@ class HtmlHeader {
     protected $keywords = "";
 
 
-    private function __construct(){
+    private function __construct() {
 
     }
 
@@ -83,8 +83,8 @@ class HtmlHeader {
     /**
      * @return lighter\helpers\html\HtmlHeader
      */
-    public function getInstance(){
-        if(!isset(self::$instance)){
+    public function getInstance() {
+        if (!isset(self::$instance)) {
             self::$instance = new self();
         }
 
@@ -97,7 +97,7 @@ class HtmlHeader {
      *
      * @param string $title
      */
-    public function setTitle($title){
+    public function setTitle($title) {
         $this->title = "<title>$title</title>";
     }
 
@@ -107,7 +107,7 @@ class HtmlHeader {
      *
      * @param string $url
      */
-    public function setCanonicalTag($url){
+    public function setCanonicalTag($url) {
         $this->canonical = "";
     }
 
@@ -117,7 +117,7 @@ class HtmlHeader {
      *
      * @param string $charset
      */
-    public function setCharset($charset){
+    public function setCharset($charset) {
         $this->charset = "<meta http-equiv='Content-Type' content='text/html;charset=$charset'/>";
     }
 
@@ -127,7 +127,7 @@ class HtmlHeader {
      *
      * @param string $description
      */
-    public function setDescription($description){
+    public function setDescription($description) {
         $this->description = "<meta name='description' content='$description'/>";
     }
 
@@ -137,7 +137,7 @@ class HtmlHeader {
      *
      * @param string $keywords
      */
-    public function setKeywords($keywords){
+    public function setKeywords($keywords) {
         $this->keywords = "<meta name='keywords' content='$keywords'/>";
     }
 
@@ -149,11 +149,11 @@ class HtmlHeader {
      * @param mixed $key - default to NULL - use a default key
      * @param string $media
      */
-    public function addCssFile($file, $key = NULL, $media = 'all'){
-        if($key === NULL){
+    public function addCssFile($file, $key = NULL, $media = 'all') {
+        if ($key === NULL) {
             $this->cssFiles[] = array($file, $media);
         }else{
-            if(!isset($this->cssFiles[$key])){
+            if (!isset($this->cssFiles[$key])) {
                 $this->cssFiles[$key] = array($file, $media);
             }else{
                 throw new HtmlHeaderException("Css file key already exists.", 1);
@@ -165,7 +165,7 @@ class HtmlHeader {
     /**
      * remove all the previously added css files
      */
-    public function resetCssFiles(){
+    public function resetCssFiles() {
         $this->cssFiles = array();
     }
 
@@ -175,7 +175,7 @@ class HtmlHeader {
      *
      * @param mixed $key
      */
-    public function removeCssFile($key){
+    public function removeCssFile($key) {
         unset($this->cssFiles[$key]);
     }
 
@@ -187,11 +187,11 @@ class HtmlHeader {
      * @param mixed $key
      * @param string $type
      */
-    public function addJsFile($file, $key = NULL, $type = 'text/javascript'){
-        if($key == NULL){
+    public function addJsFile($file, $key = NULL, $type = 'text/javascript') {
+        if ($key == NULL) {
             $this->jsFiles[] = array($type, $file);
         }else{
-            if(!isset($this->cssFiles[$key])){
+            if (!isset($this->cssFiles[$key])) {
                 $this->jsFiles[$key] = array($type, $file);
             }else{
                 throw new HtmlHeaderException("Js file key already exists.", 2);
@@ -203,7 +203,7 @@ class HtmlHeader {
     /**
      * remove all the previously added js files
      */
-    public function resetJsFiles(){
+    public function resetJsFiles() {
         $this->jsFiles = array();
     }
 
@@ -213,7 +213,7 @@ class HtmlHeader {
      *
      * @param mixed $key
      */
-    public function removeJsFile($key){
+    public function removeJsFile($key) {
         unset($this->jsFiles[$key]);
     }
 
@@ -221,7 +221,7 @@ class HtmlHeader {
     /**
      * display this object i.e. convert it to a string and echo it
      */
-    public function display(){
+    public function display() {
         echo (string)$this;
     }
 
@@ -229,16 +229,16 @@ class HtmlHeader {
     /**
      * convert this header to a string
      */
-    public function __toString(){
+    public function __toString() {
         $s = '<head>';
         $s.= $this->charset;
         $s.= $this->title;
         $s.= $this->canonical;
-        foreach($this->cssFiles as $cssFile){
+        foreach ($this->cssFiles as $cssFile) {
             $s.= '<link type="text/css" rel="stylesheet" href="'.$cssFile[0].'"'
                 .' media="'.$cssFile[1].'"/>';
         }
-        foreach($this->jsFiles as $jsFile){
+        foreach ($this->jsFiles as $jsFile) {
             $s.= '<script type="'.$jsFile[0].'" src="'.$jsFile[1].'"></script>';
         }
         $s.= $this->description;

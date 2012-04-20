@@ -111,7 +111,7 @@ class Debug {
      * a private constructor for the singleton
      * @param string $section
      */
-    private function __construct($section){
+    private function __construct($section) {
         $this->curSection = $section;
         self::$messages[$section] = array();
         $this->i = array("message" => 1, "var" => 1, "exception" => 1, "trace" => 1, "profiling" => 1);
@@ -125,17 +125,17 @@ class Debug {
      * @param string $section
      * @return Debug
      */
-    public static function getInstance($section = "default"){
-        if(isset(self::$instances[$section])){
+    public static function getInstance($section = "default") {
+        if (isset(self::$instances[$section])) {
             return self::$instances[$section];
         }else{
-            if(count(self::$instances) == 0){
+            if (count(self::$instances) == 0) {
                 $config = Config::getInstance();
-                if(!$config->getValue('debug', 'active', false)){
+                if (!$config->getValue('debug', 'active', false)) {
                     self::$debugClass = 'lighter\handlers\FakeDebug';
                 }else{
                     $configFile = $config->getValue('debug', 'configPath', '');
-                    if(file_exists($configFile)){
+                    if (file_exists($configFile)) {
                         self::loadConfig($configFile);
                     }
                 }
@@ -150,15 +150,15 @@ class Debug {
     /**
      * create the reports
      */
-    public function __destruct(){
-        if(count(self::$instances) == 1){
-            if(self::$report){
+    public function __destruct() {
+        if (count(self::$instances) == 1) {
+            if (self::$report) {
                 $this->generateReport(self::$sections);
-                if(self::$redirect && isset($_SERVER['HTTP_HOST'])){
+                if (self::$redirect && isset($_SERVER['HTTP_HOST'])) {
                     echo("<script type='text/javascript'>location.assign('http://".$_SERVER['HTTP_HOST'].self::$reportPath."');</script>");
                 }
             }
-            if(self::$frameReport && isset($_SERVER['HTTP_HOST'])){
+            if (self::$frameReport && isset($_SERVER['HTTP_HOST'])) {
                 $this->displayFrameReport(self::$sections);
             }
         }
@@ -175,8 +175,8 @@ class Debug {
      * @param string $content
      * @param array $location
      */
-    private function addMessage($type, $title, $content, array $location = NULL){
-        if(is_null($location)){
+    private function addMessage($type, $title, $content, array $location = NULL) {
+        if (is_null($location)) {
             $trace = debug_backtrace();
             //$trace[0] est l'appel interne à cette méthode par une methode publique de l'objet
             $location = array("file" => $trace[1]["file"], "line" => $trace[1]["line"]);
@@ -191,8 +191,8 @@ class Debug {
      * @param string $message
      * @param string $title
      */
-    public function log($message, $title = NULL){
-        if(is_null($title)){
+    public function log($message, $title = NULL) {
+        if (is_null($title)) {
             $title = "Message ".$this->i["message"]++;
         }
         $this->addMessage("Message", $title, $message);
@@ -205,8 +205,8 @@ class Debug {
      * @param mixed $variable
      * @param string $title
      */
-    public function dump($variable, $title = NULL){
-        if(is_null($title)){
+    public function dump($variable, $title = NULL) {
+        if (is_null($title)) {
             $title = "Variable ".$this->i["var"]++;
         }
         $this->addMessage("Variable", $title, "<pre>".print_r($variable, true)."</pre>");
@@ -218,13 +218,13 @@ class Debug {
      *
      * @param string $title
      */
-    public function trace($title = NULL){
-        if(is_null($title)){
+    public function trace($title = NULL) {
+        if (is_null($title)) {
             $title = "Trace ".$this->i["trace"]++;
         }
         $backtrace = debug_backtrace();
-        foreach($backtrace as $trace){
-            if($trace["class"] !== "Debug"){
+        foreach ($backtrace as $trace) {
+            if ($trace["class"] !== "Debug") {
                 $this->addMessage(
                 	"Trace",
                 $title,
@@ -241,8 +241,8 @@ class Debug {
      *
      * @param string $title
      */
-    public function startProfiling($title = NULL){
-        if($title == NULL){
+    public function startProfiling($title = NULL) {
+        if ($title == NULL) {
             $title = "Start profiling";
         }
         $this->i["profiling"] = 1;
@@ -256,9 +256,9 @@ class Debug {
      *
      * @param string $title
      */
-    public function profilingCP($title = NULL){
+    public function profilingCP($title = NULL) {
         $endTime = microtime(true);
-        if($title == NULL){
+        if ($title == NULL) {
             $title = $title = "Profiling CheckPoint".$this->i["profiling"]++;
         }
 
@@ -271,9 +271,9 @@ class Debug {
      *
      * @param string $title
      */
-    public function endProfiling($title = NULL){
+    public function endProfiling($title = NULL) {
         $endTime = microtime(true);
-        if($title == NULL){
+        if ($title == NULL) {
             $title = $title = "End profiling";
         }
 
@@ -289,19 +289,19 @@ class Debug {
      *
      * @param array $sections
      */
-    public function getFormattedMessages($sections = NULL){
-        if(is_null($sections)){
+    public function getFormattedMessages($sections = NULL) {
+        if (is_null($sections)) {
             $sections = array_keys(self::$messages);
         }
         $html = "";
-        foreach($sections as $section){
-            if(isset(self::$messages[$section]) && count(self::$messages[$section]) != 0){
+        foreach ($sections as $section) {
+            if (isset(self::$messages[$section]) && count(self::$messages[$section]) != 0) {
                 $html .= "<h2>$section</h2>";
                 $html .= "<table>";
                 $html .= "<thead><tr><td>Type</td><td>Titre</td><td>Contenu</td><td>Fichier</td><td>Ligne</td></tr></thead><tbody>";
                 $highlighted = false;
-                foreach(self::$messages[$section] as $message){
-                    if($highlighted){
+                foreach (self::$messages[$section] as $message) {
+                    if ($highlighted) {
                         $class = " class='highlight'";
                     }else{
                         $class = "";
@@ -325,7 +325,7 @@ class Debug {
      *
      * @param array $sections
      */
-    public function displayFrameReport($sections = NULL){
+    public function displayFrameReport($sections = NULL) {
         //les retours à la ligne et les " provoquent la coupure des chaines javascript et des plantages
         $formattedMessages = preg_replace(
             array('/"/', "/\n/"),
@@ -342,10 +342,10 @@ class Debug {
      *
      * @param array $sections
      */
-    public function getHtmlPage($sections = NULL){
+    public function getHtmlPage($sections = NULL) {
         $html = self::$header;
         $html .= "<p>Heure d'execution: ".date("d-m-Y H:i:s", time())."</p>";
-        if(self::$redirect && isset($_SERVER['HTTP_HOST']) && isset($_SERVER['REQUEST_URI'])){
+        if (self::$redirect && isset($_SERVER['HTTP_HOST']) && isset($_SERVER['REQUEST_URI'])) {
             $html .= "<p>Origine: http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']." - ";
             $html .= "<a href='http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."'>Retester</a></p>";
 
@@ -361,8 +361,8 @@ class Debug {
      *
      * @param array $sections
      */
-    public function generateReport($sections = NULL){
-        if(isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT'] !== ''){
+    public function generateReport($sections = NULL) {
+        if (isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT'] !== '') {
             $path = $_SERVER['DOCUMENT_ROOT'].self::$reportPath;
         }else{
             $path = self::$scriptPath.self::$reportPath;
@@ -378,7 +378,7 @@ class Debug {
      *
      * @static
      */
-    private static function loadConfig($path){
+    private static function loadConfig($path) {
         $xml = new SimpleXmlElement($path, 0, true);
         self::$redirect = (boolean)(int)$xml->options["redirect"];
         self::$report = (boolean)(int)$xml->options["report"];
@@ -389,8 +389,8 @@ class Debug {
         self::$footer = (string)$xml->html->footer;
         self::$frame = (string)$xml->html->frame;
 
-        foreach($xml->options->sections->children() as $section){
-            if(is_null(self::$sections)){
+        foreach ($xml->options->sections->children() as $section) {
+            if (is_null(self::$sections)) {
                 self::$sections = array();
             }
             self::$sections[] = (string)$section;
@@ -416,29 +416,29 @@ class Debug {
  *
  */
 class FakeDebug extends Debug {
-    public function __construct($section){
+    public function __construct($section) {
     }
-    public function __destruct(){
+    public function __destruct() {
     }
-    public function log($message, $title = NULL){
+    public function log($message, $title = NULL) {
     }
-    public function dump($variable, $title = NULL){
+    public function dump($variable, $title = NULL) {
     }
-    public function trace($title = NULL){
+    public function trace($title = NULL) {
     }
-    public function startProfiling($title = NULL){
+    public function startProfiling($title = NULL) {
     }
-    public function profilingCP($title = NULL){
+    public function profilingCP($title = NULL) {
     }
-    public function endProfiling($title = NULL){
+    public function endProfiling($title = NULL) {
     }
-    public function getFormattedMessages($sections = NULL){
+    public function getFormattedMessages($sections = NULL) {
     }
-    public function displayFrameReport($sections = NULL){
+    public function displayFrameReport($sections = NULL) {
     }
-    public function getHtmlPage($sections = NULL){
+    public function getHtmlPage($sections = NULL) {
     }
-    public function generateReport($sections = NULL){
+    public function generateReport($sections = NULL) {
     }
 
 }

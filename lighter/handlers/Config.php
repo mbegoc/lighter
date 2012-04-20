@@ -49,7 +49,7 @@ class Config {
      * as a subclass, the Config class can't restrict the visibility of the parent
      * class.
      */
-    protected function __construct(){}
+    protected function __construct() {}
 
 
     /**
@@ -58,8 +58,8 @@ class Config {
      * @static
      * @return Config
      */
-    public static function getInstance(){
-        if(!isset(self::$instance)){
+    public static function getInstance() {
+        if (!isset(self::$instance)) {
             self::$instance = new self();
         }
 
@@ -77,7 +77,7 @@ class Config {
      * @param string $section
      * @param array $values
      */
-    public function setSection($section, array $values){
+    public function setSection($section, array $values) {
         $this->configuration[$section] = $values;
     }
 
@@ -90,7 +90,7 @@ class Config {
      * @param string $name
      * @param mixed $value
      */
-    public function setValue($section, $name, $value){
+    public function setValue($section, $name, $value) {
         if (isset($this->configuration[$section])) {
             $this->configuration[$section] = array();
         }
@@ -103,7 +103,7 @@ class Config {
      *
      * @param array $section
      */
-    public function getSection($section){
+    public function getSection($section) {
         return $this->configuration[$section];
     }
 
@@ -116,9 +116,9 @@ class Config {
      * @param mixed $default
      * @return mixed
      */
-    public function getValue($section, $name, $default){
+    public function getValue($section, $name, $default) {
         if (isset($this->configuration[$section])) {
-            if (isset($this->configuration[$section][$name])){
+            if (isset($this->configuration[$section][$name])) {
                 return $this->configuration[$section][$name];
             }
         }
@@ -132,7 +132,7 @@ class Config {
      * @param string $regex
      * @param array $route
      */
-    public function setRoutes(RouteNode $route){
+    public function setRoutes(RouteNode $route) {
         $this->configuration['routes'] = $route;
     }
 
@@ -142,7 +142,7 @@ class Config {
      *
      * @return RouteNode
      */
-    public function getRoutes(){
+    public function getRoutes() {
        return $this->configuration['routes'];
     }
 

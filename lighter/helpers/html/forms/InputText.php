@@ -27,7 +27,7 @@ class InputText extends Input {
      * @param int $size
      * @param mixed $value
      */
-    public function __construct($name, $label, $size, $value = "", $type = FormElement::STRING){
+    public function __construct($name, $label, $size, $value = "", $type = FormElement::STRING) {
         parent::__construct('text', $type, $name, $label, $size, $value);
     }
 

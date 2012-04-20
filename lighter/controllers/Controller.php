@@ -41,7 +41,7 @@ abstract class Controller {
      * view getter
      * @return lighter\views\View
      */
-    public function getView(){
+    public function getView() {
         return $this->view;
     }
 

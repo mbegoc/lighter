@@ -57,7 +57,7 @@ class Table {
     /**
      * default constructor - initiate the table HTML tag
      */
-    public function __construct($id){
+    public function __construct($id) {
         $this->table = "<table id=$id>";
     }
 
@@ -67,7 +67,7 @@ class Table {
      *
      * @param string $name
      */
-    public function addCol($name){
+    public function addCol($name) {
         $this->cols[] = $name;
     }
 
@@ -81,8 +81,8 @@ class Table {
      * of objects than DataAccessor and we need to fix the way it accesses the
      * data
      */
-    public function addRow(DataAccessor $da){
-        if($this->highlight){
+    public function addRow(DataAccessor $da) {
+        if ($this->highlight) {
             $class = " class='highlighted'";
         }else{
             $class = "";
@@ -90,9 +90,9 @@ class Table {
         $this->highlight = !$this->highlight;
 
         $this->tbody.= "<tr$class>";
-        foreach($this->cols as $col){
+        foreach ($this->cols as $col) {
             $value = $da->{'get'.$col}();
-            if($value){
+            if ($value) {
                 $this->tbody.= "<td$colspan>$value</td>";
             }else{
                 $this->tbody.= "<td></td>";
@@ -109,11 +109,11 @@ class Table {
      * @param string $cell
      * @param int $span
      */
-    public function addHeaderCell($cell, $span = 1){
-        if($this->thead == NULL){
+    public function addHeaderCell($cell, $span = 1) {
+        if ($this->thead == NULL) {
             $this->thead = "<thead><tr>";
         }
-        if($span > 1){
+        if ($span > 1) {
             $colspan = " colspan='$span'";
         }
         $this->thead.= "<td$colspan>$cell</td>";
@@ -127,11 +127,11 @@ class Table {
      * @param string $cell
      * @param int $span
      */
-    public function addFooterCell($cell, $span = 1){
-        if($this->tfoot == NULL){
+    public function addFooterCell($cell, $span = 1) {
+        if ($this->tfoot == NULL) {
             $this->tfoot = "<tfoot><tr>";
         }
-        if($span > 1){
+        if ($span > 1) {
             $colspan = " colspan='$span'";
         }
         $this->tfoot.= "<td$colspan>$cell</td>";
@@ -143,11 +143,11 @@ class Table {
      *
      * @return string HTML
      */
-    public function toHTML(){
-        if($this->thead != NULL){
+    public function toHTML() {
+        if ($this->thead != NULL) {
             $this->thead.= "</tr></thead>";
         }
-        if($this->tfoot != NULL){
+        if ($this->tfoot != NULL) {
             $this->tfoot.= "</tr></tfoot>";
         }
         return    $this->table.
@@ -164,7 +164,7 @@ class Table {
      * @see lighter\helpers\html\tables\EditTable::toHTML()
      * @return string HTML
      */
-    public function __toString(){
+    public function __toString() {
         return $this->toHTML();
     }
 

@@ -13,7 +13,7 @@ class Example extends WebPage {
      *
      * @param string $template
      */
-    public function __construct(){
+    public function __construct() {
         parent::__construct('main', 'example');
         HtmlHeader::getInstance()->addCssFile('include/css/example.css');
     }
