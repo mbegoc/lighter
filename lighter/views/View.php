@@ -85,12 +85,22 @@ abstract class View {
 
 
     /**
-     * display the content in JSON format and return a boolean saying if
-     * the method is supported
-     *
-     * @return boolean
-     */
+    * display the content in JSON format and return a boolean saying if
+    * the method is supported
+    *
+    * @return boolean
+    */
     public function displayJson() {
+        return false;
+    }
+
+
+    /**
+    * if the content is not of one of the 3 preceeding, use this method
+    *
+    * @return boolean
+    */
+    public function displayOther() {
         return false;
     }
 

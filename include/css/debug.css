@@ -1,0 +1,33 @@
+.debug {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 10px;
+    width: 10px;
+    max-height: 95%;
+    max-width: 95%;
+    background-color: #ff0;
+    border: 1px solid #f00;
+    overflow: hidden;
+    z-index: 10000;
+}
+
+.debug table{
+    border:1px solid #000;
+    background-color:#fff;
+    border-right:0;
+    border-collapse:collapse;
+}
+
+.debug thead{
+    background-color:#99a;
+    border-bottom:1px solid #000;
+}
+
+.debug td{
+    border-right:1px solid #000;
+}
+
+.debug .highlight{
+    background-color:#bbc;
+}

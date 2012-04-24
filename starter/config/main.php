@@ -1,4 +1,8 @@
 <?php
+/*
+ * main configuration file of a lighter application.
+ *
+ */
 error_reporting(E_ALL);
 
 
@@ -28,6 +32,7 @@ use lighter\routing\routes\MethodNode;
 use lighter\routing\routes\ParamNode;
 use lighter\routing\routes\ParamsNode;
 use lighter\routing\routes\RootNode;
+use lighter\routing\routes\StaticFileNode;
 
 
 // main config, i.e. very basic config
@@ -37,11 +42,6 @@ $config->setDbData('mongo', array(
     'host' => 'localhost',
     'port' => '27017',
 	'database' => 'lighter',
-));
-
-$config->setSection('debug', array(
-    'active' => true,
-    'configPath' => 'myApp/config/debug.xml',
 ));
 
 $config->setSection('controllersPaths', array(
@@ -56,9 +56,14 @@ $config->setSection('tplPaths', array(
 
 // define routes
 $map = new RootNode('/');
+$map->addSubNode(new StaticFileNode('include'));
 $map->addSubNode(new ControllerNode('Example'))
     ->addSubNode(new MethodNode('handleRequest'))
     ->addSubNode(new ParamsNode());
 
 $config->setRoutes($map);
+
+
+// additional configuration inclusion
+require '../config/debug.php';
 

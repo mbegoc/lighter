@@ -5,14 +5,20 @@ namespace lighter\routing\parser;
 class StaticFileNodeParser extends RouteParser {
 
 
+    /**
+     *
+     * @see lighter\routing\parser.RouteParser::handleNode()
+     */
     public function handleNode(Node $node, array $uri) {
-        if (($value = current($uri)) && $value == $node->getValue()) {
+        $value = current($uri);
+        if ($value && $value == $node->getValue()) {
             $this->routeManager->setController('StaticFile');
+            $this->routeManager->setMethod('returnResource');
             $this->routeManager->addParam(implode('/', $uri));
+            return true;
         } else {
-            $this->routeManager->handleNode($node, $uri);
+            return false;
         }
-        return true;
     }
 
 }

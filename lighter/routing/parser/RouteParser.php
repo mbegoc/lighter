@@ -1,5 +1,6 @@
 <?php
 namespace lighter\routing\parser;
+use lighter\routing\routes;
 
 
 /**
@@ -38,7 +39,7 @@ abstract class RouteParser {
     /**
      * the method which will be called to handle a node
      *
-     * @param Node $node
+     * @param lighter\routing\Routes\ode $node
      * @param array $uri
      */
     public abstract function handleNode(Node $node, array $uri);

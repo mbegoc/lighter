@@ -116,14 +116,14 @@ class HttpResponse {
         );
 
         $this->httpBodyCodes = array(100, 101, 200,  201, 202, 203, 206);
-
+        $this->contentType = HttpRequest::getInstance()->getAccept();
     }
 
 
     /**
      * manage the singleton
      *
-     * @return handlers\HttpResponse
+     * @return lighter\handlers\HttpResponse
      */
     public function getInstance() {
         if (!isset(self::$instance)) {
@@ -171,9 +171,10 @@ class HttpResponse {
 
     /**
      * send this response, i.e. write it to the output stream
+     * FIXME this function is a pain and must be rewritted. We should correctly set
+     * the content type in the display other case.
      */
     public function send() {
-        $this->contentType = HttpRequest::getInstance()->getAccept();
         $this->prepareHeader();
         if (in_array($this->code, $this->httpBodyCodes)) {
             switch ($this->contentType) {
@@ -190,18 +191,28 @@ class HttpResponse {
 //                case 'application/xhtml':
                     if ($this->body->displayHtml()) {
                         return;
+                    } elseif ($this->body->displayOther()) {
+                        return;
                     }
                     break;
                 case 'text/xml':
                     if ($this->body->displayXml()) {
+                        return;
+                    } elseif ($this->body->displayOther()) {
                         return;
                     }
                     break;
                 case 'application/json':
                     if ($this->body->displayJson()) {
                         return;
+                    } elseif ($this->body->displayOther()) {
+                        return;
                     }
                     break;
+                default:
+                    if ($this->body->displayOther()) {
+                        return;
+                    }
             }
             $this->code = 406;
             $this->prepareHeader();
@@ -225,7 +236,7 @@ class HttpResponse {
                 $this->contentType = 'text/html';
                 $this->prepareHeader();
             case 'text/html':
-            case 'application/xhtml':
+//             case 'application/xhtml':
                 $httpMessage->displayHtml();
         }
     }

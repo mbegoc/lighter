@@ -9,7 +9,6 @@
 
     Here are the next steps to obtain a correct first version:
 
-        * change the coding standards
         * Debug should have its configuration data into the Config object
         * Debug should use templates for reports instead of the xml config file
         * A logger with different level of log should be implemented. Since it's a

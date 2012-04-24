@@ -18,6 +18,7 @@ class RouteManager extends RouteParser {
         $this->parsers['MethodNode'] = new MethodNodeParser($this);
         $this->parsers['ParamNode'] = new ParamNodeParser($this);
         $this->parsers['ParamsNode'] = new ParamsNodeParser($this);
+        $this->parsers['StaticFileNode'] = new StaticFileNodeParser($this);
     }
 
 

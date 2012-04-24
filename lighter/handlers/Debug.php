@@ -2,6 +2,8 @@
 namespace lighter\handlers;
 
 
+use lighter\helpers\html\HtmlHeader;
+
 use lighter\handlers\Config;
 
 use \SimpleXMLElement;
@@ -42,35 +44,10 @@ class Debug {
      */
     private static $instances = array();
     /**
-     * say if we want to be redirect at the end of the page generation
-     * @staticvar boolean
+     * the configuration object
+     * @var lighter\handlers\Config
      */
-    private static $redirect = false;
-    /**
-     * say if we want that a report is generated
-     * @staticvar boolean
-     */
-    private static $report = false;
-    /**
-     * say if we want a frame report, i.e. a frame in the web page
-     * @staticvar boolean
-     */
-    private static $frameReport = false;
-    /**
-     * the report path
-     * @staticvar string
-     */
-    private static $reportPath = "debug.html";
-    /**
-     * the section list to display in the report
-     * @staticvar array
-     */
-    private static $sections = NULL;
-    /**
-     * the path of the reports from shell execution script
-     * @staticvar string
-     */
-    private static $scriptPath = "/tmp/";
+    private static $config;
     /**
      * the header html for the report
      * @staticvar string
@@ -130,14 +107,17 @@ class Debug {
             return self::$instances[$section];
         }else{
             if (count(self::$instances) == 0) {
-                $config = Config::getInstance();
-                if (!$config->getValue('debug', 'active', false)) {
-                    self::$debugClass = 'lighter\handlers\FakeDebug';
-                }else{
-                    $configFile = $config->getValue('debug', 'configPath', '');
-                    if (file_exists($configFile)) {
-                        self::loadConfig($configFile);
-                    }
+                self::$config = Config::getInstance();
+                if (!self::$config->getValue('debug', 'active', false)) {
+                    $debugClass = 'lighter\handlers\FakeDebug';
+                } else {
+                    $debugClass = get_class();
+                }
+                if (self::$config->getValue('debug', 'frameReport', false) && isset($_SERVER['HTTP_HOST'])) {
+                    $htmlHeader = HtmlHeader::getInstance();
+                    // FIXME move the file names into the configuration ?
+                    $htmlHeader->addJsFile('include/js/debug.js');
+                    $htmlHeader->addCssFile('include/css/debug.css');
                 }
             }
 
@@ -152,14 +132,15 @@ class Debug {
      */
     public function __destruct() {
         if (count(self::$instances) == 1) {
-            if (self::$report) {
-                $this->generateReport(self::$sections);
-                if (self::$redirect && isset($_SERVER['HTTP_HOST'])) {
-                    echo("<script type='text/javascript'>location.assign('http://".$_SERVER['HTTP_HOST'].self::$reportPath."');</script>");
+            if (self::$config->getValue('debug', 'report', false)) {
+                $this->generateReport(self::$config->getValue('debug', 'sections', false));
+                if (self::$config->getValue('debug', 'redirect', false) && isset($_SERVER['HTTP_HOST'])) {
+                    echo("<script type='text/javascript'>location.assign('http://"
+                        .$_SERVER['HTTP_HOST'].self::$config->getValue('debug', 'reportFile', false)."');</script>");
                 }
             }
-            if (self::$frameReport && isset($_SERVER['HTTP_HOST'])) {
-                $this->displayFrameReport(self::$sections);
+            if (self::$config->getValue('debug', 'frameReport', false) && isset($_SERVER['HTTP_HOST'])) {
+                $this->displayFrameReport(self::$config->getValue('debug', 'sections', false));
             }
         }
 
@@ -345,7 +326,7 @@ class Debug {
     public function getHtmlPage($sections = NULL) {
         $html = self::$header;
         $html .= "<p>Heure d'execution: ".date("d-m-Y H:i:s", time())."</p>";
-        if (self::$redirect && isset($_SERVER['HTTP_HOST']) && isset($_SERVER['REQUEST_URI'])) {
+        if (self::$config->getValue('debug', 'redirect', false) && isset($_SERVER['HTTP_HOST']) && isset($_SERVER['REQUEST_URI'])) {
             $html .= "<p>Origine: http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']." - ";
             $html .= "<a href='http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."'>Retester</a></p>";
 
@@ -363,39 +344,15 @@ class Debug {
      */
     public function generateReport($sections = NULL) {
         if (isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT'] !== '') {
-            $path = $_SERVER['DOCUMENT_ROOT'].self::$reportPath;
+            $path = $_SERVER['DOCUMENT_ROOT'].self::$config->getValue('debug', 'reportFile', false);
         }else{
-            $path = self::$scriptPath.self::$reportPath;
+            $path = self::$config->getValue('debug', 'scriptPath', false).self::$config->getValue('debug', 'reportFile', false);
         }
         $file = fopen($path, "w");
         fwrite($file, $this->getHtmlPage($sections));
         fclose($file);
     }
 
-
-    /**
-     * load the config from xml file
-     *
-     * @static
-     */
-    private static function loadConfig($path) {
-        $xml = new SimpleXmlElement($path, 0, true);
-        self::$redirect = (boolean)(int)$xml->options["redirect"];
-        self::$report = (boolean)(int)$xml->options["report"];
-        self::$frameReport = (boolean)(int)$xml->options["frameReport"];
-        self::$reportPath = (string)$xml->options["reportPath"];
-        self::$scriptPath = (string)$xml->options["scriptPath"];
-        self::$header = (string)$xml->html->header;
-        self::$footer = (string)$xml->html->footer;
-        self::$frame = (string)$xml->html->frame;
-
-        foreach ($xml->options->sections->children() as $section) {
-            if (is_null(self::$sections)) {
-                self::$sections = array();
-            }
-            self::$sections[] = (string)$section;
-        }
-    }
 }
 
 
@@ -416,31 +373,18 @@ class Debug {
  *
  */
 class FakeDebug extends Debug {
-    public function __construct($section) {
-    }
-    public function __destruct() {
-    }
-    public function log($message, $title = NULL) {
-    }
-    public function dump($variable, $title = NULL) {
-    }
-    public function trace($title = NULL) {
-    }
-    public function startProfiling($title = NULL) {
-    }
-    public function profilingCP($title = NULL) {
-    }
-    public function endProfiling($title = NULL) {
-    }
-    public function getFormattedMessages($sections = NULL) {
-    }
-    public function displayFrameReport($sections = NULL) {
-    }
-    public function getHtmlPage($sections = NULL) {
-    }
-    public function generateReport($sections = NULL) {
-    }
-
+    public function __construct($section) {}
+    public function __destruct() {}
+    public function log($message, $title = NULL) {}
+    public function dump($variable, $title = NULL) {}
+    public function trace($title = NULL) {}
+    public function startProfiling($title = NULL) {}
+    public function profilingCP($title = NULL) {}
+    public function endProfiling($title = NULL) {}
+    public function getFormattedMessages($sections = NULL) {}
+    public function displayFrameReport($sections = NULL) {}
+    public function getHtmlPage($sections = NULL) {}
+    public function generateReport($sections = NULL) {}
 }
 
 
