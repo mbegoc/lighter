@@ -52,6 +52,9 @@ class HttpMessage extends WebPage {
         $htmlHeader->setTitle("$code - $message");
         $htmlHeader->resetJsFiles();
         $htmlHeader->resetCssFiles();
+
+        $this->addMimeType('application/json', 'displayJson');
+        $this->addMimeType('text/xml', 'displayXml');
     }
 
 
@@ -76,18 +79,15 @@ class HttpMessage extends WebPage {
 
 
     /**
-     * (non-PHPdoc)
-     * @see views.View::displayJson()
+     * display a json message
      */
     public function displayJson() {
         echo json_encode(array('code' => $this->code, 'message' => $this->message));
-        return true;
     }
 
 
     /**
-     * (non-PHPdoc)
-     * @see views.View::displayXml()
+     * Display an xml message
      */
     public function displayXml() {
         $xml = new SimpleXMLElement("<?xml version='1.0' encoding='UTF-8'?><httpResponse></httpResponse>");
@@ -95,7 +95,6 @@ class HttpMessage extends WebPage {
         $xml->addChild('message', $this->message);
 
         echo $xml->asXml();
-        return true;
     }
 
 }

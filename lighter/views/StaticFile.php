@@ -4,9 +4,12 @@ namespace lighter\views;
 
 use lighter\helpers\html\HtmlHeader;
 
+use finfo;
+
 
 class StaticFile extends View {
     private $file;
+    private $finfo;
 
 
     /**
@@ -16,22 +19,20 @@ class StaticFile extends View {
      */
     public function __construct() {
         parent::__construct(null, null);
+        $this->resetMimeTypes();
+        $this->finfo = new finfo();
     }
 
 
     public function setFile($file) {
         $this->file = $file;
+        $this->defaultType = $this->finfo->file($this->file, FILEINFO_MIME_TYPE);
+        $this->addMimeType($this->defaultType, 'displayFile');
     }
 
 
-    public function displayOther() {
+    public function displayFile() {
         echo file_get_contents($this->file);
-        return true;
-    }
-
-
-    public function displayHtml() {
-        return false;
     }
 
 

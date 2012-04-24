@@ -44,6 +44,14 @@ abstract class View {
      * @var string
      */
     protected $messages = "";
+    /**
+     * an array containing the supported mime types and the associated function to
+     * call.
+     *
+     * @var array
+     */
+    protected $supportedMimeTypes = array();
+    protected $defaultType = null;
 
 
     /**
@@ -57,6 +65,9 @@ abstract class View {
         if (!isset(self::$tplEngine)) {
             self::$tplEngine = new TemplateEngine();
         }
+
+        $this->addMimeType('text/html', 'displayHtml');
+        $this->setDefaultMimeType('text/html');
     }
 
 
@@ -66,42 +77,41 @@ abstract class View {
      *
      * @return boolean
      */
-    public function displayHtml() {
+    public function display($type) {
+        $call = $this->supportedMimeTypes[$type];
+        $this->$call();
+    }
+
+
+    public function isSupportedMimeType($type) {
+        return isset($this->supportedMimeTypes[$type]);
+    }
+
+
+    public function setDefaultMimeType($type) {
+        $this->defaultType = $type;
+    }
+
+
+    public function getDefaultMimeType() {
+        return $this->defaultType;
+    }
+
+
+    protected function addMimeType($type, $call) {
+        $this->supportedMimeTypes[$type] = $call;
+    }
+
+
+    protected function resetMimeTypes() {
+        $this->supportedMimeTypes = array();
+    }
+
+
+    protected function displayHtml() {
         self::$tplEngine->addVar("view", $this);
         self::$tplEngine->display($this->mainTemplate);
         return true;
-    }
-
-
-    /**
-     * display the content in XML format and return a boolean saying if the
-     * method is supported
-     *
-     * @return boolean
-     */
-    public function displayXml() {
-        return false;
-    }
-
-
-    /**
-    * display the content in JSON format and return a boolean saying if
-    * the method is supported
-    *
-    * @return boolean
-    */
-    public function displayJson() {
-        return false;
-    }
-
-
-    /**
-    * if the content is not of one of the 3 preceeding, use this method
-    *
-    * @return boolean
-    */
-    public function displayOther() {
-        return false;
     }
 
 

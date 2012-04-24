@@ -31,7 +31,6 @@ abstract class WebPage extends View {
     public function displayHtml() {
         self::$tplEngine->addVar("htmlHeader", HtmlHeader::getInstance());
         parent::displayHtml();
-        return true;
     }
 
 
