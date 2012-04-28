@@ -29,7 +29,7 @@ abstract class View {
     /**
      * the template engine
      *
-     * @var handlers\TemplateEngine
+     * @var lighter\handlers\TemplateEngine
      */
     protected static $tplEngine;
     /**

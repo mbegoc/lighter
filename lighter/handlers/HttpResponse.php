@@ -30,13 +30,13 @@ class HttpResponse {
      *
      * @var handlers\HttpReponse
      */
-    private static $instance = NULL;
+    private static $instance = null;
     /**
      * the body of the HTTP response. It's a view which will produce it.
      *
      * @var views\View
      */
-    private $body = NULL;
+    private $body = null;
     /**
      * default HTTP messages, as described  by RFC 2616
      *
@@ -171,31 +171,43 @@ class HttpResponse {
 
     /**
      * send this response, i.e. write it to the output stream
-     * FIXME this function is a pain and must be rewritted. We should correctly set
-     * the content type in the display other case.
      */
     public function send() {
         $this->prepareHeader();
-        if (in_array($this->code, $this->httpBodyCodes)) {
-            if ($this->body->isSupportedMimeType($this->contentType)) {
-                $this->body->display($this->contentType);
-            } else {
-                $this->body->getDefaultMimeType();
-                if ($this->body->getDefaultMimeType() != null) {
-                    $this->contentType = $this->body->getDefaultMimeType();
-                    $this->prepareHeader();
-                    $this->body->display($this->contentType);
-                } else {
-                    $this->code = 406;
-                    $httpMessage = new HttpMessage($this->code, $this->httpMessages[$this->code]);
-                    if (!$httpMessage->isSupportedMimeType($this->contentType)) {
-                        $this->contentType = $httpMessage->getDefaultMimeType();
+        if ($this->code >= 200 && $this->code < 300) {
+            if ($this->body != null) {
+                if (in_array($this->code, $this->httpBodyCodes)) {
+                    if ($this->body->isSupportedMimeType($this->contentType)) {
+                        $this->body->display($this->contentType);
+                    } else {
+                        $this->body->getDefaultMimeType();
+                        if ($this->body->getDefaultMimeType() != null) {
+                            $this->contentType = $this->body->getDefaultMimeType();
+                            $this->prepareHeader();
+                            $this->body->display($this->contentType);
+                        } else {
+                            $this->code = 406;
+                            $this->displayHttpError();
+                        }
                     }
-                    $this->prepareHeader();
-                    $httpMessage->display($this->contentType);
                 }
+            } else {
+                $this->code = 500;
+                $this->displayHttpError();
             }
+        } else {
+            $this->displayHttpError();
         }
+    }
+
+
+    protected function displayHttpError() {
+        $httpMessage = new HttpMessage($this->code, $this->httpMessages[$this->code]);
+        if (!$httpMessage->isSupportedMimeType($this->contentType)) {
+            $this->contentType = $httpMessage->getDefaultMimeType();
+        }
+        $this->prepareHeader();
+        $httpMessage->display($this->contentType);
     }
 
 

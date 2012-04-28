@@ -13,9 +13,6 @@
         * Debug should use templates for reports instead of the xml config file
         * A logger with different level of log should be implemented. Since it's a
           similar feature than debug, maybe it's possible to merge the 2 concepts.
-        * continue to separate the framework from the app (media files may be a part
-          of the app -  at this time, the include folder is neither a part of the 
-          framework nor the app)
         * DataAccessor objects should use both collections and database
         * DataAccessor objects should implements basic validation methods (or a Helper
           should do so)

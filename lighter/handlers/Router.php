@@ -115,6 +115,7 @@ class Router {
         $response = HttpResponse::getInstance();
 
         $paths = $this->config->getSection('controllersPaths');
+        $requestOk = false;
         foreach ($paths as $path => $package) {
             if (file_exists($path.$this->controllerClass.'.php')) {
                 $controller = $package.$this->controllerClass;
@@ -127,16 +128,15 @@ class Router {
                     );
 
                     $this->view = $this->controller->getView();
-                    $response->setCode(200);
                     $response->setBody($this->view);
-
+                    $requestOk = true;
                     break;
-                }else{
-                    $response->setCode(404);
                 }
-            }else{
-                $response->setCode(404);
             }
+        }
+
+        if (!$requestOk) {
+            $response->setCode(404);
         }
 
         $this->profile->profilingCP('Intialized - Start of page rendering');

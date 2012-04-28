@@ -344,7 +344,7 @@ class Debug {
      */
     public function generateReport($sections = NULL) {
         if (isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT'] !== '') {
-            $path = $_SERVER['DOCUMENT_ROOT'].self::$config->getValue('debug', 'reportFile', false);
+            $path = $_SERVER['DOCUMENT_ROOT'].'/'.self::$config->getValue('debug', 'reportFile', false);
         }else{
             $path = self::$config->getValue('debug', 'scriptPath', false).self::$config->getValue('debug', 'reportFile', false);
         }

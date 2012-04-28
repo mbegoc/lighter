@@ -39,7 +39,7 @@ class StaticFile extends Controller {
 
 
     public function returnResource($file) {
-        if (file_exists(LIGHTER_PATH.$file)) {
+        if (is_file(LIGHTER_PATH.$file)) {
             $this->view = new View();
             $this->view->setFile(LIGHTER_PATH.$file);
         } else {
