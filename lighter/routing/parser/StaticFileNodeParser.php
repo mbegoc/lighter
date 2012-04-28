@@ -9,7 +9,7 @@ class StaticFileNodeParser extends RouteParser {
      *
      * @see lighter\routing\parser.RouteParser::handleNode()
      */
-    public function handleNode(Node $node, array $uri) {
+    public function handleNode(Node $node, array &$uri) {
         $value = current($uri);
         if ($value && $value == $node->getValue()) {
             $this->routeManager->setController('StaticFile');

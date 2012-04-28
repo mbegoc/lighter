@@ -52,7 +52,7 @@ class RouteManager extends RouteParser {
     }
 
 
-    public function handleNode(Node $node, array $uri) {
+    public function handleNode(Node $node, array &$uri) {
         Debug::getInstance('routing')->dump($node);
         if ($subNode = $node->nextNode()) {
             if (!$this->parsers[$subNode->getType()]->handleNode($subNode, $uri)) {

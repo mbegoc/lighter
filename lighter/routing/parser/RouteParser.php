@@ -42,7 +42,7 @@ abstract class RouteParser {
      * @param lighter\routing\Routes\ode $node
      * @param array $uri
      */
-    public abstract function handleNode(Node $node, array $uri);
+    public abstract function handleNode(Node $node, array &$uri);
 
 }
 
