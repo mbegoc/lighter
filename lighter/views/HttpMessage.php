@@ -48,10 +48,9 @@ class HttpMessage extends WebPage {
         $this->code = $code;
         $this->message = $message;
 
-        $htmlHeader = HtmlHeader::getInstance();
-        $htmlHeader->setTitle("$code - $message");
-        $htmlHeader->resetJsFiles();
-        $htmlHeader->resetCssFiles();
+        $this->htmlHeader->setTitle("$code - $message");
+        $this->htmlHeader->resetJsFiles();
+        $this->htmlHeader->resetCssFiles();
 
         $this->addMimeType('application/json', 'displayJson');
         $this->addMimeType('text/xml', 'displayXml');

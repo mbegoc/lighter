@@ -6,6 +6,8 @@ use lighter\helpers\html\HtmlHeader;
 
 use lighter\handlers\Config;
 
+use lighter\views\Debug as View;
+
 use \SimpleXMLElement;
 use \Exception;
 
@@ -113,12 +115,6 @@ class Debug {
                 } else {
                     $debugClass = get_class();
                 }
-                if (self::$config->getValue('debug', 'frameReport', false) && isset($_SERVER['HTTP_HOST'])) {
-                    $htmlHeader = HtmlHeader::getInstance();
-                    // FIXME move the file names into the configuration ?
-                    $htmlHeader->addJsFile('include/js/debug.js');
-                    $htmlHeader->addCssFile('include/css/debug.css');
-                }
             }
 
             self::$instances[$section] = new self::$debugClass($section);
@@ -133,7 +129,7 @@ class Debug {
     public function __destruct() {
         if (count(self::$instances) == 1) {
             if (self::$config->getValue('debug', 'report', false)) {
-                $this->generateReport(self::$config->getValue('debug', 'sections', false));
+                $this->generateReport(self::$config->getValue('debug', 'sections', null));
                 if (self::$config->getValue('debug', 'redirect', false) && isset($_SERVER['HTTP_HOST'])) {
                     echo("<script type='text/javascript'>location.assign('http://"
                         .$_SERVER['HTTP_HOST'].self::$config->getValue('debug', 'reportFile', false)."');</script>");
@@ -266,38 +262,16 @@ class Debug {
      * DISPLAY METHOD
     */
     /**
-     * return messages well formatted
+     * return well formatted messages
      *
      * @param array $sections
      */
-    public function getFormattedMessages($sections = NULL) {
-        if (is_null($sections)) {
-            $sections = array_keys(self::$messages);
+    public function getMessages($sections = null) {
+        if ($sections === null) {
+            return self::$messages;
+        } else {
+            return array_intersect_key(self::$messages, $sections);
         }
-        $html = "";
-        foreach ($sections as $section) {
-            if (isset(self::$messages[$section]) && count(self::$messages[$section]) != 0) {
-                $html .= "<h2>$section</h2>";
-                $html .= "<table>";
-                $html .= "<thead><tr><td>Type</td><td>Titre</td><td>Contenu</td><td>Fichier</td><td>Ligne</td></tr></thead><tbody>";
-                $highlighted = false;
-                foreach (self::$messages[$section] as $message) {
-                    if ($highlighted) {
-                        $class = " class='highlight'";
-                    }else{
-                        $class = "";
-                    }
-                    $html .= "<tr$class><td>".$message["type"]."</td>";
-                    $html .= "<td>".$message["title"]."</td>";
-                    $html .= "<td>".$message["content"]."</td>";
-                    $html .= "<td>".$message["file"]."</td>";
-                    $html .= "<td>".$message["line"]."</td></tr>";
-                    $highlighted = !$highlighted;
-                }
-                $html .= "</tbody></table>";
-            }
-        }
-        return $html;
     }
 
 
@@ -311,7 +285,7 @@ class Debug {
         $formattedMessages = preg_replace(
             array('/"/', "/\n/"),
             array('\"', "\\n"),
-            $this->getFormattedMessages($sections)
+            $this->getMessages($sections)
         );
         $frame = preg_replace("/{debugInfo}/", $formattedMessages, self::$frame);
         echo($frame);
@@ -324,16 +298,11 @@ class Debug {
      * @param array $sections
      */
     public function getHtmlPage($sections = NULL) {
-        $html = self::$header;
-        $html .= "<p>Heure d'execution: ".date("d-m-Y H:i:s", time())."</p>";
         if (self::$config->getValue('debug', 'redirect', false) && isset($_SERVER['HTTP_HOST']) && isset($_SERVER['REQUEST_URI'])) {
             $html .= "<p>Origine: http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']." - ";
             $html .= "<a href='http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."'>Retester</a></p>";
 
         }
-        $html .= $this->getFormattedMessages($sections);
-        $html .= self::$footer;
-        return $html;
     }
 
 
@@ -342,15 +311,16 @@ class Debug {
      *
      * @param array $sections
      */
-    public function generateReport($sections = NULL) {
+    public function generateReport($sections = null) {
         if (isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT'] !== '') {
             $path = $_SERVER['DOCUMENT_ROOT'].'/'.self::$config->getValue('debug', 'reportFile', false);
         }else{
             $path = self::$config->getValue('debug', 'scriptPath', false).self::$config->getValue('debug', 'reportFile', false);
         }
-        $file = fopen($path, "w");
-        fwrite($file, $this->getHtmlPage($sections));
-        fclose($file);
+        $view = new View();
+        $view->setMessages($this->getMessages($sections));
+
+        $view->dumpToFile($path);
     }
 
 }

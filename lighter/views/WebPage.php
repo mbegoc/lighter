@@ -18,18 +18,20 @@ use \Exception;
  *
  */
 abstract class WebPage extends View {
-    protected $title = "";
-    protected $contentTemplate = NULL;
+    protected $title = '';
+    protected $contentTemplate = null;
+    protected $htmlHeader = null;
 
 
     public function __construct($mainTemplate, $contentTemplate) {
         parent::__construct($mainTemplate);
         $this->contentTemplate = $contentTemplate;
+        $this->htmlHeader = new HtmlHeader();
     }
 
 
-    public function displayHtml() {
-        self::$tplEngine->addVar("htmlHeader", HtmlHeader::getInstance());
+    protected function displayHtml() {
+        $this->tplEngine->addVar("htmlHeader", $this->htmlHeader);
         parent::displayHtml();
     }
 
@@ -40,7 +42,7 @@ abstract class WebPage extends View {
      * @return string
      */
     public function getMainContent() {
-        return self::$tplEngine->get($this->contentTemplate);
+        return $this->tplEngine->get($this->contentTemplate);
     }
 
 
@@ -51,6 +53,11 @@ abstract class WebPage extends View {
 
     public function getTitle() {
         return $this->title;
+    }
+
+
+    public function getHtmlHeader() {
+        return $this->htmlHeader;
     }
 
 }

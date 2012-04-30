@@ -4,6 +4,8 @@ namespace lighter\controllers;
 
 use lighter\views\Example as View;
 
+use lighter\handlers\Debug;
+
 
 /**
  * Admin controller class.

@@ -60,11 +60,12 @@ class TemplateEngine {
 
     /**
      * affichage du template principal
+     *
+     * @param string $template
      */
     public function display($template) {
         extract($this->vars);
-
-        include($this->getTemplate($template));
+        include $this->getTemplate($template);
     }
 
 
@@ -77,7 +78,7 @@ class TemplateEngine {
         extract($this->vars);
 
         ob_start();
-        include($this->getTemplate($template));
+        include $this->getTemplate($template);
         $html = ob_get_contents();
         ob_end_clean();
 

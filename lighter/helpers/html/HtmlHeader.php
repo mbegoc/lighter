@@ -75,20 +75,8 @@ class HtmlHeader {
     protected $keywords = "";
 
 
-    private function __construct() {
+    public function __construct() {
 
-    }
-
-
-    /**
-     * @return lighter\helpers\html\HtmlHeader
-     */
-    public function getInstance() {
-        if (!isset(self::$instance)) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
     }
 
 

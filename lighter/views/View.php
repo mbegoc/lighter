@@ -31,7 +31,7 @@ abstract class View {
      *
      * @var lighter\handlers\TemplateEngine
      */
-    protected static $tplEngine;
+    protected $tplEngine;
     /**
      * the template to display
      *
@@ -62,9 +62,7 @@ abstract class View {
     public function __construct($mainTemplate) {
         $this->mainTemplate = $mainTemplate;
 
-        if (!isset(self::$tplEngine)) {
-            self::$tplEngine = new TemplateEngine();
-        }
+        $this->tplEngine = new TemplateEngine();
 
         $this->addMimeType('text/html', 'displayHtml');
         $this->setDefaultMimeType('text/html');
@@ -72,14 +70,20 @@ abstract class View {
 
 
     /**
-     * display the main template of the page and return a boolean saying
-     * if the method is supported
+     * display the main template of the page
      *
-     * @return boolean
+     * @param string $type - the mime type of the displayed content
      */
     public function display($type) {
         $call = $this->supportedMimeTypes[$type];
-        $this->$call();
+        $this->{$call}();
+    }
+
+
+    public function dumpToFile($file) {
+        $this->tplEngine->addVar("view", $this);
+        $html = $this->tplEngine->get($this->mainTemplate);
+        file_put_contents($file, $this->tplEngine->get($this->mainTemplate));
     }
 
 
@@ -109,9 +113,8 @@ abstract class View {
 
 
     protected function displayHtml() {
-        self::$tplEngine->addVar("view", $this);
-        self::$tplEngine->display($this->mainTemplate);
-        return true;
+        $this->tplEngine->addVar("view", $this);
+        $this->tplEngine->display($this->mainTemplate);
     }
 
 

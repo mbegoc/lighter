@@ -15,7 +15,7 @@ class Example extends WebPage {
      */
     public function __construct() {
         parent::__construct('main', 'example');
-        HtmlHeader::getInstance()->addCssFile('include/css/example.css');
+        $this->htmlHeader->addCssFile('include/css/example.css');
     }
 
 }
