@@ -56,7 +56,8 @@ $config->setSection('tplPaths', array(
 
 $config->setSection('log', array(
     'active' => true,
-    'level' => 5,
+    'level' => Logger::INFO,
+    'path' => './',
 ));
 
 // define routes
