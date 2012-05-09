@@ -2,9 +2,6 @@
 namespace lighter\routing\parser;
 
 
-use lighter\handlers\Debug;
-
-
 class RouteManager extends RouteParser {
     private $parsers = array();
     private $controller = NULL;
@@ -53,7 +50,6 @@ class RouteManager extends RouteParser {
 
 
     public function handleNode(Node $node, array &$uri) {
-        Debug::getInstance('routing')->dump($node);
         if ($subNode = $node->nextNode()) {
             if (!$this->parsers[$subNode->getType()]->handleNode($subNode, $uri)) {
                 $this->handleNode($node, $uri);

@@ -128,15 +128,16 @@ class Debug {
      */
     public function __destruct() {
         if (count(self::$instances) == 1) {
+            $view = new View();
             if (self::$config->getValue('debug', 'report', false)) {
-                $this->generateReport(self::$config->getValue('debug', 'sections', null));
+                $this->generateReport($view, self::$config->getValue('debug', 'sections', null));
                 if (self::$config->getValue('debug', 'redirect', false) && isset($_SERVER['HTTP_HOST'])) {
                     echo("<script type='text/javascript'>location.assign('http://"
                         .$_SERVER['HTTP_HOST'].self::$config->getValue('debug', 'reportFile', false)."');</script>");
                 }
             }
             if (self::$config->getValue('debug', 'frameReport', false) && isset($_SERVER['HTTP_HOST'])) {
-                $this->displayFrameReport(self::$config->getValue('debug', 'sections', false));
+                $this->displayFrameReport($view, self::$config->getValue('debug', 'sections', null));
             }
         }
 
@@ -280,15 +281,15 @@ class Debug {
      *
      * @param array $sections
      */
-    public function displayFrameReport($sections = NULL) {
+    public function displayFrameReport(View $view, $sections = null) {
         //les retours à la ligne et les " provoquent la coupure des chaines javascript et des plantages
         $formattedMessages = preg_replace(
             array('/"/', "/\n/"),
             array('\"', "\\n"),
             $this->getMessages($sections)
         );
-        $frame = preg_replace("/{debugInfo}/", $formattedMessages, self::$frame);
-        echo($frame);
+        $view->setMessages($this->getMessages($sections));
+        echo($view->getMainContent());
     }
 
 
@@ -297,7 +298,7 @@ class Debug {
      *
      * @param array $sections
      */
-    public function getHtmlPage($sections = NULL) {
+    public function getHtmlPage($sections = null) {
         if (self::$config->getValue('debug', 'redirect', false) && isset($_SERVER['HTTP_HOST']) && isset($_SERVER['REQUEST_URI'])) {
             $html .= "<p>Origine: http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']." - ";
             $html .= "<a href='http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."'>Retester</a></p>";
@@ -311,13 +312,12 @@ class Debug {
      *
      * @param array $sections
      */
-    public function generateReport($sections = null) {
+    public function generateReport(View $view, $sections = null) {
         if (isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT'] !== '') {
             $path = $_SERVER['DOCUMENT_ROOT'].'/'.self::$config->getValue('debug', 'reportFile', false);
         }else{
             $path = self::$config->getValue('debug', 'scriptPath', false).self::$config->getValue('debug', 'reportFile', false);
         }
-        $view = new View();
         $view->setMessages($this->getMessages($sections));
 
         $view->dumpToFile($path);

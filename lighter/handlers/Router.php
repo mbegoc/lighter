@@ -7,7 +7,7 @@ use lighter\helpers\Exception;
 use lighter\handlers\Config;
 use lighter\handlers\ConfigException;
 
-use lighter\handlers\Debug;
+use lighter\handlers\Logger;
 use lighter\handlers\HttpResponse;
 
 use lighter\routing\parser\RouteManager;
@@ -63,9 +63,9 @@ class Router {
     /**
      * the profile object
      *
-     * @var profile
+     * @var Logger
      */
-    protected $profile;
+    protected $logger;
     /**
      * the config object
      *
@@ -80,15 +80,16 @@ class Router {
     public function __construct() {
         error_reporting(E_ALL);
 
-        $this->profile = Debug::getInstance('Page profiling');
-        $this->profile->startProfiling('Page generation start');
+        $this->logger = Logger::getInstance('lighter');
+        $this->logger->startProfiling('entire page');
+        $this->logger->info('Starting of routing process');
 
         Exception::convertErrorToException();
 
         $this->config = Config::getInstance();
 
-        $urlReport = Debug::getInstance('Url Data');
-        $urlReport->startProfiling('Route handling');
+        $this->logger->info('Handling of URL');
+        $this->logger->startProfiling('url handling');
         $matches = array();
         if (preg_match("#(\w+\.php/)?/(.*)/?$#", $_SERVER["REQUEST_URI"], $matches)) {
             $routeManager = new RouteManager();
@@ -98,11 +99,7 @@ class Router {
             $this->method = $routeManager->getMethod();
             $this->args = $routeManager->getParams();
         }
-
-        $urlReport->endProfiling('Route handling');
-        $urlReport->log($this->controllerClass, 'controller');
-        $urlReport->log($this->method, 'method');
-        $urlReport->dump($this->args, 'arguments');
+        $this->logger->endProfiling('url handling');
     }
 
 
@@ -110,8 +107,7 @@ class Router {
      * execution of the controller
      */
     public function execute() {
-        $this->profile->profilingCP('Initialization begining');
-
+        $this->logger->info('Execute request');
         $response = HttpResponse::getInstance();
 
         $paths = $this->config->getSection('controllersPaths');
@@ -139,11 +135,10 @@ class Router {
             $response->setCode(404);
         }
 
-        $this->profile->profilingCP('Intialized - Start of page rendering');
-
+        $this->logger->info('Sending response');
         $response->send();
 
-        $this->profile->endProfiling('Page generation end');
+        $this->logger->endProfiling('entire page');
     }
 
 }

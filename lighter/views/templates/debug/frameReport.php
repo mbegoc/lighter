@@ -1,7 +1,7 @@
 <div class="debug">
     <p>Heure d'exécution: <?= $time ?></p>
-    <? foreach ($messages as $section) : ?>
-        <h2><?= $section ?></h2>
+    <? foreach ($messages as $title => $section) : ?>
+        <h2><?= $title ?></h2>
         <table>
             <thead><tr><td>Type</td><td>Titre</td><td>Contenu</td><td>Fichier</td><td>Ligne</td></tr></thead>
             <tbody>

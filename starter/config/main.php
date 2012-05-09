@@ -54,6 +54,11 @@ $config->setSection('tplPaths', array(
     'lighter' => LIGHTER_PATH.'lighter/views/templates/',
 ));
 
+$config->setSection('log', array(
+    'active' => true,
+    'level' => 5,
+));
+
 // define routes
 $map = new RootNode('/');
 $map->addSubNode(new StaticFileNode('include'));
