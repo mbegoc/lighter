@@ -8,10 +8,9 @@ use \Exception;
 
 
 /**
- * This class aims to facilitate debuggage. It picks up debbuging messages to
- * display them in a readable way in a convenient format for the programmer.
+ * This class aims to messages.
 
- * @name Debug
+ * @name Logger
  * @package lighter
  * @subpackage handlers
  * @since 0.1
@@ -22,9 +21,13 @@ use \Exception;
  *
  */
 class Logger {
+    /**
+     * Logging levels constants
+     * @var string
+     */
     const TRACE   = 'TraceLogger',
           DUMP    = 'DumpLogger',
-          PROFILE = 'ProfilerLogger',
+          PROFILE = 'ProfileLogger',
           DEBUG   = 'DebugLogger',
           INFO    = 'InfoLogger',
           WARNING = 'WarningLogger',
@@ -33,11 +36,6 @@ class Logger {
           NONE    = 'Logger';
 
 
-    /**
-     * the messages list
-     * @var array
-     */
-    private $messages = array();
     /**
      * the instances list of the debugger
      * @staticvar array
@@ -48,7 +46,6 @@ class Logger {
      * @var lighter\handlers\Config
      */
     private $config;
-
     /**
      * the name of the debug section
      * @var string
@@ -56,11 +53,14 @@ class Logger {
     private $section;
     /**
      * a time field for profiling purpose
-     * @var float
+     * @var array
      */
     private $time = array();
-
-
+    /**
+     * the file handler in which the messages are written
+     *
+     * @var resource
+     */
     private $file = null;
 
 
@@ -75,10 +75,11 @@ class Logger {
 
 
     /**
-     * the principle of the singleton, but not an actual singleton
+     * this method is a convenient method to handle the instances pool of loggers.
      *
      * @static
      * @param string $section
+     * @param string $level - provided by class constants
      * @return lighter\handlers\Logger
      */
     public static function getInstance($section = "default", $level = null) {
@@ -99,7 +100,7 @@ class Logger {
 
 
     /**
-     * create the reports
+     * close de file handler
      */
     public function __destruct() {
         fclose($this->file);
@@ -107,17 +108,21 @@ class Logger {
 
 
     /**
-     * add a message
+     * add a message with a time stamp
      *
-     * @param string $type
-     * @param string $title
+     * @param string $level
      * @param string $content
-     * @param array $location
      */
     protected function addTimedMessage($level, $content) {
         $this->addMessage('<'.date('Y-m-d h:m:s').'> '.$level.' : '.$content);
     }
 
+
+    /**
+     * add a simple message
+     *
+     * @param string $content
+     */
     protected function addMessage($content) {
         if ($this->file === null) {
             $path = $this->config->getValue('log', 'path', '.').$this->section.'.log';
@@ -203,12 +208,9 @@ class Logger {
 
 
 /**
- * a fake debug class to use instead of the actual debug class in production
- * Its purpose is to minimize the number of if done on the debug flag. Instead of
- * check the flag, we use this empty class which does nothing in place of the true
- * debug class.
+ * implements the fatal level
  *
- * @name FakeDebug
+ * @name FatalLogger
  * @package lighter
  * @subpackage handlers
  * @since 0.1
@@ -236,6 +238,19 @@ class FatalLogger extends Logger {
 }
 
 
+/**
+ * implements the error level
+ *
+ * @name ErrorLogger
+ * @package lighter
+ * @subpackage handlers
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
+ *
+ */
 class ErrorLogger extends FatalLogger {
 
 
@@ -254,6 +269,19 @@ class ErrorLogger extends FatalLogger {
 }
 
 
+/**
+ * implements the warning level
+ *
+ * @name WarningLogger
+ * @package lighter
+ * @subpackage handlers
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
+ *
+ */
 class WarningLogger extends ErrorLogger {
 
 
@@ -272,6 +300,19 @@ class WarningLogger extends ErrorLogger {
 }
 
 
+/**
+ * implements the info level
+ *
+ * @name InfoLogger
+ * @package lighter
+ * @subpackage handlers
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
+ *
+ */
 class InfoLogger extends WarningLogger {
 
 
@@ -290,7 +331,20 @@ class InfoLogger extends WarningLogger {
 }
 
 
-class ProfilerLogger extends WarningLogger {
+/**
+ * implements the profiling level
+ *
+ * @name ProfileLogger
+ * @package lighter
+ * @subpackage handlers
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
+ *
+ */
+class ProfileLogger extends WarningLogger {
 
 
     public function __construct($section) {
@@ -322,6 +376,19 @@ class ProfilerLogger extends WarningLogger {
 }
 
 
+/**
+ * implements the debug level
+ *
+ * @name DebugLogger
+ * @package lighter
+ * @subpackage handlers
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
+ *
+ */
 class DebugLogger extends ProfilerLogger {
 
 
@@ -340,6 +407,19 @@ class DebugLogger extends ProfilerLogger {
 }
 
 
+/**
+ * implements the dump level
+ *
+ * @name DumpLogger
+ * @package lighter
+ * @subpackage handlers
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
+ *
+ */
 class DumpLogger extends DebugLogger {
 
 
@@ -359,6 +439,19 @@ class DumpLogger extends DebugLogger {
 }
 
 
+/**
+ * implements the trace level
+ *
+ * @name TraceLogger
+ * @package lighter
+ * @subpackage handlers
+ * @since 0.1
+ * @version 0.1
+ * @author Michel Begoc
+ * @copyright (c) 2011 Michel Begoc
+ * @license MIT - see http://www.opensource.org/licenses/mit-license.php
+ *
+ */
 class TraceLogger extends DumpLogger {
 
 
@@ -378,9 +471,10 @@ class TraceLogger extends DumpLogger {
 
 
 /**
- * The exception lauched by the debug class.
+ * The exception lauched by the profile level.
+ * Thrown when a nonexistent profiling operation is terminated.
  *
- * @name DebugException
+ * @name NonexistentProfilingOperation
  * @package lighter
  * @subpackage handlers
  * @since 0.1
