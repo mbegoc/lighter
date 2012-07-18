@@ -389,7 +389,7 @@ class ProfileLogger extends WarningLogger {
  * @license MIT - see http://www.opensource.org/licenses/mit-license.php
  *
  */
-class DebugLogger extends ProfilerLogger {
+class DebugLogger extends ProfileLogger {
 
 
     public function __construct($section) {
