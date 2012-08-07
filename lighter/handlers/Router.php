@@ -91,7 +91,7 @@ class Router {
         $this->logger->info('Handling of URL');
         $this->logger->startProfiling('url handling');
         $matches = array();
-        if (preg_match("#(\w+\.php/)?/(.*)/?$#", $_SERVER["REQUEST_URI"], $matches)) {
+        if (preg_match("#(\w+\.php/)?/([^\?]*?)/?(\?.*)?$#", $_SERVER["REQUEST_URI"], $matches)) {
             $routeManager = new RouteManager();
             $routeManager->handleNode($this->config->getRoutes(), explode('/', $matches[2]));
 
@@ -99,6 +99,9 @@ class Router {
             $this->method = $routeManager->getMethod();
             $this->args = $routeManager->getParams();
         }
+        $this->logger->dump($this->controllerClass);
+        $this->logger->dump($this->method);
+        $this->logger->dump($this->args);
         $this->logger->endProfiling('url handling');
     }
 

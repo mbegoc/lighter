@@ -149,14 +149,14 @@ class HttpRequest {
      * @param string $name
      * @return string
      */
-    public function getString($name) {
+    public function getString($name, $default = null) {
         if (isset($this->parameters[$name])) {
             $string = trim($this->parameters[$name]);
             if ($string != "") {
                 return $string;
             }
         }
-        return NULL;
+        return $default;
     }
 
 
@@ -166,11 +166,11 @@ class HttpRequest {
      *
      * @param int $name
      */
-    public function getInt($name) {
+    public function getInt($name, $default = null) {
         if (isset($this->parameters[$name]) && trim($this->parameters[$name]) != "") {
             return (int)$this->parameters[$name];
         }else{
-            return NULL;
+            return $default;
         }
     }
 
@@ -181,11 +181,11 @@ class HttpRequest {
      *
      * @param float $name
      */
-    public function getFloat($name) {
+    public function getFloat($name, $default = null) {
         if (isset($this->parameters[$name]) && trim($this->parameters[$name]) != "") {
             return (float)$this->parameters[$name];
         }else{
-            return NULL;
+            return $default;
         }
     }
 
@@ -196,11 +196,23 @@ class HttpRequest {
      *
      * @param boolean $name
      */
-    public function getBool($name) {
+    public function getBool($name, $default = null) {
         if (isset($this->parameters[$name]) && trim($this->parameters[$name]) != "") {
             return (bool)$this->parameters[$name];
         }else{
-            return NULL;
+            return $default;
+        }
+    }
+
+
+    public function getArray($name, $default = array()) {
+        if (isset($this->parameters[$name])
+            && is_array($this->parameters[$name])
+            && count($this->parameters[$name]) > 0
+        ) {
+            return $this->parameters[$name];
+        } else {
+            return $default;
         }
     }
 

@@ -18,8 +18,8 @@ use \Exception;
  * @abstract
  * @package lighter
  * @subpackage views
- * @since 0.1
- * @version 0.1
+ * @since 0.1.0
+ * @version 0.1.0
  * @author Michel Begoc
  * @copyright (c) 2011 Michel Begoc
  * @license MIT - see http://www.opensource.org/licenses/mit-license.php
@@ -28,26 +28,22 @@ use \Exception;
 abstract class View {
     /**
      * the template engine
-     *
      * @var lighter\handlers\TemplateEngine
      */
     protected $tplEngine;
     /**
      * the template to display
-     *
      * @var string
      */
     protected $mainTemplate;
     /**
      * a messages list to display
-     *
      * @var string
      */
     protected $messages = "";
     /**
      * an array containing the supported mime types and the associated function to
      * call.
-     *
      * @var array
      */
     protected $supportedMimeTypes = array();

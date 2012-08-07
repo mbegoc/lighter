@@ -2,19 +2,22 @@
 namespace lighter\routing\parser;
 
 
+use lighter\helpers\String;
+
+
 class MethodNodeParser extends RouteParser {
 
 
     public function handleNode(Node $node, array &$uri) {
         $value = current($uri);
         if ($value) {
-            $this->routeManager->setMethod($value);
+            $method = $value;
             next($uri);
-            $this->routeManager->handleNode($node, $uri);
         } else {
-            $this->routeManager->setMethod($node->getValue());
-            $this->routeManager->handleNode($node, $uri);
+            $method = $node->getValue();
         }
+        $this->routeManager->setMethod(String::camelize($method));
+        $this->routeManager->handleNode($node, $uri);
         return true;
     }
 
