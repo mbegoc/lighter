@@ -42,6 +42,9 @@ class Config {
      * @var RouteNode
      */
     private $routeTree = null;
+    private $controllerPaths = array();
+    private $templatePaths = array();
+    private $roots = array();
 
 
     /**
@@ -64,6 +67,21 @@ class Config {
         }
 
         return self::$instance;
+    }
+
+
+    public function initApp($mainConfigFile, $appRoot = null) {
+        if ($appRoot === null) {
+            $appRoot = realpath(dirname($mainConfigFile).'/..');
+        }
+        define('LIGHTER_APP_PATH', $appRoot);
+
+        $this->roots = array(LIGHTER_APP_PATH, LIGHTER_PATH);
+
+        $this->addControllersSpace('\\lighter\\controllers\\', LIGHTER_PATH);
+        $this->addTemplatePath(LIGHTER_PATH.'lighter/views/templates/');
+
+        require $mainConfigFile;
     }
 
 
@@ -144,6 +162,43 @@ class Config {
      */
     public function getRoutes() {
        return $this->configuration['routes'];
+    }
+
+
+    public function addControllersSpace($space, $root = LIGHTER_APP_PATH) {
+        $path = str_replace('\\', '/', $space);
+        $this->controllerPaths = array_merge(array($root.$path => $space), $this->controllerPaths);
+    }
+
+    public function getControllerFullname($controllerName) {
+        foreach ($this->controllerPaths as $path => $package) {
+            if (file_exists($path.$controllerName.'.php')) {
+                return $package.$controllerName;
+            }
+        }
+        return null;
+    }
+
+    public function addTemplatePath($path) {
+        array_unshift($this->templatePaths, $path);
+    }
+
+    public function getTemplateFullpath($template) {
+        foreach ($this->templatePaths as $path) {
+            if (file_exists($path.$template.'.php')) {
+                return $path.$template.'.php';
+            }
+        }
+    }
+
+    public function completePath($path) {
+        foreach ($this->roots as $root) {
+            $completePath = $root.'/'.$path;
+            if (file_exists($completePath)) {
+                return $completePath;
+            }
+        }
+        return $path;
     }
 
 }

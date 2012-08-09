@@ -113,28 +113,21 @@ class Router {
         $this->logger->info('Execute request');
         $response = HttpResponse::getInstance();
 
-        $paths = $this->config->getSection('controllersPaths');
-        $requestOk = false;
-        foreach ($paths as $path => $package) {
-            if (file_exists($path.$this->controllerClass.'.php')) {
-                $controller = $package.$this->controllerClass;
-                $this->controller = new $controller();
+        $controller = $this->config->getControllerFullname($this->controllerClass);
+        if ($controller != null) {
+            $this->controller = new $controller();
+            if (method_exists($this->controller, $this->method)) {
+                call_user_func_array(
+                    array($this->controller, $this->method),
+                    $this->args
+                );
 
-                if (method_exists($this->controller, $this->method)) {
-                    call_user_func_array(
-                        array($this->controller, $this->method),
-                        $this->args
-                    );
-
-                    $this->view = $this->controller->getView();
-                    $response->setBody($this->view);
-                    $requestOk = true;
-                    break;
-                }
+                $this->view = $this->controller->getView();
+                $response->setBody($this->view);
+            } else {
+                $reponse->setCode(404);
             }
-        }
-
-        if (!$requestOk) {
+        } else {
             $response->setCode(404);
         }
 

@@ -65,7 +65,7 @@ class TemplateEngine {
      */
     public function display($template) {
         extract($this->vars);
-        include $this->getTemplate($template);
+        include $this->config->getTemplateFullpath($template);
     }
 
 
@@ -83,20 +83,6 @@ class TemplateEngine {
         ob_end_clean();
 
         return $html;
-    }
-
-
-    /**
-     *
-     * @param string $template
-     */
-    protected function getTemplate($template) {
-        $paths = $this->config->getSection('tplPaths');
-        foreach ($paths as $path) {
-            if (file_exists($path.$template.'.php')) {
-                return $path.$template.'.php';
-            }
-        }
     }
 
 }

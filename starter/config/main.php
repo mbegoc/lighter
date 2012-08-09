@@ -1,29 +1,4 @@
 <?php
-/*
- * main configuration file of a lighter application.
- *
- */
-error_reporting(E_ALL);
-
-
-// environment type: production, staging, dev for example
-// unkown is the default value
-$lighter_env = getenv('LIGHTER_ENVIRONMENT');
-if ($lighter_env !== false) {
-    define('LIGHTER_ENVIRONMENT', $lighter_env);
-} else {
-    define('LIGHTER_ENVIRONMENT', 'unknown');
-}
-
-
-// constants declaration
-define('ROOT_APP_PATH', '.');
-define('LIGHTER_PATH', '.');
-
-
-// inclusions
-require LIGHTER_PATH.'config/include.php';
-
 use lighter\handlers\Config;
 
 use lighter\routing\routes\ControllerNode;
@@ -34,42 +9,34 @@ use lighter\routing\routes\ParamsNode;
 use lighter\routing\routes\RootNode;
 use lighter\routing\routes\StaticFileNode;
 
+use lighter\handlers\Debug;
+use lighter\handlers\Logger;
+
 
 // main config, i.e. very basic config
 $config = Config::getInstance();
 
-$config->setDbData('mongo', array(
-    'host' => 'localhost',
-    'port' => '27017',
-	'database' => 'lighter',
-));
+$config->addControllersSpace('\\your_app_name\\controllers\\');
+$config->addTemplatePath('your_app_name/views/templates/');
 
-$config->setSection('controllersPaths', array(
-	'myApp/controllers/' => '\\myApp\\controllers\\',
-    LIGHTER_PATH.'lighter/controllers/' => '\\lighter\\controllers\\',
-));
-
-$config->setSection('tplPaths', array(
-    'myApp' => 'myApp/views/templates/',
-    'lighter' => LIGHTER_PATH.'lighter/views/templates/',
-));
-
-$config->setSection('log', array(
-    'active' => true,
-    'level' => Logger::INFO,
-    'path' => './',
+$config->setSection('mongo', array(
+    'default' => array(
+        'host' => 'localhost',
+        'port' => '27017',
+    	'database' => 'your_app_mongo_name',
+	),
 ));
 
 // define routes
 $map = new RootNode('/');
-$map->addSubNode(new StaticFileNode('include'));
-$map->addSubNode(new ControllerNode('Example'))
+$map->addSubNode(new ControllerNode('DefaultController'))
     ->addSubNode(new MethodNode('handleRequest'))
     ->addSubNode(new ParamsNode());
-
 $config->setRoutes($map);
 
-
-// additional configuration inclusion
-require '../config/debug.php';
+$config->setSection('log', array(
+    'active' => true,
+    'level' => Logger::ERROR,
+    'path' => LIGHTER_APP_PATH.'/logs/',
+));
 

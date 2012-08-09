@@ -125,7 +125,10 @@ class Logger {
      */
     protected function addMessage($content) {
         if ($this->file === null) {
-            $path = $this->config->getValue('log', 'path', '.').$this->section.'.log';
+            if (!file_exists($this->config->getValue('log', 'path', './'))) {
+                mkdir($this->config->getValue('log', 'path', './'), 0755, true);
+            }
+            $path = $this->config->getValue('log', 'path', './').$this->section.'.log';
             $this->file = fopen($path, 'a');
         }
         fwrite($this->file, $content."\n");

@@ -139,20 +139,3 @@ abstract class View {
 
 }
 
-
-/**
- * The exception thrown by the Views classes
- *
- * @name ViewException
- * @package lighter
- * @subpackage views
- * @since 0.1
- * @version 0.1
- * @author Michel Begoc
- * @copyright (c) 2011 Michel Begoc
- * @license MIT - see http://www.opensource.org/licenses/mit-license.php
- *
- */
-class ViewException extends Exception {}
-
-
