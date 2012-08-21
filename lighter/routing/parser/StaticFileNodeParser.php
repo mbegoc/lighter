@@ -2,6 +2,8 @@
 namespace lighter\routing\parser;
 
 
+use lighter\handlers\Debug;
+
 class StaticFileNodeParser extends RouteParser {
 
 

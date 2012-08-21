@@ -8,7 +8,7 @@ use lighter\handlers\Config;
  * and then to instanciate the Router which will actually handle
  * the requests.
  */
-require '/home/michel/Developpement/www/LIB/lighter/config/init.php';
+require '/full/path/to/lighter/config/init.php';
 Config::getInstance()->initApp('../config/main.php');
 
 

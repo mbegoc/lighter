@@ -2,7 +2,7 @@
 namespace lighter\helpers\html;
 
 
-use \Exception;
+use lighter\exceptions\AlreadyInUseException;
 
 
 /**
@@ -27,52 +27,49 @@ use \Exception;
 class HtmlHeader {
     /**
      * static singleton instance
-     *
      * @var lighter\helpers\html\HtmlHeader
      */
     private static $instance;
     /**
      * The js inclusions.
-     *
      * @var array
      */
     protected $jsFiles = array();
     /**
      * The css inclusions.
-     *
      * @var array
      */
     protected $cssFiles = array();
     /**
      * the HTML title tag content
-     *
      * @var string
      */
     protected $title = "";
     /**
      * The canonical tag
-     *
      * @var string
      */
     protected $canonical = "";
     /**
      * The charset used in the page
-     *
      * @var string
      */
     protected $charset = "";
     /**
      * The description of the page
-     *
      * @var string
      */
     protected $description = "";
     /**
      * The keywords of the page, separated by commas as defined by the HTML norm.
-     *
      * @var string
      */
     protected $keywords = "";
+    /**
+     * the js script tag to redirect the page
+     * @var string
+     */
+    protected $jsRedirection = "";
 
 
     public function __construct() {
@@ -134,17 +131,18 @@ class HtmlHeader {
      * add a css file to the header
      *
      * @param string $file
-     * @param mixed $key - default to NULL - use a default key
+     * @param mixed $key - default to null - use a default key
      * @param string $media
+     * @throws lighter\exceptions\AlreadyInUseException
      */
-    public function addCssFile($file, $key = NULL, $media = 'all') {
-        if ($key === NULL) {
+    public function addCssFile($file, $key = null, $media = 'all') {
+        if ($key === null) {
             $this->cssFiles[] = array($file, $media);
         }else{
             if (!isset($this->cssFiles[$key])) {
                 $this->cssFiles[$key] = array($file, $media);
             }else{
-                throw new HtmlHeaderException("Css file key already exists.", 1);
+                throw new AlreadyInUseException("Css file key already exists.", 1);
             }
         }
     }
@@ -174,15 +172,16 @@ class HtmlHeader {
      * @param string $file
      * @param mixed $key
      * @param string $type
+     * @throws lighter\exceptions\AlreadyInUseException
      */
-    public function addJsFile($file, $key = NULL, $type = 'text/javascript') {
-        if ($key == NULL) {
+    public function addJsFile($file, $key = null, $type = 'text/javascript') {
+        if ($key == null) {
             $this->jsFiles[] = array($type, $file);
         }else{
             if (!isset($this->cssFiles[$key])) {
                 $this->jsFiles[$key] = array($type, $file);
             }else{
-                throw new HtmlHeaderException("Js file key already exists.", 2);
+                throw new AlreadyInUseException("Js file key already exists.", 2);
             }
         }
     }
@@ -231,25 +230,29 @@ class HtmlHeader {
         }
         $s.= $this->description;
         $s.= $this->keywords;
+        $s.= $this->jsRedirection;
         $s.= '</head>';
         return $s;
     }
 
+
+    /**
+     * insert a simple javascript script to automatically redirect to $url
+     *
+     * @param string $url
+     */
+    public function jsRedirect($url) {
+        $this->jsRedirection = '<script type="text/javascript">location.assign("'
+            .$url.'");</script>';
+    }
+
+
+    /**
+     * cancel a js redirection
+     */
+    public function resetJsRedirection() {
+        $this->jsRedirection = '';
+    }
+
 }
-
-
-/**
- * an exception thrown by HtmlHeader
- *
- * @name HtmlHeaderException
- * @package lighter
- * @subpackage helpers\html
- * @since 0.1
- * @version 0.1
- * @author Michel Begoc
- * @copyright (c) 2011 Michel Begoc
- * @license MIT - see http://www.opensource.org/licenses/mit-license.php
- *
- */
-class HtmlHeaderException extends Exception {}
 

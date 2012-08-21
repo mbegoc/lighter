@@ -5,6 +5,7 @@ namespace lighter\handlers;
 use lighter\helpers\html\HtmlHeader;
 
 use lighter\handlers\Config;
+use lighter\handlers\TemplateEngine;
 
 use lighter\views\Debug as View;
 
@@ -20,7 +21,7 @@ use \Exception;
  * @package lighter
  * @subpackage handlers
  * @since 0.1
- * @version 0.1
+ * @version 0.1.1
  * @author Michel Begoc
  * @copyright (c) 2011 Michel Begoc
  * @license MIT - see http://www.opensource.org/licenses/mit-license.php
@@ -50,21 +51,6 @@ class Debug {
      * @var lighter\handlers\Config
      */
     private static $config;
-    /**
-     * the header html for the report
-     * @staticvar string
-     */
-    private static $header;
-    /**
-     * the footer html for the report
-     * @staticvar string
-     */
-    private static $footer;
-    /**
-     * the page script to display a debug frame
-     * @staticvar string
-     */
-    private static $frame;
 
     /*
      * INSTANCE ATTRIBUTES
@@ -83,7 +69,7 @@ class Debug {
      * a time field for profiling purpose
      * @var float
      */
-    private $time = NULL;
+    private $time = null;
 
 
     /**
@@ -98,7 +84,7 @@ class Debug {
 
 
     /**
-     * the principle of the singleton, but not an actual singleton
+     * this is a multiton
      *
      * @static
      * @param string $section
@@ -111,9 +97,9 @@ class Debug {
             if (count(self::$instances) == 0) {
                 self::$config = Config::getInstance();
                 if (!self::$config->getValue('debug', 'active', false)) {
-                    $debugClass = 'lighter\handlers\FakeDebug';
+                    self::$debugClass = 'lighter\handlers\FakeDebug';
                 } else {
-                    $debugClass = get_class();
+                    self::$debugClass = get_class();
                 }
             }
 
@@ -128,16 +114,10 @@ class Debug {
      */
     public function __destruct() {
         if (count(self::$instances) == 1) {
-            $view = new View();
             if (self::$config->getValue('debug', 'report', false)) {
-                $this->generateReport($view, self::$config->getValue('debug', 'sections', null));
-                if (self::$config->getValue('debug', 'redirect', false) && isset($_SERVER['HTTP_HOST'])) {
-                    echo("<script type='text/javascript'>location.assign('http://"
-                        .$_SERVER['HTTP_HOST'].self::$config->getValue('debug', 'reportFile', false)."');</script>");
+                if (count(self::$messages) > 0) {
+                    $this->generateReport();
                 }
-            }
-            if (self::$config->getValue('debug', 'frameReport', false) && isset($_SERVER['HTTP_HOST'])) {
-                $this->displayFrameReport($view, self::$config->getValue('debug', 'sections', null));
             }
         }
 
@@ -153,7 +133,7 @@ class Debug {
      * @param string $content
      * @param array $location
      */
-    private function addMessage($type, $title, $content, array $location = NULL) {
+    private function addMessage($type, $title, $content, array $location = null) {
         if (is_null($location)) {
             $trace = debug_backtrace();
             //$trace[0] est l'appel interne à cette méthode par une methode publique de l'objet
@@ -169,7 +149,7 @@ class Debug {
      * @param string $message
      * @param string $title
      */
-    public function log($message, $title = NULL) {
+    public function log($message, $title = null) {
         if (is_null($title)) {
             $title = "Message ".$this->i["message"]++;
         }
@@ -183,7 +163,7 @@ class Debug {
      * @param mixed $variable
      * @param string $title
      */
-    public function dump($variable, $title = NULL) {
+    public function dump($variable, $title = null) {
         if (is_null($title)) {
             $title = "Variable ".$this->i["var"]++;
         }
@@ -196,7 +176,7 @@ class Debug {
      *
      * @param string $title
      */
-    public function trace($title = NULL) {
+    public function trace($title = null) {
         if (is_null($title)) {
             $title = "Trace ".$this->i["trace"]++;
         }
@@ -219,8 +199,8 @@ class Debug {
      *
      * @param string $title
      */
-    public function startProfiling($title = NULL) {
-        if ($title == NULL) {
+    public function startProfiling($title = null) {
+        if ($title == null) {
             $title = "Start profiling";
         }
         $this->i["profiling"] = 1;
@@ -234,9 +214,9 @@ class Debug {
      *
      * @param string $title
      */
-    public function profilingCP($title = NULL) {
+    public function profilingCP($title = null) {
         $endTime = microtime(true);
-        if ($title == NULL) {
+        if ($title == null) {
             $title = $title = "Profiling CheckPoint".$this->i["profiling"]++;
         }
 
@@ -249,9 +229,9 @@ class Debug {
      *
      * @param string $title
      */
-    public function endProfiling($title = NULL) {
+    public function endProfiling($title = null) {
         $endTime = microtime(true);
-        if ($title == NULL) {
+        if ($title == null) {
             $title = $title = "End profiling";
         }
 
@@ -277,33 +257,22 @@ class Debug {
 
 
     /**
-     * display a frame report in a web page
+     * prepare a debug view
      *
-     * @param array $sections
+     * @param lighter\helpers\html\HtmlHeader $htmlHeader
+     * @param boolean $framed
+     * @return lighter\views\View
      */
-    public function displayFrameReport(View $view, $sections = null) {
-        //les retours à la ligne et les " provoquent la coupure des chaines javascript et des plantages
-        $formattedMessages = preg_replace(
-            array('/"/', "/\n/"),
-            array('\"', "\\n"),
-            $this->getMessages($sections)
-        );
-        $view->setMessages($this->getMessages($sections));
-        echo($view->getMainContent());
-    }
-
-
-    /**
-     * return a html page report
-     *
-     * @param array $sections
-     */
-    public function getHtmlPage($sections = null) {
-        if (self::$config->getValue('debug', 'redirect', false) && isset($_SERVER['HTTP_HOST']) && isset($_SERVER['REQUEST_URI'])) {
-            $html .= "<p>Origine: http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']." - ";
-            $html .= "<a href='http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."'>Retester</a></p>";
-
+    public function prepareView(HtmlHeader $htmlHeader) {
+        $htmlHeader->addCssFile('include/css/debug.css');
+        if (self::$config->getValue('debug', 'redirect', false) && isset($_SERVER['HTTP_HOST'])) {
+            $htmlHeader->jsRedirect('http://'.$_SERVER['HTTP_HOST'].'/'
+                .self::$config->getValue('debug', 'reportFile', false));
         }
+        $view = new View();
+        $view->setMessages($this->getMessages(
+            self::$config->getValue('debug', 'sections', null)));
+        return $view;
     }
 
 
@@ -312,13 +281,17 @@ class Debug {
      *
      * @param array $sections
      */
-    public function generateReport(View $view, $sections = null) {
+    public function generateReport() {
         if (isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT'] !== '') {
-            $path = $_SERVER['DOCUMENT_ROOT'].'/'.self::$config->getValue('debug', 'reportFile', false);
+            $path = $_SERVER['DOCUMENT_ROOT'].'/'
+                .self::$config->getValue('debug', 'reportFile', false);
         }else{
-            $path = self::$config->getValue('debug', 'scriptPath', false).self::$config->getValue('debug', 'reportFile', false);
+            $path = self::$config->getValue('debug', 'scriptPath', false)
+                .self::$config->getValue('debug', 'reportFile', false);
         }
-        $view->setMessages($this->getMessages($sections));
+        $view = new View();
+        $view->setMessages($this->getMessages(
+            self::$config->getValue('debug', 'sections', null)));
 
         $view->dumpToFile($path);
     }
@@ -328,7 +301,7 @@ class Debug {
 
 /**
  * a fake debug class to use instead of the actual debug class in production
- * Its purpose is to minimize the number of if done on the debug flag. Instead of
+ * Its purpose is to minimize the number of "ifs" done on the debug flag. Instead of
  * check the flag, we use this empty class which does nothing in place of the true
  * debug class.
  *
@@ -345,31 +318,14 @@ class Debug {
 class FakeDebug extends Debug {
     public function __construct($section) {}
     public function __destruct() {}
-    public function log($message, $title = NULL) {}
-    public function dump($variable, $title = NULL) {}
-    public function trace($title = NULL) {}
-    public function startProfiling($title = NULL) {}
-    public function profilingCP($title = NULL) {}
-    public function endProfiling($title = NULL) {}
-    public function getFormattedMessages($sections = NULL) {}
-    public function displayFrameReport($sections = NULL) {}
-    public function getHtmlPage($sections = NULL) {}
-    public function generateReport($sections = NULL) {}
+    public function log($message, $title = null) {}
+    public function dump($variable, $title = null) {}
+    public function trace($title = null) {}
+    public function startProfiling($title = null) {}
+    public function profilingCP($title = null) {}
+    public function endProfiling($title = null) {}
+    public function getMessages($sections = null) {}
+    public function prepareView(HtmlHeader $htmlHeader) { return null; }
+    public function generateReport(View $view) {}
 }
-
-
-/**
- * The exception lauched by the debug class.
- *
- * @name DebugException
- * @package lighter
- * @subpackage handlers
- * @since 0.1
- * @version 0.1
- * @author Michel Begoc
- * @copyright (c) 2011 Michel Begoc
- * @license MIT - see http://www.opensource.org/licenses/mit-license.php
- *
- */
-class DebugException extends Exception {}
 

@@ -4,7 +4,7 @@ use lighter\handlers\Config;
 
 $config = Config::getInstance();
 
-if (LIGHTER_ENVIRONMENT === 'production') {
+if (LIGHTER_APP_ENV === 'production') {
     $config->setValue('debug', 'active', false);
 } else {
     $config->setSection('debug', array(
@@ -14,6 +14,6 @@ if (LIGHTER_ENVIRONMENT === 'production') {
         'frameReport' => true,
         'reportFile' => 'debug.html',
         'scriptPath' => '/tmp/',
-        'sections' => array('default'),
+        'sections' => null,
     ));
 }

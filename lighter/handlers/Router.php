@@ -78,8 +78,6 @@ class Router {
      * set the object regarding the requested uri
      */
     public function __construct() {
-        error_reporting(E_ALL);
-
         $this->logger = Logger::getInstance('lighter');
         $this->logger->startProfiling('entire page');
         $this->logger->info('Starting of routing process');

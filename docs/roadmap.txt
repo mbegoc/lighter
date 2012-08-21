@@ -9,9 +9,8 @@
 
     Here are the next steps to obtain a correct first version:
 
-        * Debug should use templates for reports instead of the xml config file
-        * DataAccessor objects should use both collections and database
-        * DataAccessor objects should implements basic validation methods (or a Helper
+        * MongoAccessor objects should use both collections and database
+        * MongoAccessor objects should implements basic validation methods (or a Helper
           should do so)
         * gettext should be correctly implemented
         * SessionManager should be implemented (at this time, it's an old object
@@ -19,8 +18,6 @@
         * the helpers collection should be bigger
         * ALL the code must be correctly commented
         * a PHPUnit test pack should be created
-        * the path object need to be improved define URI more efficiently. At this
-          time, the basic module admin have navigation bugs because of the URI.
 
 * Modules
 

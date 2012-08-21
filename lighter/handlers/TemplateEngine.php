@@ -78,7 +78,7 @@ class TemplateEngine {
         extract($this->vars);
 
         ob_start();
-        include $this->getTemplate($template);
+        include $this->config->getTemplateFullpath($template);
         $html = ob_get_contents();
         ob_end_clean();
 

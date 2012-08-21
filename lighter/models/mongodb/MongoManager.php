@@ -2,9 +2,12 @@
 namespace lighter\models\mongodb;
 
 
-use lighter\exceptions\BadTypeException;
-
+use lighter\handlers\Logger;
 use lighter\handlers\Config;
+
+use lighter\exceptions\BadTypeException;
+use lighter\exceptions\UninitializedException;
+use lighter\exceptions\AlreadyInUseException;
 
 use \MongoId;
 use \Mongo;
@@ -13,8 +16,6 @@ use lighter\models\Persistence;
 use lighter\models\Model;
 
 use lighter\models\mongodb\MongoModel;
-
-use lighter\exceptions\AlreadyInUseException;
 
 
 /**
@@ -47,12 +48,17 @@ class MongoManager extends Persistence {
      * the connection data
      * @var array
      */
-    private $connexionData = null;
+    private $connectionData = null;
     /**
      * the current model
      * @var lighter\models\mongodb\MongoModel
      */
     protected $model = null;
+    /**
+    * flag if this object is ready to be iterate
+    * @var boolean
+    */
+    protected $ready = true;
 
 
     /**
@@ -61,11 +67,12 @@ class MongoManager extends Persistence {
      * @param string $collection
      */
     public function __construct($collection, $database = 'default') {
-        $this->connexionData = Config::getInstance()->getValue('mongodb', $database);
+        $this->connectionData = Config::getInstance()->getValue('mongodb', $database);
 
-        $connexionString = 'mongodb://'.$this->connexionData['host'].':'.$this->connexionData['port'];
-        $mongo = new Mongo($connexionString, array("persistent" => $this->connexionData['database']));
-        $this->collection = $mongo->selectCollection($this->connexionData['database'], $collection);
+        $connectionString = 'mongodb://'.$this->connectionData['host'].':'.$this->connectionData['port'];
+        Logger::getInstance()->info($connectionString);
+        $mongo = new Mongo($connectionString, array("persistent" => $this->connectionData['database']));
+        $this->collection = $mongo->selectCollection($this->connectionData['database'], $collection);
     }
 
 
@@ -101,6 +108,14 @@ class MongoManager extends Persistence {
      */
     public function loadAll() {
         return $this->search();
+    }
+
+
+    /**
+     * @see lighter\models.Persistence::load()
+     */
+    public function load($qty, $from = 0) {
+        return $this->search()->slice($qty, $from);
     }
 
 
@@ -162,6 +177,7 @@ class MongoManager extends Persistence {
      * @see Iterator::next()
      */
     public function next() {
+        $this->ready = false;
         if ($this->cursor !== null) {
             if ($this->cursor->hasNext()) {
                 $this->setModel($this->cursor->getNext());
@@ -188,7 +204,10 @@ class MongoManager extends Persistence {
      * @see Iterator::rewind()
      */
     public function rewind() {
-        $this->reset();
+            if (!$this->ready) {
+            $this->reset();
+            $this->ready = true;
+        }
         $this->next();
     }
 

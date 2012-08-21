@@ -7,10 +7,8 @@
 
 * Introduction
 
-    Lighter is a lightweight MVC PHP framework based on MongoDB.
+    Lighter is a lightweight MVC PHP framework.
     
-    At this time, no other db is supported.
-
 * Licence
     
     copyright (c) Michel Begoc
@@ -18,13 +16,18 @@
 
 * Installation
 
-    1 ensure you have an environment set with Apache2, PHP 5.3 and MongoDB
-    2 place your lighter framework in a folder correctly configured in your Apache
-    3 edit the pmf/config/db.ini file and change the MongoDB connection info id needed
-    4 create a folder for you app 
-    5 edit the install.php file and change the constants for the values of your own
-    6 execute the install.php file in command line
+    1 ensure you have an environment set with a complete web server environment:
+        - Apache or nginx, or a similar web server
+        - PHP 5.3 or higher
+        - a MongoDB or MySQL database
+    2 clone the lighter git repository anywhere you want on your system
+    3 create the web server environment for your app
+    4 copy the content of the starter directory into your application directory
+    5 edit the public/index.php file to edit the init.php lighter path to fit your
+      configuration
+    6 edit the config/main.php file to set your app name and database configuration
+      information
     7 if you wish, edit your apache config or add a .htaccess file to redirect the 
       requests to index.php so you don't need to specify the index.php file in the uri
-    8 remove the install.php file
+    8 your are ready to go
 

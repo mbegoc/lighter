@@ -88,11 +88,10 @@ class SQLManager extends Persistence {
      */
     protected $fieldQuote = '';
     /**
-     *
-     *
+     * flag if this object is ready to be iterate
      * @var boolean
      */
-    protected $rewinded = true;
+    protected $ready = true;
 
 
     /**
@@ -267,7 +266,7 @@ class SQLManager extends Persistence {
      * @see Iterator::next()
      */
     public function next($quick = true) {
-        $this->rewinded = false;
+        $this->ready = false;
         // to be able to handle properly the joined data row, we
         if ($this->currentData === null) {
             $this->currentData = $this->database->next();
@@ -318,9 +317,9 @@ class SQLManager extends Persistence {
      * @see Iterator::rewind()
      */
     public function rewind() {
-        if (!$this->rewinded) {
+        if (!$this->ready) {
             $this->reset();
-            $this->rewinded = true;
+            $this->ready = true;
         }
         $this->next();
     }

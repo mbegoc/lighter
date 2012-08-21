@@ -3,5 +3,6 @@
 <?= $htmlHeader->display() ?>
 <body>
     <div id="content"><?= $view->getMainContent() ?></div>
+    <?= isset($debug) ? $debug->getMainContent() : '' ?>
 </body>
 </html>

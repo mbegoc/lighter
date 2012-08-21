@@ -125,7 +125,7 @@ class HttpResponse {
      *
      * @return lighter\handlers\HttpResponse
      */
-    public function getInstance() {
+    public static function getInstance() {
         if (!isset(self::$instance)) {
             self::$instance = new self();
         }
